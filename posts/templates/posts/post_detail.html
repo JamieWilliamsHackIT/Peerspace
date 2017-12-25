@@ -6,7 +6,7 @@
  <post-feed></post-feed>
 </ul>
 <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
-<script src="{% static 'tags/post-feed.js' %}"></script>
+<script src="{% static 'tags/post-view.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
@@ -178,7 +178,7 @@
       })
     })
   })
-  riot.mount('post-feed', {callback:tagCallBack})
+  riot.mount('post-view', {callback:tagCallBack})
 </script>
 
 {% endblock %}
