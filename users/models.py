@@ -84,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     profile_pic = DefaultStaticImageField(
                                     blank=True,
-                                    default_image_path='https://peerspace.herokuapp.com/media/default_profile_pic.svg',
+                                    # default_image_path='https://peerspace.herokuapp.com/media/default_profile_pic.svg',
                                     )
 
     cover_pic = models.ImageField(blank=True, null=True)
