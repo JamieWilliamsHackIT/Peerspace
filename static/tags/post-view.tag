@@ -1,5 +1,5 @@
 <post-feed>
-    <li class="media post post-{post.id} list-group-item p-4 my-3">
+    <li class="media post post-{opts.post.id} list-group-item p-4 my-3">
       <img class="media-object mr-3 align-self-start" src="{ post.user_url }">
       <div class="media-body">
         <div class="media-heading">
@@ -57,7 +57,7 @@
     })
     this.on('data_loaded', function(data, user_id) {
       opts.post = data
-      // console.log(opts.posts)
+      console.log(opts.post)
       this.update()
     })
   </script>
