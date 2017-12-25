@@ -9,6 +9,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 
+from django_fields import DefaultStaticImageField
 
 # The user manager class controls how users and superusers are created
 # It extends the base user manager that comes with Django
