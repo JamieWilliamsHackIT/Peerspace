@@ -1,11 +1,11 @@
 <post-feed>
   <div each={post in opts.posts}>
     <li class="media post post-{post.id} list-group-item p-4 my-3">
-      <img class="media-object mr-3 align-self-start" src="http://127.0.0.1:8000{ post.user_url }">
+      <img class="media-object mr-3 align-self-start" src="https://peerspace.herokuapp.com{ post.user_url }">
       <div class="media-body">
         <div class="media-heading">
           <small class="float-right text-muted">{post.days_since} days</small>
-          <h6><a href="http://127.0.0.1:8000/users/{post.user}">{post.user_name}</a> made the commitment: <a href="http://127.0.0.1:8000/posts/{post.id}">{post.title}</a></h6>
+          <h6><a href="https://peerspace.herokuapp.com/users/{post.user}">{post.user_name}</a> made the commitment: <a href="https://peerspace.herokuapp.com/posts/{post.id}">{post.title}</a></h6>
         </div>
         <p>
           {post.description}
@@ -59,7 +59,7 @@
     })
     this.on('data_loaded', function(data, user_id) {
       opts.posts = data
-      console.log(opts.posts)
+      // console.log(opts.posts)
       this.update()
     })
   </script>

@@ -10,15 +10,6 @@ from posts.serializers import PostSerializer
 # This class takes the data from the User model and serializes it into JSON
 # (JavaScript Object Notation) ready for use in the API
 class UserSerializer(serializers.ModelSerializer):
-    # This gets all the user's posts from the PostSerializer
-    # posts = PostSerializer(many=True, read_only=True)
-
-    # ordering = ('-id',)
-    #
-    def get_posts(self, obj):
-         ordered_queryset = Post.objects.all()#.order_by('-created_at',)
-         return PostSerializer(ordered_queryset, read_only=True, many=True).data
-
 
     class Meta:
         # Define the model to use

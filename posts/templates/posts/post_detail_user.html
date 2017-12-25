@@ -14,11 +14,11 @@
     </div>
     <ul class="media-list col-lg-6 mt-5 media-list-stream post-body mb-3">
       <li class="media list-group-item post p-4">
-        <img class="media-object mr-3 align-self-start" src="http://127.0.0.1:8000{{user_profile_pic}}">
+        <img class="media-object mr-3 align-self-start" src="https://peerspace.herokuapp.com{{user_profile_pic}}">
         <div class="media-body pb-4">
           <div class="media-heading">
             <small class="float-right text-muted">{{post.time_since_creation}} days</small>
-            <h6><a href="http://127.0.0.1:8000/users/{{post.user.id}}">{{post.user.name}}</a> made the commitment: {{post.title}}</h6>
+            <h6><a href="https://peerspace.herokuapp.com/users/{{post.user.id}}">{{post.user.name}}</a> made the commitment: {{post.title}}</h6>
           </div>
           <p>
             {{post.description}}
@@ -47,12 +47,12 @@
     {% endif %}
       <div class="post-footer pb-3">
         {% if post.proof_description and post.proof_pic %}
-        <a href="http://127.0.0.1:8000/posts/{{post.id}}/prove/delete_confirm/" class="ml-3 pt-3 like-btn"><span class="icon icon-cross"></span> Delete proof</a>
+        <a href="https://peerspace.herokuapp.com/posts/{{post.id}}/prove/delete_confirm/" class="ml-3 pt-3 like-btn"><span class="icon icon-cross"></span> Delete proof</a>
         {% else %}
-        <a href="http://127.0.0.1:8000/posts/{{post.id}}/prove/" class="ml-3 pt-3 like-btn"><span class="icon icon-plus"></span> Submit proof</a>
+        <a href="https://peerspace.herokuapp.com/posts/{{post.id}}/prove/" class="ml-3 pt-3 like-btn"><span class="icon icon-plus"></span> Submit proof</a>
         {% endif %}
-        <a href="http://127.0.0.1:8000/posts/{{post.id}}/edit/" class="ml-3 pt-3 like-btn"><span class="icon icon-edit"></span> Edit</a>
-        <a href="http://127.0.0.1:8000/posts/{{post.id}}/delete/" class="ml-3 pt-3 like-btn"><span class="icon icon-trash"></span>Delete</a>
+        <a href="https://peerspace.herokuapp.com/posts/{{post.id}}/edit/" class="ml-3 pt-3 like-btn"><span class="icon icon-edit"></span> Edit</a>
+        <a href="https://peerspace.herokuapp.com/posts/{{post.id}}/delete/" class="ml-3 pt-3 like-btn"><span class="icon icon-trash"></span>Delete</a>
     </div>
     </ul>
 {% endblock %}

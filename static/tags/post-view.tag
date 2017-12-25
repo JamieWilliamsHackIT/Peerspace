@@ -42,7 +42,7 @@
     this.on('data_loaded', function(data, user_id) {
       opts.post = data
       opts.user_id = user_id
-      console.log(data)
+      // console.log(data)
       // console.log(opts)
       this.update()
     })

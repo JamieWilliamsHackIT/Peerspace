@@ -87,7 +87,7 @@
     // Gets posts
     $.ajax({
       type: "GET",
-      url: "http://127.0.0.1:8000/posts/api/v1/profile/{{ user.id }}",
+      url: "root_url + /posts/api/v1/profile/{{ user.id }}",
       dataType: "json",
       success: function(data) {
         user_id = {{ user_viewing }}
@@ -97,7 +97,7 @@
   }
   function deleteComment(comment_id, post_id) {
     $.ajax({
-      url: "http://127.0.0.1:8000/posts/api/v1/comments/" + comment_id,
+      url: root_url + "/posts/api/v1/comments/" + comment_id,
       type: "DELETE",
       // This MUST be in the callback due to the asynchronus nature of javascript
       success: function() {
@@ -110,7 +110,7 @@
     //Gets comments
     $.ajax({
       type: "GET",
-      url: "http://127.0.0.1:8000/posts/api/v1/" + post_id + "/comment",
+      url: root_url + "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
         $('.comment-list-' + post_id).html('')
@@ -147,7 +147,7 @@
       e.preventDefault()
       var this_button = $(this)
       $.ajax({
-        url: "http://127.0.0.1:8000/posts/api/v1/" + this_button.attr('id') + "/like",
+        url: root_url + "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         data: {},
         success: function(data) {
@@ -184,7 +184,7 @@
       e.preventDefault()
       $.ajax({
         type: "GET",
-        url: "http://127.0.0.1:8000/users/api/v2/" + {{ user.id }} + "/follow/",
+        url: root_url + "/users/api/v2/" + {{ user.id }} + "/follow/",
         dataType: "json",
         success: function(data) {
           if (data.following) {
@@ -204,11 +204,10 @@
             post: post_id
           }
           $.ajax({
-            url: "http://127.0.0.1:8000/posts/api/v1/" + post_id + "/comment",
+            url: root_url + "/posts/api/v1/" + post_id + "/comment",
             method: "POST",
             data: data,
             success: function(data) {
-              console.log(data)
               //Load all comments
               getComments(post_id)
               $(this).html('<span class="icon icon-message"></span> Comment (' + data.comments.length + ')')
@@ -223,7 +222,7 @@
       post_id = $(this).attr("post-id")
       this_button = $(this)
       $.ajax({
-        url: "http://127.0.0.1:8000/posts/api/v1/" + post_id + "/verify",
+        url: root_url + "/posts/api/v1/" + post_id + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {
