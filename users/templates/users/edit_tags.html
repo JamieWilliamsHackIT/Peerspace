@@ -29,7 +29,7 @@
 $.ajax({
   type: "GET",
   dataType: "json",
-  url: "http://peerspace.herokuapp.com/users/get_preferences",
+  url: "https://peerspace.herokuapp.com/users/get_preferences",
   success: function(data) {
     for (i in data.tags) {
       $('#tags').append('<li>' + data.tags[i] + '</li>')
