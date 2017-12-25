@@ -113,6 +113,10 @@
 <!-- Riot.js custom tag -->
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
+  // For development
+  //var root_url = 'https://127.0.0.8:8000'
+  // For production
+  var root_url = 'https://peerspace.herokuapp.com'
   // Initialise the tag input field
   $("#tags").tagit();
   // Get the posts and mount the riot.js tag
