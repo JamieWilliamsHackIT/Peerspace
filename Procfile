@@ -1,2 +1,2 @@
-web: gunicorn peerspace.wsgi --log-file -
+web: gunicorn peerspace.wsgi:application --log-file -
 
