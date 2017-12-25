@@ -1,0 +1,142 @@
+For jQueryUI
+
+// (function($) {
+//     if (!$.curCSS) {
+//        $.curCSS = $.css;
+//     }
+// })(jQuery);
+
+
+
+<%-- <div class="post-footer pb-3">
+  <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(user_id)}><span class="icon icon-thumbs-up"></span> Like</a>
+  <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(user_id)}><span class="icon icon-thumbs-up"></span> Like</a>
+  <a href="#" class="ml-3 pt-3 like-btn"><span class="icon icon-message"></span> Comment</a>
+  </div> --%>
+
+
+  <div class="post-list mx-auto pt-5 mt-2 d-block">
+    <div class="mt-2">
+      <div class="row justify-content-center">
+        <div class="col-lg-5">
+          <div class="card card-profile">
+            <div class="card-header" style="background-image: url(https://igcdn-photos-h-a.akamaihd.net/hphotos-ak-xfa1/t51.2885-15/11312291_348657648678007_1202941362_n.jpg);"></div>
+            <div class="card-body text-xs-center">
+              <img class="card-profile-img" src="{{ user_profile_pic }}">
+              <h5 class="card-title">{{ user.name}}</h5>
+              <p class="mb-4">{{ user.bio }}</p>
+                {% if following %}
+                <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#">
+                  <span class="icon icon-check"></span> Following
+                </button>
+                {% else %}
+                <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#">
+                  <span class="icon icon-add-user"></span> Follow
+                </button>
+                {% endif %}
+              <a class="btn btn-outline-primary btn-sm mx-1" href="#">
+                <span class="icon icon-message"></span> Message
+              </a>
+            </div>
+            <ul class="card-menu mx-auto">
+              <li class="card-menu-item text-center">
+                <a href="#userModal" class="text-inherit" data-toggle="modal">
+                  Followers
+                  <h6 class="my-0">{{ user.follows.count }}</h6>
+                </a>
+              </li>
+              <li class="card-menu-item text-center">
+                <a href="#userModal" class="text-inherit" data-toggle="modal">
+                  Following
+                  <h6 class="my-0">{{ user.following.count }}</h6>
+                </a>
+              </li>
+              <li class="card-menu-item text-center">
+                <a href="#userModal" class="text-inherit" data-toggle="modal">
+                  Posts
+                  <h6 class="my-0">{{ number_of_posts }}</h6>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="media-list media-list-stream post-feed-profile mb-3">
+    <post-list></post-list>
+  </ul>
+
+  What do I need from the API?
+
+  > It needs to give me posts
+  > It needs to give me user info
+  > It needs to give me likes
+
+  < It needs to receive new posts
+  < It needs to receive likes
+
+  Current API urls
+
+
+
+
+
+
+  So the client calls the API with a GET request with the users pk in the query string
+  The server then calls get_most_relevent(user_pk) and returns JSON with the post info
+
+  What does the server have to do?
+
+  It has to run the get_most_relevent(user_pk) function and then query the database to get the post info
+
+  How to do this?
+
+  Serializer?
+
+
+
+  Set up user detail view
+
+
+
+
+  What are my different views?
+
+
+  For the logged in user:
+  \\ When viewing their own profile and posts
+  \\|| They can edit their profile from their view provided profile page
+  \\|| They can edit their posts from their view provided post detail page
+
+  \\ When viewing other users' profiles and posts
+  \\|| They can view/follow other peoples' API provided profiles
+  \\|| They can view/like other peoples' API provided posts
+
+
+
+
+
+  How to allow users to edit their own posts and only their own posts
+
+  Use the view to only give the user whose post it is the csrf token in the form
+
+
+
+
+  What to do when a user likes a post?
+
+  Change the like button to indicate the like (and then on a second click make it an unlike button)
+
+  Add the like to the database
+
+  increment the weights of the tags that match
+
+  How? Using an ajax post request to the api with the post id in the button's id
+
+
+
+
+  If the user's id is in the list of user ids in the likes list then set the liked value to True
+
+  If the value is true then set the like button to be in the 'liked' state

@@ -1,0 +1,10 @@
+/* Profile picture */
+.profile-picture {
+  height: 100px;
+}
+
+.card-profile {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 60px;
+}

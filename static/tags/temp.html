@@ -1,0 +1,25 @@
+<div each={post in opts.posts} class="post-list mx-auto d-block">
+  <div class="row justify-content-center">
+    <ul class="media-list media-list-stream my-3 mx-auto col-lg-5">
+      <li class="media list-group-item p-4 col-lg-8">
+        <div class="media-body container">
+          <div class="row">
+            <div class="media-heading col-lg-8">
+              <small class="float-right text-muted">{post.days_since} days ago</small>
+              <a href="http://127.0.0.1:8000/api/v1/posts/posts/{post.id}/"><h6>{post.title}</h6></a>
+            </div>
+            <p>
+              {post.description}
+            </p>
+            <button id="{post.id}" class="like-btn mt-3 btn btn-outline-primary btn-sm mx-1">
+              <span class="icon icon-thumbs-up"></span> Like
+            </button>
+            <div class="col-lg-4">
+              dfds
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

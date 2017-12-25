@@ -1,0 +1,262 @@
+{% load static %}
+<html>
+  <head>
+    <title>Peerspace</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/toolkit.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/toolkit.css.map' %}">
+    <link rel="stylesheet" href="css/demo.css">
+  	<link rel="stylesheet" href="{% static 'css/footer-distributed-with-address-and-phones.css' %}">
+  	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="http://127.0.0.1:8000/posts/">
+          <img src="{% static 'img/logo-reversed.png' %}" width="30" height="30" class="d-inline-block align-top" alt="Go to feed">
+          Peerspace
+        </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:signup' %}">Sign up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <header class="main-header">
+      <div class="fullscreen-bg">
+          <video loop muted autoplay poster="img/videoframe.jpg" class="fullscreen-bg__video">
+              <source src="{% static 'vid/meeting.mp4' %}" type="video/mp4">
+          </video>
+      </div>
+      <div class="header-text">
+        <h1 class="display-1">Welcome to Peerspace.io!</h1>
+        <p class="lead">A Python powered social network that counters procrastination and encourages collaboration.</p>
+        <div class="site-info mt-5">
+          <h2 class="lead mb-5">There are currently<strong> {{ users.count }} </strong>active users, who have collectively posted<strong> {{ posts.count }} </strong>times.</h2>
+          <a href="{% url 'users:signup' %}" class="btn btn-outline-dark mr-3">Get Started</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-dark">Login</a>
+       </div>
+      </div>
+      <!-- <img class="header-img img-fluid" src="{% static 'img/home-network.png' %}"> -->
+      <!-- <div class="header-footer">
+        <a class="btn btn-outline-light">Sign in</a>
+        <a class="btn btn-outline-light">Sign up</a>
+      </div> -->
+    </header>
+    <div class="main-content mt-5">
+      <!-- <svg class="main-content-svg" height="100%" width="100%">
+        <line x1="600" y1="0" x2="1900" y2="800" style="stroke:#6A0F49;stroke-width:1" />
+        <line x1="1900" y1="400" x2="-800" y2="2200" style="stroke:#6A0F49;stroke-width:1" />
+
+      </svg> -->
+      <div class="primary-content">
+        <div class="container info-block">
+          <div class="intro-text mb-5">
+            <h2 class="display-3 text-center">What is Peerspace?</h2>
+            <p class="lead text-center">Add why would you care?</p>
+            <div class="container mt-5">
+              <div class="row justify-content-between">
+                <div class="col-3 text-center">
+                  <img class="mb-3" src="https://png.icons8.com/time/Dusk_Wired/100/000000">
+                  <h4 class="display-5">Been meaning to do that thing for ages?</h4>
+                  <p class="lead mt-3">Is there something you've been meaning to do for years but never got round to it?
+                                  By posting commitments on Peerspace, everyone can see whether you have done it or not.                  </p>
+                </div>
+                <div class="col-3 text-center">
+                  <img class="mb-3" src="https://png.icons8.com/collaboration/dotty/100/000000">
+                  <h4 class="display-5">Want to collaborate with like minded people?</h4>
+                  <p class="lead mt-3">Need to find a gym partner? Or squash opponent? Make a post on Peerspace about it and
+                                  like-minded people will get in touch, you might even find a future co-founder!
+                  </p>
+                </div>
+                <div class="col-3 text-center">
+                  <img class="mb-3" src="https://png.icons8.com/dirty/dotty/100/000000">
+                  <h4 class="display-5">Want to get away from the clutter on Facebook?</h4>
+                  <p class="lead mt-3">Gone are the days of letting people know how you feel, Facebook has become
+                                       nothing but a mass advertising platform with the occasional funny cat video.
+                                       Peerspace is free of ads and unwanted clutter.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="background-color-1">
+          <div class="container">
+            <h2 class="display-3 text-center pt-5">How does Peerspace Work?</h2>
+            <p class="lead text-center pb-5">A breif overview of the nuts, bolts and cogs of the site.</p>
+            <div class="row justify-content-between info-row mt-5">
+              <div class="col-3 my-auto">
+                <img class="logo img-fluid" src="{% static 'img/django-logo.png' %}">
+              </div>
+              <div class="col-8">
+                <h3 class="display-4">Powered By Django</h3>
+                <p class="lead">Peerspace is built using the Django web-framework for Python. It allows developers to build
+                                powerful web applications quickly and efficiently. Django takes care of the boring stuff and enables
+                                the developer to focus on the important stuff, the application itself. This project was my first encounter
+                                with Django and I only have positive things to say, it has been very easy to pick up and the support community
+                                is broad and extremely helpful. Find out more <a target="_blank" href="https://www.djangoproject.com/">here</a>.
+                </p>
+              </div>
+            </div>
+            <div class="row justify-content-between info-row">
+              <div class="col-8">
+                <h3 class="display-4">Postgres Won't Forget<weak class="small-text ml-2">(Hopefully)</weak></h3>
+                <p class="lead">PostgreSQL is the memory of Peerspace, it remembers everything from user information to what I had for dinner last night, four years ago, to
+                                every post created in Peerspace history. Django's object relational mapper (ORM) makes it very easy to interface
+                                with the PostgreSQL database, this is one of my favourite features of Django. I have had experience quering a MySQL
+                                database with PHP, comparatively Django's ORM makes it a walk in the park. Find out more <a target="_blank" href="https://www.postgresql.org/">here</a>.
+                </p>
+              </div>
+              <div class="col-4 my-auto">
+                <img class="logo img-fluid d-block" src="{% static 'img/postgresql-logo.png' %}">
+              </div>
+            </div>
+            <div class="row justify-content-between info-row">
+              <div class="col-3 my-auto">
+                <img class="logo img-fluid" src="{% static 'img/heroku-logo.svg' %}">
+              </div>
+              <div class="col-8">
+                <h3 class="display-4">Heroku is the Engine</h3>
+                <p class="lead">Without Heroku my test user is forever trapped within the local development environment of my laptop. Heroku
+                                gives me the ability to share Peerspace with the world. I can choose any number of dedicated Heroku dynamos to
+                                deal with the number crunching and Python running as I need, this allows me to scale the app to meet any demand.
+                                Find out more <a target="_blank" href="https://www.heroku.com/home/">here</a>.
+                </p>
+              </div>
+            </div>
+            <div class="row justify-content-between info-row-last">
+              <div class="col-8">
+                <h3 class="display-4">S3 Serves Us Well</h3>
+                <p class="lead pb-5">PostgreSQL is the memory of Peerspace, it remembers everything from user information to what I had for dinner last night, four years ago, to
+                                every post created in Peerspace history. Django's object relational mapper (ORM) makes it very easy to interface
+                                with the PostgreSQL database, this is one of my favourite features of Django. I have had experience quering a MySQL
+                                database with PHP, comparatively Django's ORM makes it a walk in the park. Find out more <a target="_blank" href="https://aws.amazon.com/s3/">here</a>.
+                </p>
+              </div>
+              <div class="col-4 my-auto pb-5 mb-0">
+                <img class="logo img-fluid d-block my-auto" src="{% static 'img/s3-logo.png' %}">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <h2 class="display-3 text-center pt-5">The codebase</h2>
+          <p class="lead text-center pb-3">The heart of the application. <a class="pl-5 github-button" href="https://github.com/JamieWilliamsHackIT/Peerspace/archive/master.zip" data-icon="octicon-cloud-download" aria-label="Download ntkme/github-buttons on GitHub">Download</a></p>
+          <img class="d-block mx-auto" src="{% static 'img/code.png' %}">
+          <p class="lead my-3 w-75 text-center mx-auto mt-5">The backend of Peerspace is powered by Django. Django is a web-framework for Python. I have always been interested in computer science, but
+                               since learning more about how the internet works I have become more and more interested in taking programs to the web. Django has given me the
+                               ability to build web applications that are scalable and fast.
+          </p>
+          <div class="container" style="padding-top: 100px;">
+            <div class="row justify-content-between">
+              <div class="col-5">
+                <img class="m-auto d-block" style="height: 100px;" src="{% static 'img/python-logo.svg' %}">
+                <!-- <h3 class="display-4 text-center">Python</h3> -->
+                <p class="lead text-center mt-3">Python powers the backend of Peerspace. I have enjoyed building this application in Python, the syntax
+                                            encourages clean code and the Python containers are brilliant. The backend has an API that is consumable
+                                            by the frontend. This allows easy scalling of the backend with a hosting service such as Heroku.
+                </p>
+              </div>
+              <div class="col-5">
+                <img class="m-auto d-block" style="height: 100px;" src="{% static 'img/web-logos.svg' %}">
+                <!-- <h3 class="display-4 text-center">HTML5 and CSS3</h3> -->
+                <p class="lead text-center mt-3">The content layer of the frontend is written in HTML5 and CSS3. I have used the Twitter Bootstrap 4
+                                            framework to build the site. Bootstrap allows for rapid frontend development and it saves a lot of time
+                                            when building responsive webpages.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <div class="row justify-content-between mt-5">
+              <div class="col-5">
+                <img class="m-auto d-block" style="height: 100px;" src="{% static 'img/javascript-logo.png' %}">
+                <!-- <h3 class="display-4 text-center">Python</h3> -->
+                <p class="lead text-center mt-3">JavaScript powers the dynamic elements of the frontend. It is the communication layer between the backend
+                                                 <strong>RE</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer (REST) API. Using <strong>A</strong>syncronous
+                                                 <strong>JA</strong>vaScript and <strong>X</strong>ML (AJAX) the frontend can GET and POST data to the database. This allows me to
+                                                 create responsive user interfaces and dynamic webpages.
+                </p>
+              </div>
+              <div class="col-5">
+                <img class="m-auto d-block" style="height: 100px;" src="{% static 'img/riot-logo.png' %}">
+                <!-- <h3 class="display-4 text-center">Python</h3> -->
+                <p class="lead text-center mt-3">Riot.js is a simple and elegent component-based user interface (UI) library. It powers the post feeds of Peerspace. It allows me to create
+                                                 custom HTML tags, for example every post that is loaded on Peerspace uses a custom HTML tag complied but Riot.js. The most useful feature
+                                                 in Riot.js (for this project in particular) is the ability to loop of data sets. In doing this I can add HTML to the document object model (DOM)
+                                                 dynamically and efficiently.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer-distributed">
+    			<div class="footer-left">
+            <img src="{% static 'img/bristol-logo.png' %}" style="height: 100px;">
+    				<p class="footer-links">
+    					<a href="#">Home</a>
+    					·
+    					<a href="#">Blog</a>
+    					·
+    					<a href="#">Pricing</a>
+    					·
+    					<a href="#">About</a>
+    					·
+    					<a href="#">Faq</a>
+    					·
+    					<a href="#">Contact</a>
+    				</p>
+    				<p class="footer-company-name">Peerspace &copy; 2017</p>
+    			</div>
+    			<div class="footer-center">
+    				<div>
+    					<i class="fa fa-map-marker"></i>
+    					<p><span>University of Bristol</span> Bristol, UK</p>
+    				</div>
+    				<div>
+    					<i class="fa fa-phone"></i>
+    					<p>07714 308 384</p>
+    				</div>
+    				<div>
+    					<i class="fa fa-envelope"></i>
+    					<p><a href="mailto:support@peerspace.io">support@peerspace.io</a></p>
+    				</div>
+    			</div>
+    			<div class="footer-right">
+    				<p class="footer-company-about">
+    					<span>About the company</span>
+    					Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
+    				</p>
+    				<div class="footer-icons">
+    					<a href="#"><i class="fa fa-facebook"></i></a>
+    					<a href="#"><i class="fa fa-twitter"></i></a>
+    					<a href="#"><i class="fa fa-linkedin"></i></a>
+    					<a href="#"><i class="fa fa-github"></i></a>
+    				</div>
+    			</div>
+    		</footer>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block title_tag %}Sign Up | {{ block.super }}{% endblock %}
+{% load bootstrap4 %}
+{% load static %}
+{% block body_content %}
+<link rel="stylesheet" href="{% static 'users/css/user_form.css' %}">
+<div class="user-form-login">
+  <h1>Sign Up</h1>
+  <form method='POST'>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Sign Up</button> or if have an account
+        <a href="http://127.0.0.1:8000/users/login/" class="">Login</a>
+    {% endbuttons %}
+  </form>
+</div>
+{% endblock %}

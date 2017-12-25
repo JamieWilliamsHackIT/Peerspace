@@ -1,0 +1,81 @@
+# Standard imports
+from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
+
+# Import views from views.py
+from . import views
+
+# Define the namespace
+app_name = 'users'
+
+# Define the url patterns to look for
+urlpatterns = [
+    # View urls
+    path(
+        'logout/',
+        views.LogoutView.as_view(),
+        name='logout'
+    ),
+    path(
+        'signup/',
+        views.SignUpView.as_view(),
+        name='signup'
+    ),
+    path(
+        'profile/',
+        views.profile_view_user,
+        name='profile_user'
+    ),
+    path(
+        'edit/',
+        views.UpdateProfile.as_view(),
+        name='edit'
+    ),
+    path(
+        'preferences/',
+        views.update_tags_view,
+        name='edit_tags'
+    ),
+    path(
+        '<int:pk>/',
+        views.profile_view,
+        name='profile'
+    ),
+    # API urls
+    path(
+        'api/v2/',
+        views.ListCreateUser.as_view(),
+        name='users'
+    ),
+    path(
+        'api/v2/<int:pk>',
+        views.RetrieveUpdateDestroyUser.as_view(),
+        name='users'
+    ),
+    path(
+        'api/v2/<int:pk>/follow/',
+        views.FollowUser.as_view(),
+        name='follow'
+    ),
+    path(
+        'api/v2/tags/',
+        views.ListCreateUserPreferenceTag.as_view(),
+        name='user_tags'
+    ),
+    path(
+        'get_preferences/',
+        views.UpdateTags.as_view(),
+        name='edit_tags_api'
+    ),
+    path(
+        'api/v2/tags/<int:pk>',
+        views.RetrieveUpdateDestroyUserPreferenceTag.as_view(),
+        name='user_tag_detail'
+    ),
+    path(
+        'api/v2/tags/delete/',
+        views.delete_tag,
+        name='delete_user_tag'
+    ),
+]

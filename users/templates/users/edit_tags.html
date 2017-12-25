@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title_tag %}Edit Preferences | {{ block.super }}{% endblock %}
+{% block body_content %}
+<link rel="stylesheet" href="{% static 'users/css/user_form.css' %}">
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+<link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+<div class="user-form mt-5 pt-5">
+  <h1>Edit Preferences</h1>
+  <form method="post" enctype="multipart/form-data" class="form">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Tags</label>
+        <ul id="tags">
+        </ul>
+      </div>
+      <a href="{% url 'users:profile_user' %}" class="btn btn-primary">Save changes</a>
+  </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+<script src="{% static 'js/csrf.js' %}"></script>
+<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+<script>
+$.ajax({
+  type: "GET",
+  dataType: "json",
+  url: "http://127.0.0.1:8000/users/get_preferences",
+  success: function(data) {
+    for (i in data.tags) {
+      $('#tags').append('<li>' + data.tags[i] + '</li>')
+    }
+    $("#tags").tagit({
+      afterTagAdded: function(e, obj) {
+        if (!obj.duringInitialization) {
+            var data = {
+              tag: obj.tagLabel,
+              weight: 0.5,
+              user: {{ user.id }}
+            }
+            $.ajax({
+              type: "POST",
+              data: data,
+              url: "http://127.0.0.1:8000/users/api/v2/tags/"
+            })
+        }
+      },
+      afterTagRemoved: function(e, obj) {
+          var data = {
+            tag: obj.tagLabel,
+            user: {{ user.id }}
+          }
+          $.ajax({
+            type: "POST",
+            data: data,
+            url: "http://127.0.0.1:8000/users/api/v2/tags/delete/"
+          })
+        }
+    })
+  }, error(error) {
+    console.log("Error: " + error)
+  }
+})
+</script>
+{% endblock %}

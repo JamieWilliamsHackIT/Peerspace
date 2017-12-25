@@ -1,0 +1,58 @@
+
+.post-feed {
+  /* width: 30%; */
+  margin-top: 60px;
+}
+
+.user-info {
+  /* margin-top: 21px; */
+  position: fixed;
+  width: 300px;
+}
+
+.post {
+  margin-bottom: 0!important;
+}
+
+.post-footer {
+  background-color: rgb(250, 250, 250);
+  margin: 0.99px;
+  /* margin-bottom: 15px; */
+  text-decoration: none;
+  color: black;
+  height: 30px;
+}
+
+.like-btn,
+.comment-btn,
+.verify-btn {
+  vertical-align: middle;
+  color: grey;
+  transition: all 0.5s;
+}
+
+.like-btn:hover {
+  color: grey;
+}
+
+.post-proof {
+  margin: 0.99px;
+  background-color: white;
+}
+
+.comment-form {
+  margin: 0.99px;
+}
+
+.comment-container {
+  background-color: white;
+  margin: 0.99px;
+}
+
+.comment-pic {
+  width: 35px!important;
+}
+
+.delete-comment-btn {
+  display: none;
+}

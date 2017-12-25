@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body_content %}
+<h1 class="mt-5 pt-5 text-center">Delete proof: {{ post.proof_description }}?</h1>
+
+<div class="mx-auto d-block w-25 text-center mt-5">
+	<a href="{% url 'posts:prove_delete' pk=post.pk %}" class="mx-2 btn btn-danger">Delete</a>
+	<a href="{% url 'posts:post_detail' pk=post.pk %}" class="mx-2">Cancel</a>
+</div>
+{% endblock %}

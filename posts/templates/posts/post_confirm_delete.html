@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block body_content %}
+<h1 class="mt-5 pt-5 text-center">Delete post: {{ post.title }}?</h1>
+
+<form method='POST' class="mx-auto d-block w-25 text-center mt-5">
+	{% csrf_token %}
+	<input type="submit" class="btn btn-danger mx-2" value="Delete">
+	<a href="{% url 'posts:post_detail' pk=post.pk %}" class="mx-2">Cancel</a>
+</form>
+{% endblock %}
