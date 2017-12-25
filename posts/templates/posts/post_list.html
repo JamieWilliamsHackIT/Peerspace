@@ -99,6 +99,7 @@
       success: function() {getComments(post_id)}
     })
   }
+  var numberOfComments;
   function getComments(post_id) {
     //Gets comments
     $.ajax({
@@ -106,13 +107,14 @@
       url: root_url + "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
+        numberOfComments = comments.length
         $('.comment-list-' + post_id).html('')
         if (comments.length == 0) {
           $('.comment-form-' + post_id).fadeIn()
         }
         $.each(comments, function(i,e) {
           var commentHTML = '<li class="media comment-block py-3">';
-          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="http://127.0.0.1:8000' + e.user_pic_url + '">'
+          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">'
           commentHTML += '<div class="media-body">'
           commentHTML += '<strong>' + e.user_name + ': </strong>'
           commentHTML += e.comment
@@ -128,13 +130,6 @@
           $('.comment-list-' + post_id).append(commentHTML)
           $('.comment-container-' + post_id).fadeIn()
           $('.comment-form-' + post_id).fadeIn()
-          if (data.completed) {
-            $(`.post-${post_id} .completion-status`).text('Completed')
-          } else if (!data.completed && (data.proof_description || data.proof_pic)) {
-            $(`.post-${post_id} .completion-status`).text('Awaiting Verification')
-          } else {
-            $(`.post-${post_id} .completion-status`).text('Not completed')
-          }
         })
       }
     });
@@ -175,6 +170,8 @@
             success: function(data) {
               //Load all comments
               getComments(post_id)
+              numberOfComments += 1
+              $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + numberOfComments + ')')
             }
           })
           $(this).val('')
