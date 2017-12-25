@@ -68,6 +68,10 @@
 <script src="{% static 'js/csrf.js' %}"></script>
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
+  // For development
+  //var root_url = 'https://127.0.0.8:8000'
+  // For production
+  var root_url = 'https://peerspace.herokuapp.com'
   $(document).ready(function() {
     $("#tags").tagit()
     $('.ui-widget-content')
@@ -79,7 +83,7 @@
     //Gets posts
     $.ajax({
       type: "GET",
-      url: "http://127.0.0.1:8000/posts/api/v1/feed/{{ user.id }}",
+      url: root_url + "/posts/api/v1/feed/{{ user.id }}",
       dataType: 'json',
       success: function(data) {
         user_id = {{ user.id }}
@@ -89,7 +93,7 @@
   }
   function deleteComment(comment_id, post_id) {
     $.ajax({
-      url: "http://127.0.0.1:8000/posts/api/v1/comments/" + comment_id,
+      url: root_url + "/posts/api/v1/comments/" + comment_id,
       type: "DELETE",
       // This MUST be in the callback due to the asynchronus nature of javascript
       success: function() {getComments(post_id)}
@@ -99,7 +103,7 @@
     //Gets comments
     $.ajax({
       type: "GET",
-      url: "http://127.0.0.1:8000/posts/api/v1/" + post_id + "/comment",
+      url: root_url + "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
         $('.comment-list-' + post_id).html('')
@@ -124,15 +128,11 @@
           $('.comment-list-' + post_id).append(commentHTML)
           $('.comment-container-' + post_id).fadeIn()
           $('.comment-form-' + post_id).fadeIn()
-          console.log('.post-${post_id} .completion-status')
           if (data.completed) {
-            console.log(1)
             $(`.post-${post_id} .completion-status`).text('Completed')
           } else if (!data.completed && (data.proof_description || data.proof_pic)) {
-            console.log(1)
             $(`.post-${post_id} .completion-status`).text('Awaiting Verification')
           } else {
-            console.log(1)
             $(`.post-${post_id} .completion-status`).text('Not completed')
           }
         })
@@ -146,7 +146,7 @@
       e.preventDefault()
       var this_button = $(this)
       $.ajax({
-        url: "http://127.0.0.1:8000/posts/api/v1/" + this_button.attr('id') + "/like",
+        url: root_url + "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         data: {},
         success: function(data) {
@@ -169,7 +169,7 @@
             post: post_id
           }
           $.ajax({
-            url: "http://127.0.0.1:8000/posts/api/v1/" + post_id + "/comment",
+            url: root_url + "/posts/api/v1/" + post_id + "/comment",
             method: "POST",
             data: data,
             success: function(data) {
@@ -203,7 +203,7 @@
       post_id = $(this).attr("post-id")
       this_button = $(this)
       $.ajax({
-        url: "http://127.0.0.1:8000/posts/api/v1/" + post_id + "/verify",
+        url: root_url + "/posts/api/v1/" + post_id + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {
@@ -234,7 +234,7 @@
       e.preventDefault()
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:8000/posts/api/v1/",
+        url: root_url + "/posts/api/v1/",
         data: data,
         success: function(postData) {
           riot.mount('post-feed', {callback:tagCallBack})
