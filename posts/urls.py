@@ -84,6 +84,6 @@ urlpatterns = [
     path(
         'api/v1/feed/<int:user_id>',
         views.FeedPostList.as_view(),
-        name='test'
+        name='feed'
     ),
 ]
