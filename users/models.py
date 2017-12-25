@@ -69,18 +69,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     # This field is used to determine whether the user is a staff user
     is_staff = models.BooleanField(default=False)
-    # This field is used to hold any accounts the user follows
+    # This field is used to hold any accounts the user is followed by
     follows = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     related_name='followed_by',
                                     default='',
                                     blank=True
                                     )
+    # This field is used to hold any accounts the user sfollows
     following = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     default='',
                                     blank=True
                                     )
 
-    profile_pic = models.ImageField(blank=True, null=True)
+    profile_pic = DefaultStaticImageField(blank=True)
 
     cover_pic = models.ImageField(blank=True, null=True)
 
