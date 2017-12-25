@@ -1,7 +1,7 @@
 <post-feed>
   <div each={post in opts.posts}>
     <li class="media post post-{post.id} list-group-item p-4 my-3">
-      <img class="media-object mr-3 align-self-start" src="https://peerspace.herokuapp.com{ post.user_url }">
+      <img class="media-object mr-3 align-self-start" src="{ post.user_url }">
       <div class="media-body">
         <div class="media-heading">
           <small class="float-right text-muted">{post.days_since} days</small>
