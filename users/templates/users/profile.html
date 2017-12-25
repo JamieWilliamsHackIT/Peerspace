@@ -83,6 +83,10 @@
 <script src="{% static 'js/csrf.js' %}"></script>
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
+    // For development
+    //var root_url = 'https://127.0.0.8:8000'
+    // For production
+    var root_url = 'https://peerspace.herokuapp.com'
     function tagCallBack(theTag) {
     // Gets posts
     $.ajax({

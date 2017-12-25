@@ -11,7 +11,7 @@
     {% bootstrap_form form %}
     {% buttons %}
         <button type="submit" class="btn btn-primary">Sign Up</button> or if have an account
-        <a href="http://127.0.0.1:8000/users/login/" class="">Login</a>
+        <a href="{% url 'login' %}" class="">Login</a>
     {% endbuttons %}
   </form>
 </div>
