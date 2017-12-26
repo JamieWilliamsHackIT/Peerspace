@@ -18,6 +18,11 @@ from users.models import User
 from . import serializers
 from .feed import get_most_relevent
 
+# Use this url for production
+root_url = 'https://peerspace.herokuapp.com'
+# Use this url for development
+# root_url = 'https://127.0.0.8:8000'
+
 class ListCreatePost(generics.ListCreateAPIView):
     queryset = models.Post.objects.all().order_by('-created_at')
     serializer_class = serializers.PostSerializer
@@ -69,9 +74,20 @@ def post_view(request, pk):
         post = get_object_or_404(models.Post, pk=pk)
         if request.user.id == post.user_id:
             user_profile_pic = User.objects.filter(id=request.user.id).latest('id').profile_pic.url
-            return render(request, 'posts/post_detail_user.html', {'post': post, 'user_profile_pic': user_profile_pic})
+            return render(request, 'posts/post_detail_user.html',
+                            {
+                                'post': post,
+                                'user_profile_pic': user_profile_pic,
+                                'root_url': root_url,
+                            }
+                         )
         else:
-            return render(request, 'posts/post_detail.html', {'post': post})
+            return render(request, 'posts/post_detail.html',
+                            {
+                                'post': post,
+                                'root_url': root_url,
+                            }
+                         )
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
 

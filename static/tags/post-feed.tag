@@ -5,7 +5,7 @@
       <div class="media-body">
         <div class="media-heading">
           <small class="float-right text-muted">{post.days_since} days</small>
-          <h6><a href="https://peerspace.herokuapp.com/users/{post.user}">{post.user_name}</a> made the commitment: <a href="https://peerspace.herokuapp.com/posts/{post.id}">{post.title}</a></h6>
+          <h6><a href="{root_url}/users/{post.user}">{post.user_name}</a> made the commitment: <a href="{root_url}/posts/{post.id}">{post.title}</a></h6>
         </div>
         <p>
           {post.description}
@@ -59,6 +59,8 @@
     })
     this.on('data_loaded', function(data, user_id) {
       opts.posts = data
+      // root_url = 'https://127.0.0.8:8000'
+      root_url = 'https://peerspace.herokuapp.com'
       // console.log(opts.posts)
       this.update()
     })
