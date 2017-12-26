@@ -61,7 +61,6 @@
       opts.posts = data
       // root_url = 'https://127.0.0.8:8000'
       root_url = 'https://peerspace.herokuapp.com'
-      // console.log(opts.posts)
       this.update()
     })
   </script>
