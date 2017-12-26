@@ -23,7 +23,11 @@
       success: function(data) {
         user_id = {{ user.id }}
         console.log(data)
-        theTag.trigger('data_loaded', data, user_id)
+        post = {
+          post: data
+        }
+        console.log(post)
+        theTag.trigger('data_loaded', post, user_id)
       }
     });
   }
