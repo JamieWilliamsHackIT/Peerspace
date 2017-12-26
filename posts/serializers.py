@@ -6,10 +6,7 @@ from . import models
 class PostSerializer(serializers.ModelSerializer):
 
     days_since = serializers.ReadOnlyField(source='time_since_creation')
-
     user_name = serializers.ReadOnlyField(source='user.name')
-
-    # proofs = PostProofSerializer(many=True, read_only=True)
 
     try:
         user_url = serializers.ReadOnlyField(source='user.profile_pic.url')
