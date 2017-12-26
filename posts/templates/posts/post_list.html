@@ -79,6 +79,15 @@
       .addClass('form-contol')
   })
   $("#tags").tagit();
+  // Will fade the delete button in and out when the user hovers over their own comment
+  $(document).on('mouseenter', '.comment-block', function() {
+    var comment_id = $(this).attr('commentid')
+    $('.delete-comment-btn-' + comment_id).fadeIn();
+  })
+  $(document).on('mouseleave', '.comment-block', function() {
+    var comment_id = $(this).attr('commentid')
+    $('.delete-comment-btn-' + comment_id).fadeOut();
+  })
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
@@ -120,7 +129,7 @@
           commentHTML += e.comment
           if ({{user.id}} == e.user_id) {
             //Handle the deleting of comments here
-            commentHTML += '</div><a class="" style="float:right" href="#" onClick="deleteComment('+ e.comment_id +',' + post_id + ')"><span class="icon icon-cross"></span></a>'
+            commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + post_id + ')"><span class="icon icon-cross"></span></button>'
           }
           commentHTML += '</li>'
           if (comments.length > i + 1) {
