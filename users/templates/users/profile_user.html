@@ -153,7 +153,6 @@
       url: root_url + "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
-        numberOfComments = comments.length
         $('.comment-list-' + post_id).html('')
         if (comments.length == 0) {
           $('.comment-form-' + post_id).fadeIn()
@@ -249,8 +248,6 @@
             success: function(data) {
               //Load all comments
               getComments(post_id)
-              numberOfComments += 1
-              $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + numberOfComments + ')')
             }
           })
           $(this).val('')
