@@ -2,9 +2,19 @@
 {% load static %}
 {% block body_content %}
 <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
-<ul class="media-list post-feed media-list-stream mb-3">
- <post-feed></post-feed>
-</ul>
+<div class="container mt-5">
+  <div class="row">
+    <div class="user-post mt-5 col-lg-3">
+      <div class="card card-profile mb-4">
+        <div class="card-header" style="background-image: url({{ profile_pictures.user_cover_pic }});"></div>
+        <div class="card-body text-center">
+        <!-- Some post stats to go in here -->
+        </div>
+      </div>
+    </div>
+    <ul class="media-list col-lg-6 mt-5 media-list-stream post-body mb-3">
+     <post-feed></post-feed>
+    </ul>
 <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
