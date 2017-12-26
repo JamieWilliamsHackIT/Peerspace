@@ -125,7 +125,7 @@
         }
         $.each(comments, function(i,e) {
           var commentHTML = '<li class="media comment-block py-3" commentid=' + e.comment_id + '>';
-          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="http://127.0.0.1:8000' + e.user_pic_url + '">'
+          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">'
           commentHTML += '<div class="media-body">'
           commentHTML += '<strong>' + e.user_name + ': </strong>'
           commentHTML += e.comment
