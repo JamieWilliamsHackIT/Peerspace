@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,9 +11,9 @@
     <title>Peerspace | Documentation</title>
 
     <!-- Styles -->
-    <link href="/static/assets/css/theDocs.all.min.css" rel="stylesheet">
-    <link href="/static/assets/css/custom.css" rel="stylesheet">
-    <link href="/static/css/docs.css" rel="stylesheet">
+    <link href="{% static 'assets/css/theDocs.all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/docs.css' %}" rel="stylesheet">
 
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Raleway:100,300,400,500%7CLato:300,400' rel='stylesheet' type='text/css'>
@@ -519,8 +520,8 @@ def profile_view(request, pk):
     <!-- END Footer -->
 
     <!-- Scripts -->
-    <script src="/static/assets/js/theDocs.all.min.js"></script>
-    <script src="/static/assets/js/custom.js"></script>
+    <script src="{% static 'assets/js/theDocs.all.min.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
 
   </body>
 </html>
