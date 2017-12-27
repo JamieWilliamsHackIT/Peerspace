@@ -29,11 +29,11 @@
     <!-- Sidebar -->
     <aside class="sidebar sidebar-boxed sidebar-dark">
 
-      <a class="sidebar-brand" href="index.html"><img src="/static/img/logo.png" class="logo" alt="logo"></a>
+      <a class="sidebar-brand" href="index.html"><img src="{% static 'img/logo.png' %}" class="logo" alt="logo"></a>
 
       <ul class="nav sidenav">
         <li><a href="#html-structure">The Entry Point</a></li>
-        <li><a href="#variations">Variations</a></li>
+        <li><a href="#variations">Settings</a></li>
 
         <li>
           <a href="#title1">Users App</a>
@@ -150,8 +150,80 @@
 
 
         <section>
-          <h2 id="variations">Django's Process</h2>
-          <p>How Django accepts HTTP requests, processes data and returns HTTP responses.</p>
+          <h2 id="variations">Settings</h2>
+          <p>Django comes with some default settings, I haven't changed many of these. Below are the key settings that I added or changed.</p>
+          <p>Peerspace uses <a href="https://aws.amazon.com/s3/" target="_blank">Amazon Web Services S3</a> to serve static files (JavaScript, CSS, images on the homepage and logo, etc...) and media files (user profile pictures and cover pictures, etc...).
+            In order for Django to retrieve these files from S3 I had to set up a bucket on in the S3 console and define some settings in my <code>settings.py</code> file.</p>
+
+
+          <pre class="line-numbers"><code class="language-python">
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.0/howto/static-files/
+
+STATIC_ROOT = ''
+STATIC_URL = '/static/'
+STATICFILES_DIRS = ( os.path.join('static'), )
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'users.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+
+# REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
+
+LOGIN_REDIRECT_URL = '/posts'
+
+
+
+STATICFILES_LOCATION = '/static/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+MEDIAFILES_LOCATION = '/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Update database configuration with $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+"""
+This will tell boto that when it uploads files to S3, it should set properties on them so that when S3 serves them, it'll include some HTTP headers in the response.
+"""
+AWS_S3_OBJECT_PARAMETERS = {
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'CacheControl': 'max-age=94608000',
+}
+
+AWS_STORAGE_BUCKET_NAME = 'peerspace'
+AWS_S3_REGION_NAME = 'eu-west-2'  # e.g. us-east-2
+AWS_ACCESS_KEY_ID = 'AKIAIWX5HLLVM7KJ5UEA'
+AWS_SECRET_ACCESS_KEY = '****************************************'
+
+# Tell django-storages the domain to use to refer to static files.
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+# you run `collectstatic`).
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+DEFAULT_IMAGE_PATH = 'default_profile_pic.svg'
+
+          </code></pre>
 
 
         </section>
