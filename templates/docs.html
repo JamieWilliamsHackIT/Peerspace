@@ -8,7 +8,8 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
 
-    <title>Peerspace | Documentation</title>
+    <title>Documentation | Peerspace</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 
     <!-- Styles -->
     <link href="{% static 'assets/css/theDocs.all.min.css' %}" rel="stylesheet">
@@ -119,7 +120,7 @@
       <!-- Main content -->
       <article class="main-content" role="main">
 
-        <p class="lead">Here is an in-depth description of how Peerspace works. This page contains the detail missed out in the report, I understand there was a limit on the report but there was not mention of how long the
+        <p class="lead">Here is an in-depth description of how Peerspace works. This page contains the detail missed out in the report, I understand there was a limit on the length report but there was not mention of how long the
         suporting documentation could be...</p>
 
         <section>
@@ -261,7 +262,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, name, password):
                                                                     # Check to see if the user has provided an email.
         if not email:
-            # If not then raise an error
+                                                                    # If not then raise an error
             raise ValueError('Please provide an E-Mail address')
                                                                     # Initialise the user model
         user = self.model(
