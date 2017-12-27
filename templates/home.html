@@ -6,9 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="{% static 'dist/toolkit.css' %}">
     <link rel="stylesheet" href="{% static 'dist/toolkit.css.map' %}">
-    <link rel="stylesheet" href="css/demo.css">
+    <!-- <link rel="stylesheet" href="css/demo.css"> -->
   	<link rel="stylesheet" href="{% static 'css/footer-distributed-with-address-and-phones.css' %}">
   	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
@@ -31,7 +32,7 @@
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="#">Documentation</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'users:signup' %}">Sign up</a>
@@ -43,32 +44,19 @@
       </div>
     </nav>
     <header class="main-header">
-      <div class="fullscreen-bg">
-          <video loop muted autoplay poster="img/videoframe.jpg" class="fullscreen-bg__video">
-              <source src="{% static 'vid/meeting.mp4' %}" type="video/mp4">
-          </video>
-      </div>
       <div class="header-text">
         <h1 class="display-1">Welcome to Peerspace.io!</h1>
         <p class="lead">A Python powered social network that counters procrastination and encourages collaboration.</p>
         <div class="site-info mt-5">
           <h2 class="lead mb-5">There are currently<strong> {{ users.count }} </strong>active users, who have collectively posted<strong> {{ posts.count }} </strong>times.</h2>
-          <a href="{% url 'users:signup' %}" class="btn btn-outline-dark mr-3">Get Started</a>
-          <a href="{% url 'login' %}" class="btn btn-outline-dark">Login</a>
+          <a href="{% url 'users:signup' %}" class="btn btn-outline-light mr-3">Get Started</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
        </div>
       </div>
-      <!-- <img class="header-img img-fluid" src="{% static 'img/home-network.png' %}"> -->
-      <!-- <div class="header-footer">
-        <a class="btn btn-outline-light">Sign in</a>
-        <a class="btn btn-outline-light">Sign up</a>
-      </div> -->
+      <!-- <img class="header-img img-fluid" src="{% static 'img/header-img.png' %}"> -->
+      <img class="header-img img-fluid" src="/static/img/header-img.png">
     </header>
     <div class="main-content mt-5">
-      <!-- <svg class="main-content-svg" height="100%" width="100%">
-        <line x1="600" y1="0" x2="1900" y2="800" style="stroke:#6A0F49;stroke-width:1" />
-        <line x1="1900" y1="400" x2="-800" y2="2200" style="stroke:#6A0F49;stroke-width:1" />
-
-      </svg> -->
       <div class="primary-content">
         <div class="container info-block">
           <div class="intro-text mb-5">

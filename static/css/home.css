@@ -7,11 +7,12 @@ body {
 }
 
 .main-header {
-  /* background: url('vid/meeting.mp4') no-repeat center;
+  background: url('static/img/Community.jpg') no-repeat center;
   background-size: cover;
   background-color: #6A0F49;
-  height: 50vh;
-  position: relative; */
+  height: 60vh;
+  position: relative;
+  color: white;
 }
 
  .fullscreen-bg {
@@ -50,9 +51,9 @@ body {
 
 .main-header .header-img {
   position: absolute;
-  bottom: 70px;
+  bottom: 40px;
   right: 10%;
-  height: 90%;
+  height: 80%;
 }
 
 .main-header .header-footer {
@@ -85,5 +86,10 @@ body {
 
 .background-color-1 {
   background-color: rgba(245,245,245, 1);
+  width: 100vw;
+}
+
+.background-color-2 {
+  background-color: rgba(240,240,240, 1);
   width: 100vw;
 }

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <title>Peerspace | Documentation</title>
+
+    <!-- Styles -->
+    <link href="/static/assets/css/theDocs.all.min.css" rel="stylesheet">
+    <link href="/static/assets/css/custom.css" rel="stylesheet">
+    <link href="/static/css/docs.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Raleway:100,300,400,500%7CLato:300,400' rel='stylesheet' type='text/css'>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" href="assets/img/favicon.png">
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar" data-offset="200">
+
+
+    <!-- Sidebar -->
+    <aside class="sidebar sidebar-boxed sidebar-dark">
+
+      <a class="sidebar-brand" href="index.html"><img src="/static/img/logo.png" class="logo" alt="logo"></a>
+
+      <ul class="nav sidenav">
+        <li><a href="#html-structure">The Entry Point</a></li>
+        <li><a href="#variations">Variations</a></li>
+
+        <li>
+          <a href="#title1">Users App</a>
+          <ul>
+            <li><a href="#subtitle1">User Manager</a></li>
+            <li>
+              <a href="#subtitle2">User Model</a>
+              <ul>
+                <li><a href="#subtitle2-1">SignUpView</a></li>
+                <li><a href="#subtitle2-2">UpdateProfile</a></li>
+                <li><a href="#subtitle2-3">LogoutView</a></li>
+                <li>
+                  <a href="#subtitle2-4">Profile View</a>
+                  <ul>
+                    <li><a href="#subtitle2-4-1">Your Profile</a></li>
+                    <li><a href="#subtitle2-4-2">Another's Profile</a></li>
+                  </ul>
+                </li>
+              </ul>
+
+            </li>
+            <li><a href="#subtitle3">Subtitle 3</a></li>
+            <li><a href="#subtitle4">Subtitle 4</a></li>
+          </ul>
+        </li>
+        <li><a href="#title2">Second Title</a></li>
+      </ul>
+
+    </aside>
+    <!-- END Sidebar -->
+
+
+    <header class="site-header navbar-transparent">
+
+      <!-- Top navbar & branding -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+
+          <!-- Toggle buttons and brand -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+              <span class="glyphicon glyphicon-option-vertical"></span>
+            </button>
+
+            <button type="button" class="navbar-toggle for-sidebar" data-toggle="offcanvas">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+          </div>
+          <!-- END Toggle buttons and brand -->
+
+          <!-- Top navbar -->
+          <div id="navbar" class="navbar-collapse collapse" aria-expanded="true" role="banner">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="index.html">Documentation</a></li>
+              <li><a href="page_blog.html">Blog</a></li>
+              <li><a href="page_faq.html">FAQ</a></li>
+              <li><a href="http://thethemeio.helpato.com/thedocs" target="_blank">Support</a></li>
+              <li class="hero"><a href="http://themeforest.net/item/thedocs-online-documentation-template/13070884?license=regular&open_purchase_for_item_id=13070884&purchasable=source&ref=thethemeio">Purchase</a></li>
+            </ul>
+          </div>
+          <!-- END Top navbar -->
+
+        </div>
+      </nav>
+      <!-- END Top navbar & branding -->
+
+      <!-- Banner -->
+      <div class="banner auto-size" style="background-color: #6A0F49">
+        <div class="container-fluid text-white">
+          <h1><strong>Peerspace</strong> documentation</h1>
+          <h5>A line-by-line explaination of how Peerspace works.</h5>
+        </div>
+      </div>
+      <!-- END Banner -->
+
+    </header>
+
+    <main class="container-fluid">
+
+      <!-- Main content -->
+      <article class="main-content" role="main">
+
+        <p class="lead">Here is an in-depth description of how Peerspace works. This page contains the detail missed out in the report, I understand there was a limit on the report but there was not mention of how long the
+        suporting documentation could be...</p>
+
+        <section>
+          <h2 id="html-structure">The entry-point</h2>
+          <p>The manage.py file is the file that allows me to run commandline instructions. From the commandline I can run the local server, create users and much more.</p>
+
+<pre class="line-numbers"><code class="language-python">
+  #!/usr/bin/env python
+  import os
+  import sys
+
+  if __name__ == "__main__":
+      os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Peerspace.settings")
+      try:
+          from django.core.management import execute_from_command_line
+      except ImportError as exc:
+          raise ImportError(
+              "Couldn't import Django. Are you sure it's installed and "
+              "available on your PYTHONPATH environment variable? Did you "
+              "forget to activate a virtual environment?"
+          ) from exc
+      execute_from_command_line(sys.argv)
+
+
+</code></pre>
+
+        </section>
+
+
+        <section>
+          <h2 id="variations">Django's Process</h2>
+          <p>How Django accepts HTTP requests, processes data and returns HTTP responses.</p>
+
+
+        </section>
+
+
+        <section>
+          <h2 id="title1">Users App</h2>
+          <p>The user application manages everything todo with the user. It allows users to signup, signin and logout. It allows users to follow other users and upload photos (soon it will allow users to receive notifications and message other users).</p>
+          <p>It also manages the permissions within the site. For example a user cannot edit another user's information or profile, it also manages user authenticatoion; only logged in users can interact with the site</p>
+
+          <h3 id="subtitle1">User Manager</h3>
+          <p>Django comes with a basic user model that you can use straight out of the box, although this is useful it did not fit the user model I needed for Peerspace. As the user model
+          is specific to every application Django makes it very easy to abstract the base user model, allowing you me customise it to my heart's content.</p>
+          <p>The <code>UserManager</code> class extends the <code>BaseUserManager</code> class. This allows me to customise the user creation process by defining what fields are requeired
+          when signing up. It also lets me perform operations on the information that the user inputs, for example I have normalised the format of all email addresses across the site are congruent.</p>
+
+          <pre class="line-numbers"><code class="language-python">
+                                                                    # These imports allow me to extend/abstract the base user model.
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin
+)
+                                                                    # Standard imports
+from django.db import models
+from django.utils import timezone
+from django.conf import settings
+
+from django_fields import DefaultStaticImageField
+
+                                                                    # The user manager class controls how users and superusers are created
+                                                                    # It extends the base user manager that comes with Django
+class UserManager(BaseUserManager):
+                                                                    # This method is run when a new user is created
+    def create_user(self, email, name, password):
+                                                                    # Check to see if the user has provided an email.
+        if not email:
+            # If not then raise an error
+            raise ValueError('Please provide an E-Mail address')
+                                                                    # Initialise the user model
+        user = self.model(
+                                                                    # The normalize_email() function will make sure that all the emails
+                                                                    # across the project are formatted identically
+            email=self.normalize_email(email),
+            name=name,
+        )
+                                                                    # The set_password() function manages the passwork security such as the
+                                                                    # password hashing
+        user.set_password(password)
+                                                                    # Save the user to the database
+                                                                    # Set the default profile and cover pictures
+        user.save
+                                                                    # Return the user
+        return user
+
+                                                                    # This method is called when a superuser is created, this will be done in
+                                                                    # the command line
+    def create_superuser(self, email, name, password):
+                                                                    # Take the info from the create_user() method
+        user = self.create_user(
+            email,
+            name,
+            password
+        )
+                                                                    # Set the is_staff value to True
+        user.is_staff = True
+                                                                    # Set the is_superuser value to True
+        user.is_superuser = True
+                                                                    # Save the superuser to the database
+        user.save()
+                                                                    # Return the superuser
+        return user
+          </code></pre>
+
+          <h3 id="subtitle2">User Model</h3>
+            <p>The user models defines the table used to store user data. The classes attributes define the columns in the table and the methods can perform opeations using the data.</p>
+            <p>In a similar fashion to the user manager the <code>User</code> class extends the <code>AbstractBaseUser</code> class, it also extends the <code>PermissionsMixin</code> class (I shall talk more on that later), this
+              allows me to add columns and customise the base user model whilst keeping all of the functionality that comes with Django's base user.</p>
+
+            <pre class="line-numbers"><code class="language-python">
+
+                                                                    # This class is my custom user model
+class User(AbstractBaseUser, PermissionsMixin):
+                                                                    # The users email is used as the unique identifier of their account
+    email = models.EmailField(unique=True)
+                                                                    # This field holds the name of the user
+                                                                    # (they can decide whether to give both first and last name or ethier.)
+    name = models.CharField(max_length=72, default='')
+                                                                    # This field holds a short bio about the user
+    bio = models.TextField(blank=True, default='')
+                                                                    # This field auto fills with the time of account creation
+    date_joined = models.DateTimeField(default=timezone.now)
+                                                                    # This field is used to determine whether the user's account is active.
+    is_active = models.BooleanField(default=True)
+                                                                    # This field is used to determine whether the user is a staff user
+    is_staff = models.BooleanField(default=False)
+                                                                    # This field is used to hold any accounts the user is followed by
+    follows = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                    related_name='followed_by',
+                                    default='',
+                                    blank=True
+                                    )
+                                                                    # This field is used to hold any accounts the user sfollows
+    following = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                    default='',
+                                    blank=True
+                                    )
+
+    profile_pic = DefaultStaticImageField(blank=True)
+
+    cover_pic = models.ImageField(blank=True, null=True)
+
+    objects = UserManager()
+                                                                    # This attribute tells Django what field to expect as the username, or
+                                                                    # unique identifier for the user
+    USERNAME_FIELD = 'email'
+                                                                    # This attribute tells Django that the "name" field is required
+    REQUIRED_FIELDS = ['name']
+            </code></pre>
+
+          <h3 id="subtitle2-1">SignUpView</h2>
+          <p>The <code>SignUpView</code> class renders the <a target="_blank" href="{% url 'users:signup' %}">sign up</a> page. This handles the standard user creation process (superusers are created in the commandline), Django
+          is so very kind and handles the form validation for me (this is another example of how Django handles mundane tasks for me so I can focus on the important stuff).</p>
+
+          <pre class="line-numbers"><code class="language-python">
+                                                                    # This class renders the signup template and form
+class SignUpView(generic.CreateView):
+                                                                    # Tell the view to use the custom form I created in forms.py
+    form_class = forms.UserCreateForm
+                                                                    # Redirect the user to the lgoin page once they've signed up
+    success_url = reverse_lazy('login')
+                                                                    # Tell the view what template to render
+    template_name = 'users/signup.html'
+          </code></pre>
+
+          <p>The code below defines the form class that the signup view uses to capture the user data. The <code>UserCreateForm</code> extends Django's base <code>UserCreationForm</code>, as I have modified the base user model I must also modify the
+          base user creation form.</p>
+          <p>The <code>Meta</code> class has an attribute <code>fields</code>, here I specify what fields the signup form should display. The <code>model</code> attribute defines what user model we are using, in this case it is the custom user model I created.</p>
+
+          <pre class="line-numbers"><code class="language-python">
+                                                                    # This class abstracts the UserCreationForm class, this allows me to customise
+                                                                    # the Django signup form
+class UserCreateForm(UserCreationForm):
+                                                                    # The meta class holds information...
+    class Meta:
+                                                                    # Define the fields that the form should hold
+        fields = (
+            'name',
+            'email',
+            'password1',
+            'password2',
+        )
+                                                                    # This gets the user model from settings.AUTH_USER_MODEL
+        model = get_user_model()
+                                                                    # This method runs when the object is instantiated
+    def __init__(self, *args, **kwargs):
+                                                                    # Run the __init__ method on the base class we inherited from with the
+                                                                    # arguments and key-word arguments supplied
+        super().__init__(*args, **kwargs)
+                                                                    # Set the label of the email field to a more aesthetic value
+        self.fields['email'].label = 'Email Address'
+          </code></pre>
+
+          <h3 id="subtitle2-2">UpdateView</h2>
+          <p>The <code>UpdateView</code> class renders the <a target="_blank" href="{% url 'users:edit' %}">profile update</a> page (must be logged in to see link). First of all the form is autofilled with the current user information so the user doesn't have to
+          re-enter any information they wish to keep the same. When the user clicks the "Save changes" button the form is submitted and the subsequesnt changes to the users entry in the database is updated.</p>
+
+          <pre class="line-numbers"><code class="language-python">
+                                                                    # This class renders the page on which users can edit their profile
+class UpdateProfile(LoginRequiredMixin, generic.UpdateView):
+                                                                    # Set the model to the custom user model from models.py
+    model = models.User
+                                                                    # Set the form to the UpdateProfile form in forms.py
+    form_class = forms.UpdateProfile
+                                                                    # Set the redirect uel to the user's profile page
+    def get_success_url(self):
+        pk = self.request.user.id
+        return reverse_lazy('users:profile', kwargs={'pk': pk})
+                                                                    # Set the template the render
+    template_name = 'users/edit_user.html'
+
+    def get_object(self):
+        return self.request.user
+          </code></pre>
+
+          <p>In an almost indenticle way to the signup view the update profile view I defined the model form. Again with the <code>Meta</code> class defining the fields to display and the model to edit.</p>
+
+          <pre class="line-numbers"><code class="language-python">
+                                                                      # This class deines the form used to update the users profile
+class UpdateProfile(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = (
+            'name',
+            'email',
+            'bio',
+            'profile_pic',
+            'cover_pic',
+        )
+          </code></pre>
+
+          <h3 id="subtitle2-3">LogoutView</h2>
+          <p>The <code>LogoutView</code> does not render a page or form like the views we have seen so far. It extends the <code>RedirectView</code> class, therefore when it is called it first logs the user out, kills the current user session
+            and redirects the user to the homepage</p>
+
+          <p>This is the first time we have come across the <code>reverse_lazy</code> function; this is a very useful function thay returns the URL that is related to the URL namespace.</p>
+
+          <pre class="line-numbers"><code class="language-python">
+
+# This class-based-view redirects the user to the home page rather than the
+# default Django admin logout page
+class LogoutView(generic.RedirectView):
+                                                                    # Get the url linked the name "home"
+    url = reverse_lazy('home')
+                                                                    # This method logs the user out and runs the base LogoutView class using the
+                                                                    # .super() method
+    def get(self, request, *args, **kwargs):
+                                                                    # This function takes the http request object and logs the user out
+        logout(request)
+        return super().get(request, *args, *kwargs)
+
+          </code></pre>
+
+          <h3 id="subtitle2-4">Profile Views</h2>
+          <p>The <code>LogoutView</code> does not render a page or form like the views we have seen so far. It extends the <code>RedirectView</code> class, therefore when it is called it first logs the user out, kills the current user session
+            and redirects the user to the homepage</p>
+
+          <h4 id="subtitle2-4-1">Your Own Profile</h4>
+
+          <p>The <code>profile_view_user</code> function-based-view renders the profile page of the current logged in user. The <code>get_profile_images</code> function is important here, it does more than just fetch
+          the user's profile images from the media store. Before I introduced this function, if the user had not uploaded a profile picture it would result in a 500 response code (internal server error) as the profile picture field was blank and
+          calling the <code>.url</code> method on a blank field returns an error. This functioin checks to see whether the field is blank, if so it doesn't call the <code>.url</code> method and instead outputs the path to the default profile
+          picturem, thus preventing the server</p>
+
+          <pre class="line-numbers"><code class="language-python">
+
+# This function returns a dictionary of the urls of the user's latest profile picture and cover picture
+def get_profile_images(user_id):
+                                                                    # If the user has a profile picture then display the latest one
+    user_profile_pic = models.User.objects.filter(id=user_id).latest('id').profile_pic
+    if user_profile_pic:
+        user_profile_pic = user_profile_pic.url
+    else:
+                                                                    # If not then display the default profile picutre
+        user_profile_pic = '/media/default_profile_pic.svg'
+
+                                                                    # If the user has a cover picture then display the latest one
+    user_cover_pic = models.User.objects.filter(id=user_id).latest('id').cover_pic
+    if user_cover_pic:
+        user_cover_pic = user_cover_pic.url
+    else:
+                                                                    # If not then display the default cover picutre
+        user_cover_pic = '/media/default_cover_pic.jpg'
+
+    data = {
+        'user_profile_pic': user_profile_pic,
+        'user_cover_pic': user_cover_pic,
+    }
+    print(data)
+    return data
+
+
+# This function-based-view renders the user's profile page
+def profile_view_user(request):
+    if request.user.is_authenticated:                               # Check to see whether the user is logged in
+                                                                    # Get user's information
+        user = request.user
+
+        profile_pictures = get_profile_images(user.id)              # Get the user's images
+
+        posts = Post.objects.filter(user=user.id)                   # Get the user's posts
+
+                                                                    # Render the template with the user object, profile pictures and post stats
+                                                                    # in a context dictionary
+        return render(request, 'users/profile_user.html', {
+            'user': user,
+            'profile_pictures': profile_pictures,
+            'number_of_posts': post_stats(user.id)['number_of_posts'],
+            'completed_posts': post_stats(user.id)['completed_posts'],
+            'completion_percentage': post_stats(user.id)['completion_percentage'],
+        })
+    else:
+        return HttpResponseRedirect(reverse_lazy('login'))          # If the user is not logged in then send them to the login page
+
+          </code></pre>
+
+          <h4 id="subtitle2-4-2">Another's Profile</h4>
+
+          <p></p>
+
+          <pre class="line-numbers"><code class="language-python">
+
+# This function-based-view renders the user's profile page
+def profile_view(request, pk):
+    if request.user.is_authenticated:
+                                                                    # If the user tries to "view" thier own page as if they were not logged into
+                                                                    # their account then run the "logged in" view
+        if request.user.id == pk:
+            return profile_view_user(request)
+
+        user = get_object_or_404(models.User, id=pk)
+
+        profile_pictures = get_profile_images(user.id)
+
+        if request.user in user.follows.all():
+            following = True
+        else:
+            following = False
+
+                                                                    # Render the template with the user object and user_profile_pic url in
+                                                                    # context dictionary
+        return render(request, 'users/profile.html', {
+            'user': user,
+            'user_viewing': request.user.id,
+            'following': following,
+            'profile_pictures': profile_pictures,
+            'number_of_posts': post_stats(user.id)['number_of_posts'],
+            'completed_posts': post_stats(user.id)['completed_posts'],
+            'completion_percentage': post_stats(user.id)['completion_percentage'],
+        })
+    else:
+        return HttpResponseRedirect(reverse_lazy('login'))
+
+          </code></pre>
+
+
+          <h3 id="subtitle3">LogoutView</h3>
+          <p>The <code>UpdateView</code> class renders .</p>
+          <p>Ut vitae sagittis ex. In porttitor ante in nunc ultrices malesuada. Praesent iaculis odio vitae volutpat tempus. Nullam a sodales lorem, nec pellentesque odio. Praesent ullamcorper nisl commodo justo imperdiet dignissim. Duis purus magna, congue sit amet varius condimentum, dapibus tristique urna. Aliquam congue molestie tempor. Curabitur vel arcu vel nibh euismod porttitor. Sed a dolor maximus ex tempus pharetra rhoncus et nulla. Integer dolor ex, lobortis ac leo non, dapibus cursus ligula. Fusce sed ultrices urna, vel tincidunt mi. Nullam neque dolor, tempor nec lorem vitae, scelerisque consectetur quam.</p>
+
+          <h3 id="subtitle4">Subtitle 4</h3>
+          <p>Phasellus dictum magna eget enim suscipit ornare. Sed in mollis nibh. Quisque odio tortor, molestie eget ullamcorper a, aliquam faucibus nisi. Sed mi risus, semper tincidunt ultrices ac, aliquet vel elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed at mi bibendum, congue risus ac, eleifend ex. Sed malesuada eros eget purus varius molestie. Pellentesque aliquet sapien nec turpis tincidunt vehicula. Vestibulum nisi nulla, vulputate ac nibh quis, feugiat rhoncus nunc. Nullam et magna tempus lacus tincidunt laoreet non in ex. Donec auctor accumsan iaculis. Duis cursus eleifend efficitur. Cras placerat nisi magna, at varius sem bibendum sed.</p>
+          <p>Donec lacinia ultrices venenatis. Duis id aliquam velit, a vehicula quam. Proin iaculis bibendum ex, hendrerit fringilla augue finibus ut. Aliquam sodales turpis vel ex cursus scelerisque. In feugiat justo quis viverra suscipit. Vivamus hendrerit aliquam purus, sit amet ultrices felis. Ut ac nisl pulvinar, tempor odio vel, feugiat ex. Phasellus consequat, leo eget lacinia sagittis, eros tellus pretium tortor, id congue purus augue eu orci. Fusce non eros iaculis, aliquet nulla quis, facilisis mi. Vivamus dictum justo non diam ultricies, sit amet eleifend erat efficitur. Ut porta diam ut dolor tincidunt, interdum placerat odio commodo. Suspendisse egestas sapien erat, et tincidunt magna fermentum sit amet. Donec vitae mi efficitur, tempus nisi ut, lacinia libero. Maecenas auctor odio mi, ac facilisis nisi vehicula efficitur. Ut hendrerit nulla ut nisl porttitor maximus. Pellentesque feugiat bibendum est, ut aliquam velit consequat eu.</p>
+        </section>
+
+        <section>
+          <h2 id="title2">Title2</h2>
+          <p>Integer egestas ante id justo mollis feugiat ac vel metus. Nunc pulvinar scelerisque faucibus. Aenean at libero hendrerit, feugiat felis suscipit, facilisis justo. Praesent laoreet rutrum velit vitae facilisis. Fusce ac consectetur leo. Praesent dapibus interdum arcu, et hendrerit mi imperdiet eget. Morbi volutpat, leo id interdum aliquet, massa justo vestibulum nisl, eget posuere velit diam ac nibh. Duis tellus enim, porttitor id lectus vitae, tristique congue odio. Duis elementum porttitor nibh et porta. Suspendisse potenti.</p>
+          <p>Ut vitae sagittis ex. In porttitor ante in nunc ultrices malesuada. Praesent iaculis odio vitae volutpat tempus. Nullam a sodales lorem, nec pellentesque odio. Praesent ullamcorper nisl commodo justo imperdiet dignissim. Duis purus magna, congue sit amet varius condimentum, dapibus tristique urna. Aliquam congue molestie tempor. Curabitur vel arcu vel nibh euismod porttitor. Sed a dolor maximus ex tempus pharetra rhoncus et nulla. Integer dolor ex, lobortis ac leo non, dapibus cursus ligula. Fusce sed ultrices urna, vel tincidunt mi. Nullam neque dolor, tempor nec lorem vitae, scelerisque consectetur quam.</p>
+        </section>
+
+      </article>
+      <!-- END Main content -->
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container-fluid">
+        <a id="scroll-up" href="#"><i class="fa fa-angle-up"></i></a>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6">
+            <p>Copyright &copy; 2017. All right reserved</p>
+          </div>
+          <div class="col-md-6 col-sm-6">
+            <ul class="footer-menu">
+              <li><a href="page_changelog.html">Changelog</a></li>
+              <li><a href="page_credits.html">Credits</a></li>
+              <li><a href="mailto:support@thetheme.io">Contact us</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- END Footer -->
+
+    <!-- Scripts -->
+    <script src="/static/assets/js/theDocs.all.min.js"></script>
+    <script src="/static/assets/js/custom.js"></script>
+
+  </body>
+</html>

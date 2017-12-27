@@ -18,3 +18,16 @@ def home_view(request):
                         'root_url': root_url,
                     }
                  )
+
+
+
+def docs_view(request):
+    users = User.objects.all()
+    posts = Post.objects.all()
+    return render(request, 'docs.html',
+                    {
+                        'users': users,
+                        'posts': posts,
+                        'root_url': root_url,
+                    }
+                 )

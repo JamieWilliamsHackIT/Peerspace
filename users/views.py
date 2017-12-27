@@ -95,7 +95,7 @@ import math
 # The blocks of code within the functions appeared twice, so I refactered them
 # into functions
 
-
+# This function returns a dictionary of the urls of the user's latest profile picture and cover picture
 def get_profile_images(user_id):
     # If the user has a profile picture then display the latest one
     user_profile_pic = models.User.objects.filter(id=user_id).latest('id').profile_pic
@@ -151,8 +151,8 @@ def profile_view_user(request):
 
         posts = Post.objects.filter(user=user.id)
 
-        # Render the template with the user object and user_profile_pic url in
-        # context dictionary
+        # Render the template with the user object, profile pictures and post stats
+        # in a context dictionary
         return render(request, 'users/profile_user.html', {
             'user': user,
             'profile_pictures': profile_pictures,
