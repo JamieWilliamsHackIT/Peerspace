@@ -100,6 +100,7 @@
     });
   }
   function deleteComment(comment_id, post_id) {
+    var this_button = $(this)
     $.ajax({
       url: root_url + "/posts/api/v1/comments/" + comment_id,
       type: "DELETE",
