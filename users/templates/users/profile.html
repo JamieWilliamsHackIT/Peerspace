@@ -17,7 +17,7 @@
         <h5 class="card-title">{{ user.name}}</h5>
         <p class="mb-4">{{ user.bio }}</p>
         {% if following %}
-        <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#" main-follow-btn=true>
+        <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#" main-follow-btn=true userid="{{ user.id }}">
           <span class="icon icon-check"></span> Following
         </button>
         {% else %}
