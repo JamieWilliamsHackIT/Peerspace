@@ -139,13 +139,10 @@
       type: "DELETE",
       // This MUST be in the callback due to the asynchronus nature of javascript
       success: function() {
-        getComments(post_id)
-        numberOfComments -= 1
-        $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + numberOfComments + ')')
+        getComments(post_id)``
       }
     })
   }
-  var numberOfComments;
   function getComments(post_id) {
     //Gets comments
     $.ajax({
@@ -172,11 +169,10 @@
             commentHTML += '<hr>'
           }
           // I can get the callback from a function by calling it in a console.log()
+          $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')')
           $('.comment-list-' + post_id).append(commentHTML)
           $('.comment-container-' + post_id).fadeIn()
           $('.comment-form-' + post_id).fadeIn()
-          $('.comment-' + post_id).focus()
-
         })
       }
     });
