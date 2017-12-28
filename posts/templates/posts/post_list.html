@@ -82,7 +82,7 @@
     //Gets posts
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/feed/" + user_id,
+      url: root_url + "/posts/api/v1/feed/" + {{ user.id }},
       dataType: 'json',
       success: function(data) {
         user_id = {{ user.id }}
