@@ -35,7 +35,7 @@ function post(user_id) {
           commentHTML += e.comment
           if (user_id == e.user_id) {
             //Handle the deleting of comments here
-            commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + post_id + ')"><span class="icon icon-cross"></span></button>'
+            commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" href="#" style="float:right; padding:0px 3px;" commentid=' + e.comment_id + ' postid=' + post_id + ')"><span class="icon icon-cross"></span></button>'
           }
           commentHTML += '</li>'
           if (comments.length > i + 1) {
@@ -132,6 +132,14 @@ function post(user_id) {
             $('.completion-status-container-' + post_id).html(statusHTML)
           }
         }
+      })
+    })
+    $(document).on('click', 'delete-comment-btn', function() {
+      $.ajax({
+        url: root_url + "/posts/api/v1/comments/" + $(this).attr('commentid'),
+        type: "DELETE",
+        // This MUST be in the callback due to the asynchronus nature of javascript
+        success: function() {getComments($(this).attr('postid'))}
       })
     })
     $('#post').click(function(e) {
