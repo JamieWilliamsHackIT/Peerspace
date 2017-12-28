@@ -78,9 +78,24 @@
     $('.ui-widget-content')
       .attr('placeholder', 'Tags')
       .addClass('form-contol')
-  })
+  function tagCallBack(theTag) {
+    //Gets posts
+    $.ajax({
+      type: "GET",
+      url: root_url + "/posts/api/v1/feed/" + user_id,
+      dataType: 'json',
+      success: function(data) {
+        user_id = user_id
+        theTag.trigger('data_loaded', data, user_id)
+      }
+    });
+  }
   $("#tags").tagit();
   post({{ user.id }})
-  riot.mount('post-feed', {callback:tagCallBack})
+  function mount() {
+    riot.mount('post-feed', {callback:tagCallBack})
+  }
+  mount()
+  })
 </script>
 {% endblock %}
