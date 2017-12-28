@@ -224,6 +224,29 @@ class FollowUser(APIView):
         return Response(data)
 
 
+class UserFollowers(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, pk=None):
+        user = get_object_or_404(models.User, pk=pk)
+        id_list = [user.id for user in list(user.follows.all())]
+        followers = models.User.objects.filter(pk__in=id_list)
+        data = []
+        for follower in followers:
+            you_follow_them = False
+            if follower in user.following.all():
+                you_follow_them = True
+            data.append({
+                'id': follower.id,
+                'name': follower.name,
+                'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
+                'you_follow_them': you_follow_them,
+            })
+
+        return Response(data)
+
+
 # These classes render the rest_framework's API views for the user
 class ListCreateUser(generics.ListCreateAPIView):
     queryset = models.User.objects.all()

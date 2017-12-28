@@ -51,12 +51,17 @@ urlpatterns = [
     path(
         'api/v2/<int:pk>',
         views.RetrieveUpdateDestroyUser.as_view(),
-        name='users'
+        name='user'
     ),
     path(
         'api/v2/<int:pk>/follow/',
         views.FollowUser.as_view(),
         name='follow'
+    ),
+    path(
+        'api/v2/<int:pk>/followers/',
+        views.UserFollowers.as_view(),
+        name='followers'
     ),
     path(
         'api/v2/tags/',
