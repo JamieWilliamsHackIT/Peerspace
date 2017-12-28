@@ -17,11 +17,11 @@
         <h5 class="card-title">{{ user.name}}</h5>
         <p class="mb-4">{{ user.bio }}</p>
         {% if following %}
-        <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#">
+        <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#" main-follow-btn=true>
           <span class="icon icon-check"></span> Following
         </button>
         {% else %}
-        <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#">
+        <button class="follow-btn btn btn-outline-primary btn-sm mx-1" href="#" main-follow-btn="true" userid="{{ user.id }}">
           <span class="icon icon-add-user"></span> Follow
         </button>
         {% endif %}
@@ -30,7 +30,7 @@
         </a>
         <ul class="card-menu mx-auto mt-3">
           <li class="card-menu-item text-center">
-            <a href="#userModal" class="text-inherit" data-toggle="modal">
+            <a href="#" id="followers" class="text-inherit" data-toggle="modal">
               Followers
               <h6 class="my-0 followers-count">{{ user.follows.count }}</h6>
             </a>
@@ -74,7 +74,14 @@
     </div>
   </div>
 </div>
-
+<div class="modal fade bd-example-modal-md" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <ul class="media-list media-list-users list-group" id="followers-model-content">
+      </ul>
+    </div>
+  </div>
+</div>
 <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -82,7 +89,7 @@
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
     // For development
-    //var root_url = 'https://127.0.0.1:8000'
+    // var root_url = 'http://127.0.0.1:8000'
     // For production
     var root_url = 'https://peerspace.herokuapp.com'
     function tagCallBack(theTag) {
@@ -97,6 +104,34 @@
       }
     });
   }
+  // Handle the folowers and following modals
+  $(document).on('click', '#followers', function() {
+    // Get all of the user's followers
+    $.ajax({
+      type: "GET",
+      url: root_url + "/users/api/v2/" + {{ user.id }} + "/followers",
+      dataType: "json",
+      success: function(data) {
+        $('#followers-model-content').html('')
+        $.each(data, function(i, e) {
+          var userHTML = '<li class="list-group-item"><div class="media w-100">'
+          userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">'
+          userHTML += '<div class="media-body">'
+          if (e.id !== {{ user_viewing }}) {
+            if (e.user_viewing_follow_them) {
+              userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + ' main-follow-btn="false"><span class="icon icon-check"></span> Following</button>'
+            } else {
+              userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + ' main-follow-btn="false"><span class="icon icon-user"></span> Follow</button>'
+            }
+          }
+          userHTML += '<strong>' + e.name + '</strong>'
+          userHTML += '</div></div></li>'
+          $('#followers-model-content').append(userHTML)
+        })
+      }
+    });
+    $('#followersModal').modal('toggle')
+  })
   function deleteComment(comment_id, post_id) {
     var this_button = $(this)
     $.ajax({
@@ -191,17 +226,26 @@
       }
     })
     //Sends follow
-    $('.follow-btn').click(function(e) {
+    $(document).on('click', '.follow-btn', function(e) {
+      var this_button = $(this);
       e.preventDefault()
       $.ajax({
         type: "GET",
-        url: root_url + "/users/api/v2/" + {{ user.id }} + "/follow/",
+        url: root_url + "/users/api/v2/" + this_button.attr('userid') + "/follow/",
         dataType: "json",
         success: function(data) {
-          if (data.following) {
-            $('.follow-btn').html('<span class="icon icon-check"></span> Following')
+          if (this_button.attr('main-follow-btn') == 'true') {
+            if (data.following) {
+              $('.follow-btn').html('<span class="icon icon-check"></span> Following')
+            } else {
+              $('.follow-btn').html('<span class="icon icon-add-user"></span> Follow')
+            }
           } else {
-            $('.follow-btn').html('<span class="icon icon-add-user"></span> Follow')
+            if (data.following) {
+              this_button.html('<span class="icon icon-check"></span> Following')
+            } else {
+              this_button.html('<span class="icon icon-add-user"></span> Follow')
+            }
           }
         }
       })

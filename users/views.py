@@ -237,16 +237,23 @@ class UserFollowers(APIView):
         user = get_object_or_404(models.User, pk=pk)
         id_list = [user.id for user in list(user.follows.all())]
         followers = models.User.objects.filter(pk__in=id_list)
+
+        user_viewing = request.user
+
         data = []
         for follower in followers:
             you_follow_them = False
             if follower in user.following.all():
                 you_follow_them = True
+            user_viewing_follow_them = False
+            if follower in user_viewing.following.all():
+                user_viewing_follow_them = True
             data.append({
                 'id': follower.id,
                 'name': follower.name,
                 'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
                 'you_follow_them': you_follow_them,
+                'user_viewing_follow_them': user_viewing_follow_them,
             })
 
         return Response(data)
