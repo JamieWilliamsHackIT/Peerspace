@@ -119,9 +119,8 @@
         if (comments.length == 0) {
           $('.comment-form-' + post_id).fadeIn()
         }
-        var commentHTML;
         $.each(comments, function(i,e) {
-          commentHTML = '<li class="media comment-block py-3" commentid=' + e.comment_id + '>';
+          var commentHTML = '<li class="media comment-block py-3" commentid=' + e.comment_id + '>';
           commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">'
           commentHTML += '<div class="media-body">'
           commentHTML += '<strong>' + e.user_name + ': </strong>'
