@@ -80,15 +80,20 @@ class UpdateTags(APIView):
         }
         return Response(data)
 
+from rest_framework.decorators import api_view
+
+@api_view(['POST'])
 def delete_tag(request):
     tag = request.POST.get('tag')
     user = request.POST.get('user')
 
     models.UserPreferenceTag.objects.filter(tag=tag).filter(user=user).delete()
+
     data = {
-    'tag': tag,
-    'user': user
+        'tag': tag,
+        'user': user,
     }
+
     return Response(data)
 
 import math
