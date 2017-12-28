@@ -136,6 +136,7 @@
             commentHTML += '<hr>'
           }
           // I can get the callback from a function by calling it in a console.log()
+          console.log(comments.length)
           $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')')
           $('.comment-list-' + post_id).append(commentHTML)
           $('.comment-container-' + post_id).fadeIn()
