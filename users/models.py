@@ -84,10 +84,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     profile_pic = DefaultStaticImageField(
                                     blank=True,
-                                    # default_image_path='https://peerspace.herokuapp.com/media/default_profile_pic.svg',
+                                    default='https://peerspace.herokuapp.com/media/default_profile_pic.svg',
                                     )
 
     cover_pic = models.ImageField(blank=True, null=True)
+
+    education = models.CharField(max_length=50, blank=True, default='')
+
+    work = models.CharField(max_length=50, blank=True, default='')
+
+    location = models.CharField(max_length=50, blank=True, default='')
 
     objects = UserManager()
     # This attribute tells Django what field to expect as the username, or
