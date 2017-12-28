@@ -8,18 +8,6 @@ function post(user_id) {
     var comment_id = $(this).attr('commentid')
     $('.delete-comment-btn-' + comment_id).fadeOut();
   })
-  function tagCallBack(theTag) {
-    //Gets posts
-    $.ajax({
-      type: "GET",
-      url: root_url + "/posts/api/v1/feed/" + user_id,
-      dataType: 'json',
-      success: function(data) {
-        user_id = user_id
-        theTag.trigger('data_loaded', data, user_id)
-      }
-    });
-  }
   function deleteComment(comment_id, post_id) {
     $.ajax({
       url: root_url + "/posts/api/v1/comments/" + comment_id,
