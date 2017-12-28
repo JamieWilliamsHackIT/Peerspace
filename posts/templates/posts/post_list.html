@@ -88,6 +88,10 @@
     var comment_id = $(this).attr('commentid')
     $('.delete-comment-btn-' + comment_id).fadeOut();
   })
+  $('like-btn').tooltip()
+  $(document).on('mouseenter', 'like-btn', function() {
+
+  })
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
