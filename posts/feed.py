@@ -42,7 +42,9 @@ def get_most_relevent(user_pk):
 
         for user_tag in user_tag_list:
             if user_tag in post_tag_list:
-                tag_score += user_tags[count].weight
+                # Normalise the weight (make sure it is in range 0 to 1) by using
+                # the logistic sigmoid
+                tag_score += 1 / (1 + math.exp(-user_tags[count].weight)
                 num_tags_match += 1
             count += 1
 
@@ -62,11 +64,9 @@ def get_most_relevent(user_pk):
             # Multiply the total relevence by a funtion that is large for a
             # small number of days and small for a large number of days
             total_relevence *= decimal.Decimal(math.exp((-1/4) * num_days))
-            # Normalise the result (make sure it is in range 0 to 1) by using
-            # the logistic sigmoid
-            total_relevence = 1 / (1 + math.exp(-total_relevence))
             # Output scores to a dictionary
             score_dict.update({post.id: total_relevence})
+            print(('Id: {}, title: {} and score: {}').format(post.id, post.title, total_relevence))
 
     # Order score_dict by value and give an ordered list of post ids
     output = {}
