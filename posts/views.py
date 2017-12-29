@@ -334,7 +334,7 @@ class ListCreateComment(generics.ListCreateAPIView):
             post.save()
 
             # Define how much to adjust the weights by
-            adjustment = 0.005
+            adjustment = 0.020
 
             # Transform the comma seperated list of tags into an actual list
             post_tags = post.tags.split(',')
@@ -359,7 +359,7 @@ class ListCreateComment(generics.ListCreateAPIView):
                     tag.save()
 
             self.comments = post.comments.count()
-            
+
             return super(ListCreateComment, self).post(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('login'))
