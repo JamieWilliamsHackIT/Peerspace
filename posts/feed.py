@@ -74,7 +74,7 @@ def get_most_relevent(user_pk):
     for k in sorted_score_dict:
         output.update({k: score_dict})
     post_ids = list(output.keys())
-    post_ids = post_ids[::-1]#[:5]
+    post_ids = post_ids[::-1][:10]
 
     # When considering efficieny this function queries the database 2 + n times
     # where n is the number of posts in the last 10 days

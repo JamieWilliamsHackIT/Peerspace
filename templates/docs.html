@@ -54,13 +54,43 @@
                   </ul>
                 </li>
               </ul>
-
             </li>
-            <li><a href="#subtitle3">Subtitle 3</a></li>
-            <li><a href="#subtitle4">Subtitle 4</a></li>
+            <li><a href="#subtitle3">Templates</a></li>
           </ul>
         </li>
-        <li><a href="#title2">Second Title</a></li>
+        <li><a href="#title2">Posts App</a>
+          <ul>
+            <li>
+              <a href="#subtitle4">Post Model</a>
+              <ul>
+                <li><a href="#subtitle4-1">Post List View</a></li>
+                <li><a href="#subtitle4-2">Post Edit View</a></li>
+                <li><a href="#subtitle4-3">Post Prove View</a></li>
+                <li>
+                  <a href="#subtitle4-4">Post View</a>
+                  <ul>
+                    <li><a href="#subtitle4-4-1">Your Post</a></li>
+                    <li><a href="#subtitle4-4-2">Another's Post</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#subtitle5">Post Feed</a>
+              <ul>
+                <li><a href="#subtitle5-1">Preference Tags</a>
+                  <ul>
+                    <li><a href="#subtitle5-1-1">User Tag Model</a></li>
+                    <li><a href="#subtitle5-1-2">Post Tags</a></li>
+                  </ul>
+                </li>
+                <li><a href="#subtitle6">Relevance Algorithm</a></li>
+              </ul>
+            </li>
+            <li><a href="#subtitle7">Templates</a></li>
+          </ul>
+        </li>
+        <li><a href="#title3">API</a></li>
+        <li><a href="#title4">Frontend</a></li>
       </ul>
 
     </aside>
@@ -91,11 +121,10 @@
           <!-- Top navbar -->
           <div id="navbar" class="navbar-collapse collapse" aria-expanded="true" role="banner">
             <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="index.html">Documentation</a></li>
-              <li><a href="page_blog.html">Blog</a></li>
-              <li><a href="page_faq.html">FAQ</a></li>
-              <li><a href="http://thethemeio.helpato.com/thedocs" target="_blank">Support</a></li>
-              <li class="hero"><a href="http://themeforest.net/item/thedocs-online-documentation-template/13070884?license=regular&open_purchase_for_item_id=13070884&purchasable=source&ref=thethemeio">Purchase</a></li>
+              <li class="active"><a href="/">Back to main site</a></li>
+              <li><a href="#">Github</a></li>
+              <li><a href="#" target="_blank">Support</a></li>
+              <li class="hero"><a href="{% url 'login' %}">Login</a></li>
             </ul>
           </div>
           <!-- END Top navbar -->
@@ -449,8 +478,9 @@ class LogoutView(generic.RedirectView):
           </code></pre>
 
           <h3 id="subtitle2-4">Profile Views</h2>
-          <p>The <code>LogoutView</code> does not render a page or form like the views we have seen so far. It extends the <code>RedirectView</code> class, therefore when it is called it first logs the user out, kills the current user session
-            and redirects the user to the homepage</p>
+          <p>The profile views allow users to view their own profile and other users' profiles. There are two profile views: <code>profile_view_user</code> and <code>profile_view</code>. The <code>profile_view_user</code> view is rendered when a logged in
+          user clicks on their own profile, it is different to the <code>profile_view</code> view as it must allow the user to edit their own prefenences and create posts. Users viewing other users' profile should not see these options as they do not
+        have permission to change such settings. This is the key reason as to why I decided to go with two views.</p>
 
           <h4 id="subtitle2-4-1">Your Own Profile</h4>
 
@@ -513,7 +543,9 @@ def profile_view_user(request):
 
           <h4 id="subtitle2-4-2">Another's Profile</h4>
 
-          <p></p>
+          <p>The <code>profile_view</code> renders when a user clicks on a profile other than their own. It is very similar to the <code>profile_view_user</code> view with a few key differences: it has no button
+          for editting prefenences and it has a follow button (the follow button was omitted from the <code>profile_view_user</code> view as a user following themselves is trivial). Also, there is no post creation
+          functionality in this view as other users cannot post on profiles other than their own.</p>
 
           <pre class="line-numbers"><code class="language-python">
 
@@ -525,12 +557,12 @@ def profile_view(request, pk):
         if request.user.id == pk:
             return profile_view_user(request)
 
-        user = get_object_or_404(models.User, id=pk)
+        user = get_object_or_404(models.User, id=pk)                # Get the user object
 
-        profile_pictures = get_profile_images(user.id)
+        profile_pictures = get_profile_images(user.id)              # Get the users profile images
 
-        if request.user in user.follows.all():
-            following = True
+        if request.user in user.follows.all():                      # Determine whether the user viewing the profile follows the user, this will
+            following = True                                        # affect how the follow button is loaded (whether it says follow or following)
         else:
             following = False
 
@@ -551,19 +583,469 @@ def profile_view(request, pk):
           </code></pre>
 
 
-          <h3 id="subtitle3">LogoutView</h3>
-          <p>The <code>UpdateView</code> class renders .</p>
-          <p>Ut vitae sagittis ex. In porttitor ante in nunc ultrices malesuada. Praesent iaculis odio vitae volutpat tempus. Nullam a sodales lorem, nec pellentesque odio. Praesent ullamcorper nisl commodo justo imperdiet dignissim. Duis purus magna, congue sit amet varius condimentum, dapibus tristique urna. Aliquam congue molestie tempor. Curabitur vel arcu vel nibh euismod porttitor. Sed a dolor maximus ex tempus pharetra rhoncus et nulla. Integer dolor ex, lobortis ac leo non, dapibus cursus ligula. Fusce sed ultrices urna, vel tincidunt mi. Nullam neque dolor, tempor nec lorem vitae, scelerisque consectetur quam.</p>
+          <h3 id="subtitle3">Templates</h3>
+          <p>So far nothing very special has happened, I have mainly been laying down the base functionality. So far Peerspace does not take into account the user and their prefenences, so this is where the user preference tag system comes in. When a
+          user signs up there are no preference tags associated with their account so the feed algorithm is nothing more than a randomiser (much more on the feed algorithm in the <a href="#title2">Post App</a> section). The user preference tags let
+          Peerspace determine what posts the user is most likely to engage with (this is important as Peerspace aims to encourage collaboration, if users aren't interested in what they see, naturally they won't collaborate).</p>
 
-          <h3 id="subtitle4">Subtitle 4</h3>
-          <p>Phasellus dictum magna eget enim suscipit ornare. Sed in mollis nibh. Quisque odio tortor, molestie eget ullamcorper a, aliquam faucibus nisi. Sed mi risus, semper tincidunt ultrices ac, aliquet vel elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed at mi bibendum, congue risus ac, eleifend ex. Sed malesuada eros eget purus varius molestie. Pellentesque aliquet sapien nec turpis tincidunt vehicula. Vestibulum nisi nulla, vulputate ac nibh quis, feugiat rhoncus nunc. Nullam et magna tempus lacus tincidunt laoreet non in ex. Donec auctor accumsan iaculis. Duis cursus eleifend efficitur. Cras placerat nisi magna, at varius sem bibendum sed.</p>
-          <p>Donec lacinia ultrices venenatis. Duis id aliquam velit, a vehicula quam. Proin iaculis bibendum ex, hendrerit fringilla augue finibus ut. Aliquam sodales turpis vel ex cursus scelerisque. In feugiat justo quis viverra suscipit. Vivamus hendrerit aliquam purus, sit amet ultrices felis. Ut ac nisl pulvinar, tempor odio vel, feugiat ex. Phasellus consequat, leo eget lacinia sagittis, eros tellus pretium tortor, id congue purus augue eu orci. Fusce non eros iaculis, aliquet nulla quis, facilisis mi. Vivamus dictum justo non diam ultricies, sit amet eleifend erat efficitur. Ut porta diam ut dolor tincidunt, interdum placerat odio commodo. Suspendisse egestas sapien erat, et tincidunt magna fermentum sit amet. Donec vitae mi efficitur, tempus nisi ut, lacinia libero. Maecenas auctor odio mi, ac facilisis nisi vehicula efficitur. Ut hendrerit nulla ut nisl porttitor maximus. Pellentesque feugiat bibendum est, ut aliquam velit consequat eu.</p>
+          <h3 id="subtitle3-1">What Are Templates?</h3>
+
+          <p>Templates are the HTML files that Django's views render. For example the <code>layout.html</code> template is the base layout structure of Peerspace:</p>
+
+            <pre class="line-numbers"><code class="language-python">
+
+              {&#37; load static &#37;}
+
+              &lt;!doctype html&gt;
+              &lt;html lang=&quot;en&quot;&gt;
+                &lt;head&gt;
+                  &lt;title&gt;{% block title_tag %}Peerspace{% endblock %}&lt;/title&gt;
+                  &lt;link rel=&quot;shortcut icon&quot; href=&quot;{% static 'img/favicon.ico' %}&quot;&gt;
+                  &lt;!-- Required meta tags --&gt;
+                  &lt;meta charset=&quot;utf-8&quot;&gt;
+                  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+                  &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static 'css/layout.css' %}&quot;&gt;
+                  &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static 'dist/toolkit.css' %}&quot;&gt;
+                  &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static 'dist/toolkit.css.map' %}&quot;&gt;
+                  &lt;!-- Bootstrap CSS --&gt;
+                  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css&quot; integrity=&quot;sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb&quot; crossorigin=&quot;anonymous&quot;&gt;
+                &lt;/head&gt;
+                &lt;body&gt;
+                  &lt;nav class=&quot;navbar fixed-top navbar-expand-lg navbar-dark bg-dark&quot;&gt;
+                    &lt;div class=&quot;container&quot;&gt;
+                      &lt;!-- &lt;div class=&quot;navbar-container&quot;&gt; --&gt;
+                      &lt;a class=&quot;navbar-brand&quot; href=&quot;{% url 'posts:post_list' %}&quot;&gt;
+                          &lt;img src=&quot;{% static 'img/logo.png' %}&quot; width=&quot;30&quot; height=&quot;30&quot; class=&quot;d-inline-block align-top&quot; alt=&quot;Go to feed&quot;&gt;
+                          Peerspace
+                        &lt;/a&gt;
+                        &lt;button class=&quot;navbar-toggler&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#navbarSupportedContent&quot; aria-controls=&quot;navbarSupportedContent&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
+                          &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
+                        &lt;/button&gt;
+                        &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
+                          &lt;ul class=&quot;navbar-nav mr-auto&quot;&gt;
+                            &lt;li class=&quot;nav-item&quot;&gt;
+                              &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'users:profile_user' %}&quot;&gt;Profile&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li class=&quot;nav-item&quot;&gt;
+                              &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'posts:post_list' %}&quot;&gt;Feed&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li class=&quot;nav-item&quot;&gt;
+                              &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'users:logout' %}&quot;&gt;Logout&lt;/a&gt;
+                            &lt;/li&gt;
+                          &lt;/ul&gt;
+                          &lt;form class=&quot;form-inline my-2 my-lg-0&quot;&gt;
+                            &lt;input class=&quot;form-control mr-sm-2&quot; type=&quot;search&quot; placeholder=&quot;Search&quot; aria-label=&quot;Search&quot;&gt;
+                            &lt;button class=&quot;btn btn-outline-light mr-0  my-2 my-sm-0&quot; type=&quot;submit&quot;&gt;&lt;span class=&quot;icon icon-plus&quot;&gt;&lt;/span&gt;&lt;/button&gt;
+                          &lt;/form&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/nav&gt;
+              &lt;/div&gt;
+                  {&#37; block body_content &#37;}
+                  {&#37; endblock body_content &#37;}
+                  &lt;!-- Optional JavaScript --&gt;
+                  &lt;!-- jQuery first, then Popper.js, then Bootstrap JS --&gt;
+                  &lt;!-- &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js&quot;&gt;&lt;/script&gt; --&gt;
+                  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js&quot; integrity=&quot;sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+                  &lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js&quot; integrity=&quot;sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+                  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js&quot;&gt;&lt;/script&gt;
+                &lt;/body&gt;
+              &lt;/html&gt;
+
+
+            </code></pre>
+
+
+            <p>The <code>layout.html</code> page has markup and style that form the navigation bar at the top of the page, other templates then "extend" this layout template. This means I don't need to include the navigation markup and styles in every single template. You can
+              read more about <a target="_blank" href="https://docs.djangoproject.com/en/2.0/topics/templates/">Django templates</a> in the Django docs.</p>
+
+            <p>The users app has five templates:</p>
+            <ul>
+              <li><p><code>profile.html</code> allows users to view their own profiles.</p></li>
+              <li><p><code>profile_user.html</code> allows users to view other users' profiles.</p></li>
+              <li><p><code>signup.html</code> displays the form allowing new users to create an account.</p></li>
+              <li><p><code>edit_user.html</code> displays the form allowing users to edit their accounts.</p></li>
+              <li><p><code>edit_tags</code> displays the form allowing users to edit their preference tags.</p></li>
+            </ul>
+
+            <p>Each of these templates is rendered by a particular view, see the Django docs for how views render templates: <a target="_blank" href="https://docs.djangoproject.com/en/2.0/topics/http/views/">Django's Views.</a></p>
+
         </section>
 
         <section>
-          <h2 id="title2">Title2</h2>
-          <p>Integer egestas ante id justo mollis feugiat ac vel metus. Nunc pulvinar scelerisque faucibus. Aenean at libero hendrerit, feugiat felis suscipit, facilisis justo. Praesent laoreet rutrum velit vitae facilisis. Fusce ac consectetur leo. Praesent dapibus interdum arcu, et hendrerit mi imperdiet eget. Morbi volutpat, leo id interdum aliquet, massa justo vestibulum nisl, eget posuere velit diam ac nibh. Duis tellus enim, porttitor id lectus vitae, tristique congue odio. Duis elementum porttitor nibh et porta. Suspendisse potenti.</p>
-          <p>Ut vitae sagittis ex. In porttitor ante in nunc ultrices malesuada. Praesent iaculis odio vitae volutpat tempus. Nullam a sodales lorem, nec pellentesque odio. Praesent ullamcorper nisl commodo justo imperdiet dignissim. Duis purus magna, congue sit amet varius condimentum, dapibus tristique urna. Aliquam congue molestie tempor. Curabitur vel arcu vel nibh euismod porttitor. Sed a dolor maximus ex tempus pharetra rhoncus et nulla. Integer dolor ex, lobortis ac leo non, dapibus cursus ligula. Fusce sed ultrices urna, vel tincidunt mi. Nullam neque dolor, tempor nec lorem vitae, scelerisque consectetur quam.</p>
+          <h2 id="title2">Posts App</h2>
+          <p>The post app handles everything todo with post creation, storage and retrieval. It is fundemental to Peerspace as the site relies on the user's ability to take their commitments public and thereby "post" to other users information about any such commitments.</p>
+          <p>As well as providing posting functionality the post app also allows users to comment on their own and other users' posts, this is important as it allows open communication between users and this is essential to encouraging collaboration.</p>
+
+          <h3 id="subtitle4">Post Model</h3>
+          <p>The post model defines the table that holds all of the data relevant to each post. </p>
+
+          <pre class="line-numbers"><code class="language-python">
+
+# This class defines the Post model
+class Post(models.Model):
+                                                                    # The exact time at which the post was created
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+                                                                    # The title of the posts
+    title = models.CharField(max_length=255)
+                                                                    # The description of the post (max_length is 140 to allow for easy
+                                                                    # integration with Twitter)
+    description = models.TextField()
+                                                                    # Whether or not the post has been completed
+    completed = models.BooleanField(default=False)
+                                                                    # The User is the foreign key (one post can belong to one user,
+                                                                    # one user can have many posts)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                unique=False,
+                                null=True,
+                                on_delete=None,
+                                related_name='posts'
+                            )
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
+
+    tags = models.TextField(null=True, blank=True)
+
+    # deadline = models.DateField(blank=True, default=None)
+
+    proof_description = models.TextField(blank=True, null=True, default=None)
+
+    proof_pic = models.ImageField(blank=True, null=True, default=None)
+
+    verifications = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='verfs')
+
+    days_taken = models.IntegerField(blank=True, default=None, null=True)
+
+    comments = models.ManyToManyField(Comment, blank=True, related_name='comments')
+
+                                                                    # This will overide the __str__ method so when it is referred to it is
+                                                                    # in a readable form
+    def __str__(self):
+        return '{} by: {}'.format(self.title, self.user)
+
+    def get_user(self):
+        return user.name
+                                                                    # This will return the number of days since the post was created
+    @property
+    def time_since_creation(self):
+        return (timezone.now() - self.created_at).days
+                                                                    # This will return the absolute url of the post
+    def get_absolute_url(self):
+        return reverse_lazy('posts:post_detail', kwargs={'pk':self.id})
+                                                                    # This will determine whether enough users have verified the post
+    def is_verified(self):
+        if self.verifications >= 5:
+            return True
+        return False
+          </code></pre>
+
+          <p>There is nothing special about the post model, the data structure is fairly basic. It has a few interesting methods that make life easier throughout the site. The <code>time_since_creation</code> property allows me to
+            return how many days (as an integer) it has been since the post was created, doing this here in the model conforms with Django's DRY (don't repeat yourself) policy as anywhere I need to get the number of days since the post
+            was created I can just call the <code>.time_since_creation</code> method easily.
+
+            <h3 id="subtitle4-1">Post List View</h3>
+            <p>The post list view renders the layout page for the post feed, it doesn't actually render or display any posts (this is done by the <a href="title3">API</a>), it simply renders the page into which the posts are loaded by the API.</p>
+
+            <pre class="line-numbers"><code class="language-python">
+def post_list(request):
+    if request.user.is_authenticated:                             # Check whether the user is logged in
+        user = request.user                                       # Get the user instance from the request
+        profile_pictures = get_profile_images(user.id)            # Get the users profile images
+        number_of_posts = models.Post.objects.filter(user=user.id).count()
+        return render(request, 'posts/post_list.html',            # Render the template with a context dictionary containing relevant information
+                        {
+                            'user': user,
+                            'profile_pictures': profile_pictures,
+                            'number_of_posts': number_of_posts,
+                        }
+                    )
+    else:
+        return HttpResponseRedirect(reverse_lazy('login'))        # If the user is not logged in then redirect them to the login page
+            </code></pre>
+
+            <p>There is nothing special going on with this view, the context dictionary is the data that is accessible by the template when it is rendered.</p>
+
+            <h3 id="subtitle4-2">Post Edit View</h3>
+            <p>The post list view renders the layout page for the post feed, it doesn't actually render or display any posts (this is done by the <a href="title3">API</a>), it simply renders the page into which the posts are loaded by the API.</p>
+
+            <pre class="line-numbers"><code class="language-python">
+# The view gets the primary key of the post from the &lt;int:pk&gt; keyword argument (kwarg or kwargs) from the url.
+def post_edit(request, pk=None):
+                                                                  # Get all the users posts
+    user_posts = models.Post.objects.filter(user=request.user.id)
+                                                                  # Get the post that the user is trying to edit
+    instance = get_object_or_404(models.Post, pk=pk)
+                                                                  # Check to see whether the user actaully owns the post they are trying to edit
+    if instance in user_posts:
+                                                                  # Get the user's input from the form
+        form = forms.UpdatePost(request.POST or None, request.FILES or None, instance=instance)
+                                                                  # Validate the form
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+                                                                  # Once complete redirect the user to the post they just edited
+            return HttpResponseRedirect(instance.get_absolute_url())
+        context = {
+            'pk': pk,
+            'title': instance.title,
+            'description': instance.description,
+            'tags': instance.tags,
+            'form': form,
+        }
+                                                                  # Render the page with the form
+        return render(request, 'posts/edit_post.html', context)
+    else:
+                                                                  # If the user is not the owner of the post then redirect them to the post (this stops them from editing other people's posts).
+        return HttpResponseRedirect(instance.get_absolute_url())
+            </code></pre>
+
+            <p>The <code>context</code> dictionary will autofill the form with the current post data, without this the user would have to re-enter data that they didn't want to change.</p>
+
+
+            <h3 id="subtitle4-3">Post Edit View</h3>
+            <p>The post list view renders the layout page for the post feed, it doesn't actually render or display any posts (this is done by the <a href="title3">API</a>), it simply renders the page into which the posts are loaded by the API.</p>
+
+            <pre class="line-numbers"><code class="language-python">
+def prove_post(request, pk=None):
+                                                                  # Check to see if the user is logged in
+    if request.user.is_authenticated:
+                                                                  # Get all of the users posts
+        user_posts = models.Post.objects.filter(user=request.user.id)
+                                                                  # Get the post being proved
+        post = get_object_or_404(models.Post, pk=pk)
+                                                                  # The user is the owner of the post then go ahead and load the form
+        if post in user_posts:
+            form = forms.ProvePost(request.POST or None, request.FILES or None, instance=post)
+                                                                  # Validate the form
+            if form.is_valid():
+                post = form.save(commit=False)
+                                                                  # If the user has correctly proved the post then set the "days_taken" attribute to the number of days between
+                                                                  # the post creation and post completion
+                if post.proof_description and post.proof_pic:
+                    post.days_taken = (timezone.now() - post.created_at).days
+                post.save()
+                return HttpResponseRedirect(post.get_absolute_url())
+            context = {
+                'pk': pk,
+                'form': form,
+            }
+            return render(request, 'posts/prove_post.html', context)
+        else:
+                                                                  # If the user doesn't own the post then don't let them edit it and redirect them
+            return HttpResponseRedirect(instance.get_absolute_url())
+    else:
+                                                                  # If they are not logged in redirect them to the login page
+        return HttpResponseRedirect(reverse_lazy('login'))
+            </code></pre>
+
+            <p>The <code>context</code> dictionary gives the template the needed data to autofill the form with the current post data, without this the user would have to re-enter data that they didn't want to change.</p>
+
+            <h3 id="subtitle4-4">Post View</h3>
+
+            <p>In contrast to the profile views there is only one post view, it renders one of two templates: one for users to view their own posts and one for users to view other users' posts. The reason for having two post detail templates is also very similar to the reason for
+              having two profile view templates; there are different controls depending on whether the user owns the post or not. If they view a post that they own then they will see the standard like, comment and verify (if proof has been submitted) buttons, whereas
+              if the user views a post they own then they will see the submit proof, edit post and delete post buttons.
+
+            <h4 id="subtitle4-4-1">Your Post</h3>
+
+            <p>The <code>post_view</code> view renders the <code>post_detail_user</code> template containing a post, this post is owned by the viewing user therefore they see the submit proof, edit post and delete post buttons.
+
+            <pre class="line-numbers"><code class="language-python">
+
+def post_view(request, pk):
+                                                                  # Check to see if the user is logged in
+    if request.user.is_authenticated:
+                                                                  # Get the post object for the post being viewed
+        post = get_object_or_404(models.Post, pk=pk)
+                                                                  # Check to see if the user owns the post
+        if request.user.id == post.user_id:
+                                                                  # Get the user's profile picture's url
+            user_profile_pic = User.objects.filter(id=request.user.id).latest('id').profile_pic.url
+                                                                  # Render the post_detail_user template
+            return render(request, 'posts/post_detail_user.html',
+                            {
+                                'post': post,
+                                'user_profile_pic': user_profile_pic,
+                                'root_url': root_url,
+                            }
+                         )
+        else:
+                                                                  # If the user doesn't own the post then render the post_detail page
+            return render(request, 'posts/post_detail.html',
+                            {
+                                'post': post,
+                                'root_url': root_url,
+                            }
+                         )
+    else:
+                                                                  # If the user is not logged in then redirect them to the login page
+        return HttpResponseRedirect(reverse_lazy('login'))
+
+            </code></pre>
+
+            <p>With many of the views I have shown so far there is process of user authenticaiton, I feel I need to address this a little more. The <code>request.user.is_authenticated</code> method will return a boolean value that
+            indicated whether the user is logged into Peerspace. This check alone is not enough to prevent users from editing other user's posts as it only checks to see if the user is logged in, therefore as long as a user if logged in
+          they could run rampent changing everyone's posts. This is why in many view I make sure to check the user owns the post before allow them to make changes. In this view I check to see whether the user making the request matches
+        the id of the user who owns the post, if so then let them edit it and if not so I redirect them to the <code>post_detail</code> view that does not have the submit proof, edit and delete buttons.</p>
+
+        <h4 id=subtitle4-4-2>Another's Post</h3>
+
+        <p>When a user views a post that is not their own the aforementioned <code>post_view</code> view renders the <code>post_detail</code> template. Unlike the <code>post_detail_user</code> template the <code>post_detail</code> template does not
+        render the post, the post information is provided by the <a href="#title3">API</a> (more on the reason for this in a later section).</p>
+
+        <h3 id="subtitle5">Post Feed</h3>
+
+        <p>The post feed is the first screen a user is redirected to after they login or signup, it is the "homepage" of the application so to speak. The post feed contains what Peerspace believes to be the 20 most relevant posts according to each user's
+        preferences, user's they follow and general activity on the site.</p>
+
+        <p>There are three key metrics the feed algorithm uses to determine a relevance score for each post:</p>
+
+        <ul>
+          <li><strong>Preference tags</strong>: the more tags the post has that match the user's preference tags the higher the relevance score.</li>
+          <li><strong>Post creation date</strong>: the sooner the post creation date the higher the relevance score.</li>
+          <li><strong>The post owner</strong>: any posts owned by users that the user follows will have a higher relevance score.</li>
+        </ul>
+
+        <p>Building the post feed system has really opened my eyes to how powerful Django can be. The <code>feed.py</code> has nothing to do with Django, it is just a file containing a function and with Django I can use this function with ease to affect
+          how things are displayed on the web. This may be an obvious feature, but I really like how easy Django makes it to build web applications.
+
+        <h3 id="subtitle5-1">Preference Tags</h3>
+
+        <p>Preference tags are one of the three key metrics the feed algorithm uses to determine the most relevant posts. The function of the preference tags is to create a link between a user and posts that user may engage with (this is important as Peerspace aims to encourage collaboration, if users aren't interested in what they see, naturally they won't collaborate).
+          There are two places where tags are stored: each user has a list of tags each with a weight (more on this later) and each post also has a list of tags (with no weight).</p>
+
+        <h4 id="subtitle5-1-1">User Tag Model</h3>
+
+        <p>The user tag model holds two important pieces of date for each tag: the tag itself and the weight of the tag. There is a <code>ManyToOne</code> relation between the tag model and the user model; each user can have many tags yet a tag can only belong to one
+          user, this is because the weight of the tag is specific to the user.</p>
+
+        <pre class="line-numbers"><code class="language-python">
+# This class holds the user's preferences
+class UserPreferenceTag(models.Model):
+                                                          # The name of the tag. There can be more than one tag with the same name
+    tag = models.CharField(max_length=100, unique=False)
+                                                              # This field is better described in the section containing the relation
+                                                              # algorithm. It holes the weight of the tag as a float
+    weight = models.DecimalField(max_digits=10, decimal_places=5, default=0.5)
+                                                              # This is the foreign key that relates the user to the tag
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=None)
+
+                                                              # This method reterns the tag name and weight when it is referenced
+    def __str__(self):
+    return "{}: {}".format(self.tag, self.weight)
+        </code></pre>
+
+        <p>The <code>user</code> field is the relation between a tag and a user. There may be 400 tags with the <code>tag</code> "cricket" yet they would all be unique in the fact they relate to different users (I am being a bit ambitious saying there are 400 Peerspace users...). I go more in-depth in the
+        reason for this in the <a href="#subtitle6">relevance algorithm</a> section.</p>
+
+        <h4 id="subtitle5-1-2">Post Tags</h4>
+
+        <p>The post tag system is much more simple than the user tag system, this is because each post's tags are stored as a comma-seperated list rather then a whole seperate model. The reason there is no model for the post tags is because the weight of the tag for each post is not important (the weight of the uset tag
+          is important as it affects how the <a href="#subtitle6">relevance algorithm</a> works).
+
+        <pre  class="line-by-line"><code class="language-python">
+# This is the field in the post model that stores the post's tags
+tags = models.TextField(null=True, blank=True)
+        </code></pre>
+
+        <h3 id="subtitle6">Relevance Algorithm</h3>
+
+        <p>The relevance algorithm is the brain of Peerspace, currently it is very young and dumb; as Peerspace grows I plan to integrate machine learning techniques (once I learn more about data science) into the algorithm to improve its operation.</p>
+
+        <p>If a user's feed is populated with posts that they don't engage with they will lose interest, not collaborate and ultimately stop using Peerspace. The relevance algorithm is at the core of Peerspace, it works to populate the each user's feed
+          with the most relevant, up-to-date and engaging content. The more posts the user engages with the more likley they are to collaborate with others, this is imperative as the vision of Peerspace is to promote collaboration.</p>
+
+          <pre class="line-numbers"><code class="language-python">
+# Input: a user
+# Output: a prediction of the most relevent posts
+
+# Get the user's tags
+# Get the post's tags
+# Compare tags
+# If tags match multiply score by tag's weight
+# Multiply score by output of the date relevence function
+
+def get_most_relevent(user_pk):
+    from users.models import UserPreferenceTag
+    from posts.models import Post
+
+    import math
+    import random
+    import decimal
+
+                                                                    #Get all user's tags
+    user_tags = UserPreferenceTag.objects.filter(user=user_pk)
+                                                                    # Get all posts (in last x amount of time)
+    posts = Post.objects.order_by('created_at')[:20]
+
+                                                                    # Initialise the results dictionary
+    score_dict = {}
+                                                                    # Gives a list of all the user's tags
+    user_tag_list = []
+    for tag in user_tags:
+        user_tag_list.append(tag.tag.lower())
+
+    for post in posts:
+                                                                    # Get all of the current post's tags
+        post_tag_list = post.tags.split(",")
+                                                                    # Lower case all tags with a list comprehension
+        post_tag_list = [tag.lower() for tag in post_tag_list]
+
+                                                                    # Initialise some varibles
+        total_score = 0
+        tag_score = 0
+        num_tags_match = 0
+        count = 0
+        num_days = post.time_since_creation
+
+        for user_tag in user_tag_list:
+            if user_tag in post_tag_list:
+                tag_score += user_tags[count].weight
+                num_tags_match += 1
+            count += 1
+
+        if num_tags_match == 0:
+                                                                    # If no tags match then give the post a random score. This may
+                                                                    # introduce the user to a new area of interest
+            wildcard_score = random.random() * 0.5
+                                                                    # This is the same date relevence and normalisation process as seen
+                                                                    # below
+            wildcard_score *= math.exp((-1/4) * num_days)
+            total_relevence = 1 / (1 + math.exp(-wildcard_score))
+            score_dict.update({post.id: total_relevence})
+        else:
+            total_relevence = tag_score
+                                                                    # Get how many days old the post is. Older posts are less relevent
+
+                                                                    # Multiply the total relevence by a funtion that is large for a
+                                                                    # small number of days and small for a large number of days
+            total_relevence *= decimal.Decimal(math.exp((-1/4) * num_days))
+                                                                    # Normalise the result (make sure it is in range 0 to 1) by using
+                                                                    # the logistic sigmoid
+            total_relevence = 1 / (1 + math.exp(-total_relevence))
+                                                                    # Output scores to a dictionary
+            score_dict.update({post.id: total_relevence})
+
+                                                                    # Order score_dict by value and give an ordered list of post ids
+    output = {}
+    sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
+    for k in sorted_score_dict:
+        output.update({k: score_dict})
+    post_ids = list(output.keys())
+    post_ids = post_ids[::-1]#[:5]
+
+                                                                    # When considering efficieny this function queries the database 2 + n times
+                                                                    # where n is the number of posts in the last 10 days
+
+    return post_ids
+          </code></pre>
+
+          <p>There are two mathematical functions that the algorithm uses:</p>
+
+          <ul>
+            <li><strong>Logistic Sigmoid</strong>: this function is used to normalise the results (it will reduce the range of the output be between 0 and 1).</li>
+            <li><strong>Exponentional</strong>: this function takes the number of days since the post was created and outputs a number between 0 and 1. A post's relevance will decrease exponentionally with number of days since its creation.</li>
+          </ul>
+
         </section>
 
       </article>

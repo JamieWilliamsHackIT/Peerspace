@@ -1,0 +1,27 @@
+<h3 id="subtitle3">Preference Tags</h3>
+<p>So far nothing very special has happened, I have mainly been laying down the base functionality. So far Peerspace does not take into account the user and their prefenences, so this is where the user preference tag system comes in. When a
+user signs up there are no preference tags associated with their account so the feed algorithm is nothing more than a randomiser (much more on the feed algorithm in the <a href="#title2">Post App</a> section). The user preference tags let
+Peerspace determine what posts the user is most likely to engage with (this is important as Peerspace aims to encourage collaboration, if users aren't interested in what they see, naturally they won't collaborate).</p>
+
+<h3 id="subtitle3-1">User Tag Model</h3>
+
+<p>The user tag model holds two important pieces of date for each tag: the tag itself and the weight of the tag. There is a <code>ManyToOne</code> relation between the tag model and the user model; each user can have many tags yet a tag can only belong to one
+  user, this is because the weight of the tag is specific to the user.</p>
+
+<pre class="line-numbers"><code class="language-python">
+
+# This class holds the user's preferences
+class UserPreferenceTag(models.Model):
+                                                          # The name of the tag. There can be more than one tag with the same name
+tag = models.CharField(max_length=100, unique=False)
+                                                          # This field is better described in the section containing the relation
+                                                          # algorithm. It holes the weight of the tag as a float
+weight = models.DecimalField(max_digits=10, decimal_places=5, default=0.5)
+                                                          # This is the foreign key that relates the user to the tag
+user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=None)
+
+                                                          # This method reterns the tag name and weight when it is referenced
+def __str__(self):
+return "{}: {}".format(self.tag, self.weight)
+
+</code></pre>

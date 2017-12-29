@@ -41,6 +41,8 @@ class Post(models.Model):
 
     tags = models.TextField(null=True, blank=True)
 
+    # deadline = models.DateField(blank=True, default=None)
+
     proof_description = models.TextField(blank=True, null=True, default=None)
 
     proof_pic = models.ImageField(blank=True, null=True, default=None)

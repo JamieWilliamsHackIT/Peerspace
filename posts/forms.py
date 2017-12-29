@@ -9,6 +9,7 @@ class UpdatePost(forms.ModelForm):
             'title',
             'description',
             'tags',
+            # 'deadline',
         )
 
 

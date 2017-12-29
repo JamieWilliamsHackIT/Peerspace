@@ -70,10 +70,15 @@ def post_list(request):
         return HttpResponseRedirect(reverse_lazy('login'))
 
 def post_view(request, pk):
+    # Check to see if the user is logged in
     if request.user.is_authenticated:
+        # Get the post object for the post being viewed
         post = get_object_or_404(models.Post, pk=pk)
+        # Check to see if the user owns the post
         if request.user.id == post.user_id:
+            # Get the user's profile picture's url
             user_profile_pic = User.objects.filter(id=request.user.id).latest('id').profile_pic.url
+            # Render the post_detail_user template
             return render(request, 'posts/post_detail_user.html',
                             {
                                 'post': post,
@@ -82,6 +87,7 @@ def post_view(request, pk):
                             }
                          )
         else:
+            # If the user doesn't own the post then render the post_detail page
             return render(request, 'posts/post_detail.html',
                             {
                                 'post': post,
@@ -89,6 +95,7 @@ def post_view(request, pk):
                             }
                          )
     else:
+        # If the user is not logged in then redirect them to the login page
         return HttpResponseRedirect(reverse_lazy('login'))
 
 
@@ -114,13 +121,20 @@ def post_edit(request, pk=None):
 
 
 def prove_post(request, pk=None):
+    # Check to see if the user is logged in
     if request.user.is_authenticated:
+        # Get all of the users posts
         user_posts = models.Post.objects.filter(user=request.user.id)
+        # Get the post being proved
         post = get_object_or_404(models.Post, pk=pk)
+        # The user is the owner of the post then go ahead and load the form
         if post in user_posts:
             form = forms.ProvePost(request.POST or None, request.FILES or None, instance=post)
+            # Validate the form
             if form.is_valid():
                 post = form.save(commit=False)
+                # If the user has correctly proved the post then set the "days_taken" attribute to the number of days between
+                # the post creation and post completion
                 if post.proof_description and post.proof_pic:
                     post.days_taken = (timezone.now() - post.created_at).days
                 post.save()
@@ -131,8 +145,10 @@ def prove_post(request, pk=None):
             }
             return render(request, 'posts/prove_post.html', context)
         else:
+            # If the user doesn't own the post then don't let them edit it and redirect them
             return HttpResponseRedirect(instance.get_absolute_url())
     else:
+        # If they are not logged in redirect them to the login page
         return HttpResponseRedirect(reverse_lazy('login'))
 
 
