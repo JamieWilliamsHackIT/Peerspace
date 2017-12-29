@@ -217,13 +217,13 @@ class PostLikeAPI(APIView):
 
         # Transform the comma seperated list of tags into an actual list
         post_tags = post.tags.split(',')
+        # Make list case-insensitive
         post_tags = [tag.lower() for tag in post_tags]
+
         # Get the user's tags as a queryset
         user_tags = UserPreferenceTag.objects.filter(user=user.id)
         # Create a list of the user's tag names
-        user_tag_list = []
-        for tag in user_tags:
-            user_tag_list.append(tag.tag.lower())
+        user_tag_list = [tag.tag.lower() for tag in user_tags]
 
         # This function will add or subtract from the weight of the users tag.
         # The polarity argument will allow me to control whether it adds or
@@ -332,7 +332,34 @@ class ListCreateComment(generics.ListCreateAPIView):
             post = get_object_or_404(models.Post, pk=post_id)
             post.comments.add(comment)
             post.save()
+
+            # Define how much to adjust the weights by
+            adjustment = 0.005
+
+            # Transform the comma seperated list of tags into an actual list
+            post_tags = post.tags.split(',')
+            # Make list case-insensitive
+            post_tags = [tag.lower() for tag in post_tags]
+
+            # Get the user's tags as a queryset
+            user_tags = UserPreferenceTag.objects.filter(user=user.id)
+            # Create a list of the user's tag names
+            user_tag_list = [tag.tag.lower() for tag in user_tags]
+
+            # This function will add or subtract from the weight of the users tag.
+            # The polarity argument will allow me to control whether it adds or
+            # subtracts.
+            def adjust_tag_weights(polarity):
+                for tag in user_tags:
+                    if tag.tag.lower() in post_tags:
+                        tag.weight += decimal.Decimal(adjustment * polarity)
+                    else:
+                        tag.weight -= decimal.Decimal(adjustment * polarity)
+                    # Commit changes to database
+                    tag.save()
+
             self.comments = post.comments.count()
+            
             return super(ListCreateComment, self).post(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('login'))
