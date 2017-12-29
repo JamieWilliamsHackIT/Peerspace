@@ -304,31 +304,6 @@ class ListCreateComment(generics.ListCreateAPIView):
     queryset = models.Comment.objects.all()
     serializer_class = serializers.CommentSerializer
 
-    # Define how much to adjust the weights by
-    adjustment = 0.020
-
-    # Transform the comma seperated list of tags into an actual list
-    post_tags = post.tags.split(',')
-    # Make list case-insensitive
-    post_tags = [tag.lower() for tag in post_tags]
-
-    # Get the user's tags as a queryset
-    user_tags = UserPreferenceTag.objects.filter(user=request.user.id)
-    # Create a list of the user's tag names
-    user_tag_list = [tag.tag.lower() for tag in user_tags]
-
-    # This function will add or subtract from the weight of the users tag.
-    # The polarity argument will allow me to control whether it adds or
-    # subtracts.
-    def adjust_tag_weights(polarity):
-        for tag in user_tags:
-            if tag.tag.lower() in post_tags:
-                tag.weight += decimal.Decimal(adjustment * polarity)
-            else:
-                tag.weight -= decimal.Decimal(adjustment * polarity)
-            # Commit changes to database
-            tag.save()
-
     def get(self, request, *args, **kwargs):
         post_id = self.kwargs['pk']
         post = get_object_or_404(models.Post, pk=post_id)
@@ -352,12 +327,38 @@ class ListCreateComment(generics.ListCreateAPIView):
                                 comment=request.data['comment'],
                                 user=request.user,
                             )
-            adjust_tag_weights(1)
             comment.save()
             post_id = request.POST.get('post')
             post = get_object_or_404(models.Post, pk=post_id)
             post.comments.add(comment)
             post.save()
+
+            # Define how much to adjust the weights by
+            adjustment = 0.020
+
+            # Transform the comma seperated list of tags into an actual list
+            post_tags = post.tags.split(',')
+            # Make list case-insensitive
+            post_tags = [tag.lower() for tag in post_tags]
+
+            # Get the user's tags as a queryset
+            user_tags = UserPreferenceTag.objects.filter(user=request.user.id)
+            # Create a list of the user's tag names
+            user_tag_list = [tag.tag.lower() for tag in user_tags]
+
+            # This function will add or subtract from the weight of the users tag.
+            # The polarity argument will allow me to control whether it adds or
+            # subtracts.
+            def adjust_tag_weights(polarity):
+                for tag in user_tags:
+                    if tag.tag.lower() in post_tags:
+                        tag.weight += decimal.Decimal(adjustment * polarity)
+                    else:
+                        tag.weight -= decimal.Decimal(adjustment * polarity)
+                    # Commit changes to database
+                    tag.save()
+
+            adjust_tag_weights(1)
 
             self.comments = post.comments.count()
 
