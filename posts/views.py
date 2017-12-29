@@ -313,7 +313,7 @@ class ListCreateComment(generics.ListCreateAPIView):
     post_tags = [tag.lower() for tag in post_tags]
 
     # Get the user's tags as a queryset
-    user_tags = UserPreferenceTag.objects.filter(user=user.id)
+    user_tags = UserPreferenceTag.objects.filter(user=request.user.id)
     # Create a list of the user's tag names
     user_tag_list = [tag.tag.lower() for tag in user_tags]
 
