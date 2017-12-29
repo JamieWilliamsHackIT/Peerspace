@@ -44,7 +44,7 @@ def get_most_relevent(user_pk):
             if user_tag in post_tag_list:
                 # Normalise the weight (make sure it is in range 0 to 1) by using
                 # the logistic sigmoid
-                tag_score += 1 / (1 + math.exp(-user_tags[count].weight)
+                tag_score += 1 / (1 + math.exp(-1 * (user_tags[count].weight))
                 num_tags_match += 1
             count += 1
 
