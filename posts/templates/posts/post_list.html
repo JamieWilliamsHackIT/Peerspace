@@ -62,6 +62,7 @@
         </div>
       </form>
       <post-feed></post-feed>
+      <img class='loading-circle' src={% static 'img/loading.gif' %}>
     </ul>
   </div>
 </div>
@@ -76,9 +77,9 @@
 $('.datepicker').datepicker();
 
   // For development
-  // var root_url = 'http://127.0.0.1:8000'
+  var root_url = 'http://127.0.0.1:8000'
   // For production
-  var root_url = 'https://peerspace.herokuapp.com'
+  // var root_url = 'https://peerspace.herokuapp.com'
   $(document).ready(function() {
     $("#tags").tagit()
     $('.ui-widget-content')
@@ -116,6 +117,9 @@ $('.datepicker').datepicker();
         })
         user_id = {{ user.id }}
         theTag.trigger('data_loaded', data, user_id)
+        $('.loading-circle').hide()
+      }, error: function(error) {
+        console.log('Error loading posts...')
       }
     });
     var reached_bottom = false
@@ -125,7 +129,7 @@ $('.datepicker').datepicker();
       page_number++
       reached_bottom = true
       //Show loading gif
-      $('#post-container').append("<img class='loading-circle' src={% static 'img/loading.gif' %}>")
+      $('.loading-circle').show()
       //Gets more posts
       $.ajax({
         type: "GET",
@@ -147,6 +151,8 @@ $('.datepicker').datepicker();
           }
           //Hide loading gif
           $('.loading-circle').hide()
+        }, error: function(error) {
+          console.log('Error loading posts...')
         }
         })
       }

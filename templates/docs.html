@@ -22,6 +22,10 @@
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="icon" href="assets/img/favicon.png">
+
+    <!-- MathJax -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
   </head>
 
   <body data-spy="scroll" data-target=".sidebar" data-offset="200">
@@ -86,7 +90,6 @@
                 <li><a href="#subtitle6">Relevance Algorithm</a></li>
               </ul>
             </li>
-            <li><a href="#subtitle7">Templates</a></li>
           </ul>
         </li>
         <li><a href="#title3">API</a></li>
@@ -740,7 +743,7 @@ class Post(models.Model):
 
           <p>There is nothing special about the post model, the data structure is fairly basic. It has a few interesting methods that make life easier throughout the site. The <code>time_since_creation</code> property allows me to
             return how many days (as an integer) it has been since the post was created, doing this here in the model conforms with Django's DRY (don't repeat yourself) policy as anywhere I need to get the number of days since the post
-            was created I can just call the <code>.time_since_creation</code> method easily.
+            was created I can just call the <code>.time_since_creation</code> method easily.</p>
 
             <h3 id="subtitle4-1">Post List View</h3>
             <p>The post list view renders the layout page for the post feed, it doesn't actually render or display any posts (this is done by the <a href="title3">API</a>), it simply renders the page into which the posts are loaded by the API.</p>
@@ -843,11 +846,11 @@ def prove_post(request, pk=None):
 
             <p>In contrast to the profile views there is only one post view, it renders one of two templates: one for users to view their own posts and one for users to view other users' posts. The reason for having two post detail templates is also very similar to the reason for
               having two profile view templates; there are different controls depending on whether the user owns the post or not. If they view a post that they own then they will see the standard like, comment and verify (if proof has been submitted) buttons, whereas
-              if the user views a post they own then they will see the submit proof, edit post and delete post buttons.
+              if the user views a post they own then they will see the submit proof, edit post and delete post buttons.</p>
 
-            <h4 id="subtitle4-4-1">Your Post</h3>
+            <h4 id="subtitle4-4-1">Your Post</h4>
 
-            <p>The <code>post_view</code> view renders the <code>post_detail_user</code> template containing a post, this post is owned by the viewing user therefore they see the submit proof, edit post and delete post buttons.
+            <p>The <code>post_view</code> view renders the <code>post_detail_user</code> template containing a post, this post is owned by the viewing user therefore they see the submit proof, edit post and delete post buttons.</p>
 
             <pre class="line-numbers"><code class="language-python">
 
@@ -887,7 +890,7 @@ def post_view(request, pk):
           they could run rampent changing everyone's posts. This is why in many view I make sure to check the user owns the post before allow them to make changes. In this view I check to see whether the user making the request matches
         the id of the user who owns the post, if so then let them edit it and if not so I redirect them to the <code>post_detail</code> view that does not have the submit proof, edit and delete buttons.</p>
 
-        <h4 id=subtitle4-4-2>Another's Post</h3>
+        <h4 id=subtitle4-4-2>Another's Post</h4>
 
         <p>When a user views a post that is not their own the aforementioned <code>post_view</code> view renders the <code>post_detail</code> template. Unlike the <code>post_detail_user</code> template the <code>post_detail</code> template does not
         render the post, the post information is provided by the <a href="#title3">API</a> (more on the reason for this in a later section).</p>
@@ -906,14 +909,14 @@ def post_view(request, pk):
         </ul>
 
         <p>Building the post feed system has really opened my eyes to how powerful Django can be. The <code>feed.py</code> has nothing to do with Django, it is just a file containing a function and with Django I can use this function with ease to affect
-          how things are displayed on the web. This may be an obvious feature, but I really like how easy Django makes it to build web applications.
+          how things are displayed on the web. This may be an obvious feature, but I really like how easy Django makes it to build web applications.</p>
 
         <h3 id="subtitle5-1">Preference Tags</h3>
 
         <p>Preference tags are one of the three key metrics the feed algorithm uses to determine the most relevant posts. The function of the preference tags is to create a link between a user and posts that user may engage with (this is important as Peerspace aims to encourage collaboration, if users aren't interested in what they see, naturally they won't collaborate).
           There are two places where tags are stored: each user has a list of tags each with a weight (more on this later) and each post also has a list of tags (with no weight).</p>
 
-        <h4 id="subtitle5-1-1">User Tag Model</h3>
+        <h4 id="subtitle5-1-1">User Tag Model</h4>
 
         <p>The user tag model holds two important pieces of date for each tag: the tag itself and the weight of the tag. There is a <code>ManyToOne</code> relation between the tag model and the user model; each user can have many tags yet a tag can only belong to one
           user, this is because the weight of the tag is specific to the user.</p>
@@ -940,7 +943,7 @@ class UserPreferenceTag(models.Model):
         <h4 id="subtitle5-1-2">Post Tags</h4>
 
         <p>The post tag system is much more simple than the user tag system, this is because each post's tags are stored as a comma-seperated list rather then a whole seperate model. The reason there is no model for the post tags is because the weight of the tag for each post is not important (the weight of the uset tag
-          is important as it affects how the <a href="#subtitle6">relevance algorithm</a> works).
+          is important as it affects how the <a href="#subtitle6">relevance algorithm</a> works).</p>
 
         <pre  class="line-by-line"><code class="language-python">
 # This is the field in the post model that stores the post's tags
@@ -955,98 +958,234 @@ tags = models.TextField(null=True, blank=True)
           with the most relevant, up-to-date and engaging content. The more posts the user engages with the more likley they are to collaborate with others, this is imperative as the vision of Peerspace is to promote collaboration.</p>
 
           <pre class="line-numbers"><code class="language-python">
-# Input: a user
-# Output: a prediction of the most relevent posts
+            # Input: a user
+            # Output: a prediction of the most relevent posts
 
-# Get the user's tags
-# Get the post's tags
-# Compare tags
-# If tags match multiply score by tag's weight
-# Multiply score by output of the date relevence function
+            # Get the user's tags
+            # Get the post's tags
+            # Compare tags
+            # If tags match multiply score by tag's weight
+            # Multiply score by output of the date relevance function
 
-def get_most_relevent(user_pk):
-    from users.models import UserPreferenceTag
-    from posts.models import Post
+            from users.models import UserPreferenceTag
+            from users.models import User
+            from posts.models import Post
 
-    import math
-    import random
-    import decimal
+            from django.shortcuts import get_object_or_404
 
-                                                                    #Get all user's tags
-    user_tags = UserPreferenceTag.objects.filter(user=user_pk)
-                                                                    # Get all posts (in last x amount of time)
-    posts = Post.objects.order_by('created_at')[:20]
+            import math
+            import random
+            import decimal
 
-                                                                    # Initialise the results dictionary
-    score_dict = {}
-                                                                    # Gives a list of all the user's tags
-    user_tag_list = []
-    for tag in user_tags:
-        user_tag_list.append(tag.tag.lower())
+            def get_most_relevent(user_pk, page_number, page_size):
 
-    for post in posts:
-                                                                    # Get all of the current post's tags
-        post_tag_list = post.tags.split(",")
-                                                                    # Lower case all tags with a list comprehension
-        post_tag_list = [tag.lower() for tag in post_tag_list]
+                                                                                # Get user's information
+                user = get_object_or_404(User, pk=user_pk)
+                                                                                # Get all user's tags
+                user_tags = UserPreferenceTag.objects.filter(user=user_pk)
+                                                                                # Get all posts (in last x amount of time)
+                post_slice1 = (page_number * page_size)
+                post_slice2 = (page_number * page_size) + 10
+                posts = Post.objects.order_by('-created_at')[post_slice1:post_slice2]
 
-                                                                    # Initialise some varibles
-        total_score = 0
-        tag_score = 0
-        num_tags_match = 0
-        count = 0
-        num_days = post.time_since_creation
+                                                                                # The slicing prevents the algorithm from re-running on the same posts twice
 
-        for user_tag in user_tag_list:
-            if user_tag in post_tag_list:
-                tag_score += user_tags[count].weight
-                num_tags_match += 1
-            count += 1
+                                                                                # E.g.
 
-        if num_tags_match == 0:
-                                                                    # If no tags match then give the post a random score. This may
-                                                                    # introduce the user to a new area of interest
-            wildcard_score = random.random() * 0.5
-                                                                    # This is the same date relevence and normalisation process as seen
-                                                                    # below
-            wildcard_score *= math.exp((-1/4) * num_days)
-            total_relevence = 1 / (1 + math.exp(-wildcard_score))
-            score_dict.update({post.id: total_relevence})
-        else:
-            total_relevence = tag_score
-                                                                    # Get how many days old the post is. Older posts are less relevent
+                                                                                # No slicing
+                                                                                # post_ids:  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18...]
+                                                                                # first run:  ^ ^ ^ ^ ^ ^ ^ ^ ^ ^  ^  ^  ^  ^  ^  ^  ^  ^
 
-                                                                    # Multiply the total relevence by a funtion that is large for a
-                                                                    # small number of days and small for a large number of days
-            total_relevence *= decimal.Decimal(math.exp((-1/4) * num_days))
-                                                                    # Normalise the result (make sure it is in range 0 to 1) by using
-                                                                    # the logistic sigmoid
-            total_relevence = 1 / (1 + math.exp(-total_relevence))
-                                                                    # Output scores to a dictionary
-            score_dict.update({post.id: total_relevence})
+                                                                                # With slicing
+                                                                                # post_ids:  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18...]
+                                                                                # first run:  ^ ^ ^ ^ ^ ^ ^ ^ ^
 
-                                                                    # Order score_dict by value and give an ordered list of post ids
-    output = {}
-    sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
-    for k in sorted_score_dict:
-        output.update({k: score_dict})
-    post_ids = list(output.keys())
-    post_ids = post_ids[::-1]#[:5]
+                                                                                # post_ids:  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18...]
+                                                                                # second run:                   ^  ^  ^  ^  ^  ^  ^  ^  ^
 
-                                                                    # When considering efficieny this function queries the database 2 + n times
-                                                                    # where n is the number of posts in the last 10 days
+                                                                                # Gives a list of all the user's tags
+                user_tag_list = [tag.tag.lower() for tag in user_tags]
 
-    return post_ids
+                                                                                # Initialise the results dictionary
+                score_dict = {}
+                runtimes = 0
+                for post in posts:
+                    runtimes += 1
+                                                                                # Initialise some varibles
+                    total_score = 0
+                    tag_score = 0
+                    num_tags_match = 0
+                    count = 0
+                    follower_tag_count = 0
+                    num_days = post.time_since_creation
+                    does_follow = False
+
+                                                                                # Get the user object of the owner of the post
+                    post_owner = get_object_or_404(User, pk=post.user.id)
+
+                                                                                # If the user follows the post owner then increase the relevance with each
+                                                                                # preference tag that matches
+                    if post_owner in user.following.all():
+                                                                                # Even if no preference tags match, increase base relevance
+                        tag_score = 0.15
+
+                        does_follow = True
+
+                                                                                # Get post_owner's tags
+                        post_owner_tags = [tag.tag.lower() for tag in UserPreferenceTag.objects.filter(user=post_owner)]
+
+                                                                                # Add to the tag_score if any posts match
+                        for tag in post_owner_tags:
+                            if tag in user_tag_list:
+                                tag_score += (1 / (1 + math.exp(-user_tags[count].weight)))
+                            follower_tag_count += 1
+
+                                                                                # Get all of the current post's tags
+                    post_tag_list = post.tags.split(", ")
+                                                                                # Lower case all tags with a list comprehension
+                    post_tag_list = [tag.lower() for tag in post_tag_list]
+                    for user_tag in user_tag_list:
+                        if user_tag in post_tag_list:
+                                                                                # Normalise the weight (make sure it is in range 0 to 1) by using
+                                                                                # the logistic sigmoid
+                            tag_score += (1 / (1 + math.exp(-user_tags[count].weight)))
+                            num_tags_match += 1
+                        count += 1
+
+                    if num_tags_match == 0:
+                                                                                # If no tags match then give the post a random score. This may
+                                                                                # introduce the user to a new area of interest
+                        wildcard_score = random.random() * 0.5
+                                                                                # This is the same date relevance and normalisation process as seen
+                                                                                # below
+                        wildcard_score *= math.exp((-1/4) * num_days)
+                        total_relevance = 1 / (1 + math.exp(-wildcard_score))
+                        score_dict.update({post.id: total_relevance})
+                    else:
+                        total_relevance = decimal.Decimal(tag_score)
+                                                                                # Multiply the total relevance by a funtion that is large for a
+                                                                                # small number of days and small for a large number of days
+                        total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days))
+                                                                                # Output scores to a dictionary
+                        score_dict.update({post.id: total_relevance})
+                                                                                # This line is extremely useful for development purposes.
+
+                        print(('Id: {}, title: {} and score: {}. {} tags matched. User follows: {} {} follower tags matched.').format(
+                                                                                                                                   post.id,
+                                                                                                                                   post.title,
+                                                                                                                                   total_relevance,
+                                                                                                                                   num_tags_match,
+                                                                                                                                   does_follow,
+                                                                                                                                   follower_tag_count
+                                                                                                                               )
+
+                              )
+                                                                                # Order score_dict by value and give an ordered list of post ids
+                output = {}
+                sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
+                for k in sorted_score_dict:
+                    output.update({k: score_dict})
+                post_ids = list(output.keys())
+                post_ids = post_ids[::-1]
+                print(post_ids, runtimes)
+
+                # When considering efficieny this function queries the database 2 + n times
+                # where n is the number of posts in the last 10 days
+
+                return post_ids
+
           </code></pre>
 
           <p>There are two mathematical functions that the algorithm uses:</p>
 
-          <ul>
+          <ul class="pb-3">
             <li><strong>Logistic Sigmoid</strong>: this function is used to normalise the results (it will reduce the range of the output be between 0 and 1).</li>
             <li><strong>Exponentional</strong>: this function takes the number of days since the post was created and outputs a number between 0 and 1. A post's relevance will decrease exponentionally with number of days since its creation.</li>
           </ul>
 
+          <div class="col-lg-6">
+            <h4>Logistic Sigmoid</h4>
+            <p>With large x this function will tend towards one and with small x it will ten towards 0. This function plays a vital role in the relevance algorithm; if I didn't use this function and a post matched a user tag
+               with a very large weight then this post would have a much higher relevance than others yet only one tag has been matched. By using this function I can restrict a single
+               tag's affect on the outcome to a range of 0 to 1, this means that the relevance score is affected by <strong>how many tags match</strong> and not only whether one tag has a very high (or very low weight).</p>
+            <div class="sigmoid">
+              <iframe src="https://www.desmos.com/calculator/4sdo9rbhdg?embed" class="graph" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
+              <img src="{% static 'img/Sigmoid.png' %}">
+            </div>
+          </div>
+
+          <!-- <div class="spacer col-lg-1"></div> -->
+
+          <div class="col-lg-6">
+            <h4>Negative Exponentional</h4>
+            <p>This is a function in time for the "time relevance coefficient" (I completely made that up), it takes the number of days since the post was created and spits out a number
+               between 1 and 0. If the post was created today it returns 1 and as the number of days increase the time relevance coefficient (I need to think of a better term) decreases exponentionally. It is an
+               assumption on my part that the relevance of a post should decrease as time goes on, it would make sense that people would want to see fresh new posts rather than old ones.</p>
+            <div class="expon">
+              <iframe src="https://www.desmos.com/calculator/a6zkdittrx?embed" class="graph" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
+              <img src="{% static 'img/expon.png' %}">
+            </div>
+          </div>
+
+
+          <h5 class="mt-5">Testing the algorithm</h5>
+          <p>The console log shows how the algorithm analyses each post.</p>
+
+          <img src="{% static 'img/console_log.png' %}">
+
+          <p>The information printed to the console shows the metrics used to determine the relevance score. We can see that the posts with the highest number of post tag matches, most number of follower tag matches and are the most recent have the highest score, perfect.</p>
+          <p>Posts that match no preference tags are not discarded though, I have introduced a "wildcard score". The <code>wildcard_score</code> is a psuedo random number that is given in place of the <code>tag_score</code> metric, it means that if a post doesn't match any tags
+            it still has a chance of placing highly in the feed. My reason for doing this is to allow the feed to present potential new interesets to the users. If they only ever saw things that they were familiar with they may get bored and not engage with the content, but this is
+            where the wildcard score system comes into place. Also a post with no matching tags but matching follower tags will still be randomised yet the overall relevance score will be higher
+
         </section>
+
+        <section>
+          <h2 id="title3">API</h2>
+          <p>Peerspace's API (application program interface) is the medium through which the frontend (client-side) communicates with the backend (server-side). It is the spinal cord of Peerspace and is absolutly essential to its operation. The
+          API is built using the <a href="http://www.django-rest-framework.org/" target="_blank">Django REST (Representational State Transfer) framework</a>. From a high-level perspective the API works to give the frontend what it asks for (the browser is very needy). A series
+          of GET, POST, PUT and DELETE requests form the commmunication layer. The frontend uses AJAX (asynchronous JavaScript and XML) to make such requests, this allows the DOM (document object model) to be updated without the need for a page refresh, this gives life to a dynamic user interface.</p>
+
+          <h3 id="subtite7">Serializers</h3>
+
+          <p>Although spelt incorrectly, Django REST framework's serializers are incredably useful. They take a model instance and convert the data into a format called JSON (JavaScript Object Notation), this data format is used widely across the web and is the standard data transfer medium. It is lightweight and
+            is very readable by both humans and computers.</p>
+
+          <p>The code below is the <code>UserSerializer</code> class that tells Django REST framework what pieces of data should be included in the response:
+
+          <pre class="line-numbers"><code class="language-python">
+# This class takes the data from the User model and serializes it into JSON
+# (JavaScript Object Notation) ready for use in the API
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+                                                                    # Define the model to use
+        model = models.User
+                                                                    # Define which fields to output
+        fields = (
+                                                                    # The id field does not appear in the User model as it is an auto
+                                                                    # incramenting value that the database handles for us
+            'id',
+            'email',
+            'name',
+            'bio',
+            'education',
+            'work',
+            'location',
+            'date_joined',
+            'is_active',
+            'is_staff',
+            'posts',
+            'profile_pic',
+        )
+          </code></pre>
+
+          <p>This is very similar to the <code>ModelForm</code> classes we came across earlier. The <code>Meta</code> class has two key attributes: <code>model</code> and <code>fields</code>. The <code>model</code> attribute tells the serializer what model to interact with and
+            the <code>fields</code> atrribute tells the serializer what fields should be included. All of the serializers look very similar, thus this will be the only one we shall talk about here.</p>
+
+          <h3 id="subtite8">How It All Works</h3>
+
+          <p></p>
 
       </article>
       <!-- END Main content -->

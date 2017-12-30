@@ -27,7 +27,6 @@ class PostSerializer(serializers.ModelSerializer):
             'user',
             'likes',
             'tags',
-            # 'deadline',
             'proof_description',
             'proof_pic',
             'days_taken',

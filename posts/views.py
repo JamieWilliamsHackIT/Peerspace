@@ -33,18 +33,6 @@ class RetrieveUpdateDestroyPost(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PostSerializer
 
 
-# class FeedPostList(generics.ListAPIView):
-#     serializer_class = serializers.PostSerializer
-#
-#     def get_queryset(self):
-#         user_id = self.kwargs['user_id']
-#         post_ids = get_most_relevent(user_id)
-#         print(post_ids)
-#         queryset = models.Post.objects.filter(pk__in=post_ids)#.order_by('-created_at')
-#         print(queryset)
-#         return queryset
-
-
 class FeedPostList(APIView):
     authenication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
@@ -52,11 +40,9 @@ class FeedPostList(APIView):
     def get(self, request, *args, **kwargs):
         user_id = self.kwargs['user_id']
         page_number = self.kwargs['page_number']
+        # Define max posts per get srequest
         page_size = 10
-        slice1 = page_number * page_size
-        slice2 = (page_number * page_size) + (page_size)
-        post_ids = get_most_relevent(user_id)[slice1:slice2]
-        print(post_ids)
+        post_ids = get_most_relevent(user_id, page_number, page_size)
         # This may not be the best way to tackle this issue, nevertheless
         # it is a working solution. The queryset was not ordered so I have
         # serialised the data from the posts myself

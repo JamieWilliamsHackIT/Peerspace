@@ -1,3 +1,24 @@
 .logo {
   height: 200px;
 }
+
+.sigmoid,
+.expon {
+  position: relative;
+  width: inherit;
+  display: inline-block;
+}
+
+.sigmoid img {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  height: 100px;
+}
+
+.expon img {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  height: 100px;
+}
