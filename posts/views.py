@@ -33,14 +33,62 @@ class RetrieveUpdateDestroyPost(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PostSerializer
 
 
-class FeedPostList(generics.ListAPIView):
-    serializer_class = serializers.PostSerializer
+# class FeedPostList(generics.ListAPIView):
+#     serializer_class = serializers.PostSerializer
+#
+#     def get_queryset(self):
+#         user_id = self.kwargs['user_id']
+#         post_ids = get_most_relevent(user_id)
+#         print(post_ids)
+#         queryset = models.Post.objects.filter(pk__in=post_ids)#.order_by('-created_at')
+#         print(queryset)
+#         return queryset
 
-    def get_queryset(self):
+
+class FeedPostList(APIView):
+    authenication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
         user_id = self.kwargs['user_id']
-        post_ids = get_most_relevent(user_id)
-        queryset = models.Post.objects.filter(pk__in=post_ids).order_by('-created_at')
-        return queryset
+        page_number = self.kwargs['page_number']
+        page_size = 10
+        slice1 = page_number * page_size
+        slice2 = (page_number * page_size) + (page_size)
+        post_ids = get_most_relevent(user_id)[slice1:slice2]
+        print(post_ids)
+        # This may not be the best way to tackle this issue, nevertheless
+        # it is a working solution. The queryset was not ordered so I have
+        # serialised the data from the posts myself
+
+        data = []
+        for _id in post_ids:
+            post = get_object_or_404(models.Post, pk=_id)
+            if post.proof_pic:
+                proof_pic = post.proof_pic.url
+            else:
+                proof_pic = ''
+            data.append(
+                {
+                    'id': post.id,
+                    'title': post.title,
+                    'description': post.description,
+                    'created_at': post.created_at,
+                    'days_since': post.time_since_creation,
+                    'completed': post.completed,
+                    'user_name': post.user.name,
+                    'user_url': post.user.profile_pic.url,
+                    'user': post.user.id,
+                    'likes': [like.id for like in post.likes.all()],
+                    'tags': post.tags,
+                    'proof_description': post.proof_description,
+                    'proof_pic': proof_pic,
+                    'days_taken': post.days_taken,
+                    'comments': [comment.id for comment in post.comments.all()],
+                    'verifications': [verf.id for verf in post.verifications.all()],
+                }
+            )
+        return Response(data)
 
 
 class ProfilePostList(generics.ListAPIView):

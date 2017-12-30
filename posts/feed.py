@@ -18,7 +18,7 @@ def get_most_relevent(user_pk):
     #Get all user's tags
     user_tags = UserPreferenceTag.objects.filter(user=user_pk)
     # Get all posts (in last x amount of time)
-    posts = Post.objects.order_by('created_at')[:20]
+    posts = Post.objects.order_by('created_at')#[:20]
 
     # Initialise the results dictionary
     score_dict = {}
@@ -44,7 +44,7 @@ def get_most_relevent(user_pk):
             if user_tag in post_tag_list:
                 # Normalise the weight (make sure it is in range 0 to 1) by using
                 # the logistic sigmoid
-                tag_score += 1 / (1 + math.exp(-1 * (user_tags[count].weight))
+                tag_score += (1 / (1 + math.exp(-user_tags[count].weight)))
                 num_tags_match += 1
             count += 1
 
@@ -58,15 +58,13 @@ def get_most_relevent(user_pk):
             total_relevence = 1 / (1 + math.exp(-wildcard_score))
             score_dict.update({post.id: total_relevence})
         else:
-            total_relevence = tag_score
-            # Get how many days old the post is. Older posts are less relevent
-
+            total_relevence = decimal.Decimal(tag_score)
             # Multiply the total relevence by a funtion that is large for a
             # small number of days and small for a large number of days
             total_relevence *= decimal.Decimal(math.exp((-1/4) * num_days))
             # Output scores to a dictionary
             score_dict.update({post.id: total_relevence})
-            print(('Id: {}, title: {} and score: {}').format(post.id, post.title, total_relevence))
+        # print(('Id: {}, title: {} and score: {}. {} tags matched.').format(post.id, post.title, total_relevence, num_tags_match))
 
     # Order score_dict by value and give an ordered list of post ids
     output = {}
@@ -74,7 +72,8 @@ def get_most_relevent(user_pk):
     for k in sorted_score_dict:
         output.update({k: score_dict})
     post_ids = list(output.keys())
-    post_ids = post_ids[::-1][:10]
+    post_ids = post_ids[::-1]#[:10]
+    print(post_ids)
 
     # When considering efficieny this function queries the database 2 + n times
     # where n is the number of posts in the last 10 days

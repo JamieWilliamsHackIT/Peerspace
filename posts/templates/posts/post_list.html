@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="col-lg-3"></div>
-    <ul class="col-lg-6 media-list media-list-stream mb-3">
+    <ul class="col-lg-6 media-list media-list-stream mb-3" id="post-container">
       <form class="" method="POST">
         <div class="form-group">
           <!-- <label for="exampleFormControlInput1">Title:</label> -->
@@ -99,17 +99,58 @@ $('.datepicker').datepicker();
   $(document).on('mouseenter', 'like-btn', function() {
 
   })
+
+ var post_data = []
+ var post_ids = []
+ var page_number = 0
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/feed/{{ user.id }}",
+      url: root_url + "/posts/api/v1/feed/{{ user.id }}/" + page_number,
       dataType: 'json',
       success: function(data) {
+        post_data = data
+        $.each(post_data, function(i, post) {
+          post_ids.push(post.id)
+        })
         user_id = {{ user.id }}
         theTag.trigger('data_loaded', data, user_id)
       }
     });
+    var reached_bottom = false
+    $(window).scroll(function() {
+      toScroll = $(document).height() - $(window).height() - 100;
+      if ( $(this).scrollTop() > toScroll && !reached_bottom) {
+      page_number++
+      reached_bottom = true
+      //Show loading gif
+      $('#post-container').append("<img class='loading-circle' src={% static 'img/loading.gif' %}>")
+      //Gets more posts
+      $.ajax({
+        type: "GET",
+        url: root_url + "/posts/api/v1/feed/{{ user.id }}/" + page_number,
+        dataType: 'json',
+        success: function(data) {
+          $.each(data, function(i, post) {
+            if ($.inArray(post.id, post_ids) == -1) {
+              post_data.push(post)
+            }
+          })
+          user_id = {{ user.id }}
+          if (data.length) {
+            reached_bottom = false
+            theTag.trigger('data_loaded', post_data, user_id)
+          } else {
+            reached_bottom = true
+            console.log('No more posts')
+          }
+          //Hide loading gif
+          $('.loading-circle').hide()
+        }
+        })
+      }
+    })
   }
   function deleteComment(comment_id, post_id) {
     $.ajax({

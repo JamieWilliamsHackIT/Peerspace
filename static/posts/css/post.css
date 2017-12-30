@@ -60,3 +60,9 @@
 .completion-status {
   margin-bottom: 0px;
 }
+
+.loading-circle {
+  height: 100px;
+  margin: 20px auto;
+  display: block;
+}

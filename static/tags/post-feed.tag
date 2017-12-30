@@ -57,6 +57,7 @@
     this.on('mount', function() {
       opts.callback(this)
     })
+    // this.on('update')
     this.on('data_loaded', function(data, user_id) {
       opts.posts = data
       // root_url = 'https://127.0.0.8:8000'

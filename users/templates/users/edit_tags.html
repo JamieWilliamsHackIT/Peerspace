@@ -26,10 +26,14 @@
 <script src="{% static 'js/csrf.js' %}"></script>
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script>
+// For development
+var root_url = 'http://127.0.0.1:8000'
+// For production
+// var root_url = 'https://peerspace.herokuapp.com'
 $.ajax({
   type: "GET",
   dataType: "json",
-  url: "https://peerspace.herokuapp.com/users/get_preferences",
+  url: root_url + "/users/get_preferences",
   success: function(data) {
     for (i in data.tags) {
       $('#tags').append('<li>' + data.tags[i] + '</li>')
@@ -45,7 +49,7 @@ $.ajax({
             $.ajax({
               type: "POST",
               data: data,
-              url: "https://peerspace.herokuapp.com/users/api/v2/tags/"
+              url: root_url + "/users/api/v2/tags/"
             })
         }
       },
@@ -57,7 +61,7 @@ $.ajax({
           $.ajax({
             type: "POST",
             data: data,
-            url: "https://peerspace.herokuapp.com/users/api/v2/tags/delete/"
+            url: root_url + "/users/api/v2/tags/delete/"
           })
         }
     })

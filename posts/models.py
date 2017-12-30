@@ -56,7 +56,7 @@ class Post(models.Model):
     # This will overide the __str__ method so when it is referred to it is
     # in a readable form
     def __str__(self):
-        return '{} by: {}'.format(self.title, self.user)
+        return 'Id:{}, {} by: {}'.format(self.id, self.title, self.user)
 
     def get_user(self):
         return user.name

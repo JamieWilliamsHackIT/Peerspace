@@ -82,7 +82,7 @@ urlpatterns = [
         name='API_post_comment_delete'
     ),
     path(
-        'api/v1/feed/<int:user_id>',
+        'api/v1/feed/<int:user_id>/<int:page_number>/',
         views.FeedPostList.as_view(),
         name='feed'
     ),
