@@ -90,7 +90,7 @@
             <div class="card-body">
               <h6 class="mb-3">News</h6>
               <div data-grid="images" data-target-height="150"><img class="media-object" data-width="640" data-height="640" data-action="zoom" src="{% static 'img/coding.jpg' %}" style="width: 239px; height: 225px; margin-bottom: 10px; margin-right: 0px; display: inline-block; vertical-align: bottom;"></div>
-              <p><strong>Fing out how Peerspace works.</strong> View the documentation for a line-by-line explaination of how the site operates.</p>
+              <p><strong>Find out how Peerspace works.</strong> View the documentation for a line-by-line explaination of how the site operates.</p>
               <a class="btn btn-outline-primary btn-sm" href="{% url 'docs' %}">View docs</a>
             </div>
           </div>
@@ -138,9 +138,9 @@
 <script>
 // $('.datepicker').datepicker();
   // For development
-  var root_url = 'http://127.0.0.1:8000'
+  // var root_url = 'http://127.0.0.1:8000'
   // For production
-  // var root_url = 'https://peerspace.herokuapp.com'
+  var root_url = 'https://peerspace.herokuapp.com'
   $(document).ready(function() {
     $('.no-search-results').hide()
     $("#tags").tagit()
