@@ -86,7 +86,7 @@ class ProfilePostList(generics.ListAPIView):
         queryset = models.Post.objects.filter(user=user_id).order_by('-created_at')
         return queryset
 
-from users.views import get_profile_images
+from users.views import get_profile_images, post_stats
 
 def post_list(request):
     if request.user.is_authenticated:
@@ -97,7 +97,9 @@ def post_list(request):
                         {
                             'user': user,
                             'profile_pictures': profile_pictures,
-                            'number_of_posts': number_of_posts,
+                            'number_of_posts': post_stats(user.id)['number_of_posts'],
+                            'completed_posts': post_stats(user.id)['completed_posts'],
+                            'completion_percentage': post_stats(user.id)['completion_percentage'],
                         }
                     )
     else:

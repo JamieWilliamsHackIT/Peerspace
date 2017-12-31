@@ -115,4 +115,4 @@ class UserPreferenceTag(models.Model):
 
     # This method reterns the tag name and weight when it is referenced
     def __str__(self):
-        return "{}: {}".format(self.tag, self.weight)
+        return "{}: {} for {}: {}".format(self.user.id, self.user.name, self.tag, self.weight)

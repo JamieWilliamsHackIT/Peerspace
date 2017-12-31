@@ -122,7 +122,6 @@ def get_profile_images(user_id):
         'user_profile_pic': user_profile_pic,
         'user_cover_pic': user_cover_pic,
     }
-    print(data)
     return data
 
 
@@ -235,28 +234,92 @@ class UserFollowers(APIView):
 
     def get(self, request, format=None, pk=None):
         user = get_object_or_404(models.User, pk=pk)
-        id_list = [user.id for user in list(user.follows.all())]
-        followers = models.User.objects.filter(pk__in=id_list)
-
-        user_viewing = request.user
+        followers = user.follows.all()
 
         data = []
+
         for follower in followers:
             you_follow_them = False
             if follower in user.following.all():
                 you_follow_them = True
+
+            user_viewing = request.user
+
             user_viewing_follow_them = False
             if follower in user_viewing.following.all():
                 user_viewing_follow_them = True
-            data.append({
-                'id': follower.id,
-                'name': follower.name,
-                'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
-                'you_follow_them': you_follow_them,
-                'user_viewing_follow_them': user_viewing_follow_them,
-            })
+
+            data.append(
+                {
+                    'id': follower.id,
+                    'name': follower.name,
+                    'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
+                    'you_follow_them': you_follow_them,
+                    'user_viewing_follow_them': user_viewing_follow_them,
+                }
+            )
 
         return Response(data)
+
+import math
+
+
+class SuggestedUsers(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, pk=None):
+        main_user = get_object_or_404(models.User, pk=pk)
+        following = main_user.following.all()
+
+        main_user_tags = models.UserPreferenceTag.objects.filter(user=main_user)
+        main_user_tags_list = [tag.tag.lower() for tag in main_user_tags]
+
+        score_dict = {}
+
+        for user in following:
+            # Get the users they follow
+            user_following = user.following.all()
+            print(user_following)
+
+            for user in user_following:
+                if not user in main_user.following.all():
+                    # Get the user's tags
+                    tags = models.UserPreferenceTag.objects.filter(user=user)
+                    tags = [tag.tag.lower() for tag in tags]
+                    count = 0
+                    score = 0
+                    for tag in tags:
+                        if tag in main_user_tags_list:
+                            score += (1 / (1 + math.exp(-main_user_tags[count].weight)))
+                        count += 1
+                    score_dict.update({user.id: score})
+                    # print('Id: {} and score: {}'.format(user.id, score))
+
+            sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
+            output = {}
+            for k in sorted_score_dict:
+                output.update({k: score_dict})
+            user_ids = list(output.keys())[::-1]
+
+            print(user_ids)
+
+            data = []
+            for id_ in user_ids:
+                user = get_object_or_404(models.User, pk=id_)
+                data.append(
+                    {
+                        'id': user.id,
+                        'name': user.name,
+                        'profile_pic': get_profile_images(user.id)['user_profile_pic'],
+                    }
+                )
+
+            return Response(data)
+
+
+
+
 
 
 # These classes render the rest_framework's API views for the user

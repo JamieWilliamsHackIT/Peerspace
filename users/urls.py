@@ -64,6 +64,11 @@ urlpatterns = [
         name='followers'
     ),
     path(
+        'api/v2/suggested_users/<int:pk>/',
+        views.SuggestedUsers.as_view(),
+        name='suggested_users'
+    ),
+    path(
         'api/v2/tags/',
         views.ListCreateUserPreferenceTag.as_view(),
         name='user_tags'

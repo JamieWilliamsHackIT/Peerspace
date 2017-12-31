@@ -4,6 +4,9 @@
 {% block body_content %}
 <!-- Peerspace specific stylesheets -->
 <link rel="stylesheet" href="{% static 'posts/css/post.css' %}">
+<!-- Percentage circles stylesheets -->
+<link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
+<link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
 <!-- jQueryUi specific stylesheets -->
 <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
 <!-- Tagit specific stylesheets -->
@@ -37,8 +40,23 @@
           </ul>
         </div>
       </div>
+      <div class="card d-md-block mt-3 d-lg-block mb-4" style="height: 100%;">
+        <div class="card-body">
+          <h6 class="mb-4">Post completion <small>· <a href="#">More</a></small></h6>
+          <div class="c100 p{{completion_percentage}} center mb-4">
+            <span>{{completion_percentage}}%</span>
+            <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+          </div>
+          <h6 class="mb-3">About <small>· <a href="{% url 'users:edit' %}">Edit</a></small></h6>
+          <ul class="list-unstyled list-spaced">
+            <li><span class="text-muted icon icon-graduation-cap mr-3"></span>Went to <a href="#">{{user.education}}</a>
+            </li><li><span class="text-muted icon icon-briefcase mr-3"></span>Worked at <a href="#">{{user.work}}</a>
+            </li><li><span class="text-muted icon icon-location-pin mr-3"></span>Location <a href="#">{{user.location}}</a>
+          </li></ul>
+        </div>
+      </div>
     </div>
-    <div class="col-lg-3"></div>
+    <div class="col-lg-3 spacer"></div>
     <ul class="col-lg-6 media-list media-list-stream mb-3" id="post-container">
       <form class="" method="POST">
         <div class="form-group">
@@ -62,8 +80,51 @@
         </div>
       </form>
       <post-feed></post-feed>
-      <img class='loading-circle' src={% static 'img/loading.gif' %}>
+      <img class='loading-circle loading-circle-posts' src={% static 'img/loading.gif' %}>
     </ul>
+    <div class="col-lg-3 right-pane">
+
+
+          <div class="card mb-4 d-none d-lg-block">
+            <div class="card-body">
+              <h6 class="mb-3">News</h6>
+              <div data-grid="images" data-target-height="150"><img class="media-object" data-width="640" data-height="640" data-action="zoom" src="{% static 'img/coding.jpg' %}" style="width: 239px; height: 225px; margin-bottom: 10px; margin-right: 0px; display: inline-block; vertical-align: bottom;"></div>
+              <p><strong>Fing out how Peerspace works.</strong> View the documentation for a line-by-line explaination of how the site operates.</p>
+              <a class="btn btn-outline-primary btn-sm" href="{% url 'docs' %}">View docs</a>
+            </div>
+          </div>
+
+          <div class="card mb-4 d-none d-lg-block">
+            <div class="card-body">
+            <h6 class="mb-3">Suggested Users <small>· <a href="#">View All</a></small></h6>
+            <ul class="media-list media-list-stream" id="suggested-users">
+              <img class='loading-circle loading-circle-suggested' src={% static 'img/loading.gif' %}>
+            </ul>
+            </div>
+            <div class="card-footer">
+              The algorithm to give suggested users is currently being improved.
+            </div>
+          </div>
+
+          <div class="card card-link-list">
+            <div class="card-body">
+              © 2018 Peerspace
+              <a href="#">About</a>
+              <a href="#">Help</a>
+              <a href="#">Terms</a>
+              <a href="#">Privacy</a>
+              <a href="#">Cookies</a>
+              <a href="#">Ads </a>
+              <a href="#">Info</a>
+              <a href="#">Brand</a>
+              <a href="#">Blog</a>
+              <a href="#">Status</a>
+              <a href="#">Apps</a>
+              <a href="#">Jobs</a>
+              <a href="#">Advertise</a>
+            </div>
+          </div>
+        </div>
   </div>
 </div>
 <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
@@ -74,8 +135,7 @@
 <script src="{% static 'js/csrf.js' %}"></script>
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
-$('.datepicker').datepicker();
-
+// $('.datepicker').datepicker();
   // For development
   // var root_url = 'http://127.0.0.1:8000'
   // For production
@@ -85,8 +145,27 @@ $('.datepicker').datepicker();
     $('.ui-widget-content')
       .attr('placeholder', 'Tags')
       .addClass('form-contol')
+      // Get the suggested users
+      $.ajax({
+        type: "GET",
+        url: root_url + "/users/api/v2/suggested_users/{{ user.id }}",
+        dataType: 'json',
+        success: function(data) {
+          $.each(data, function(i, e) {
+            var userHTML = '<li class="media mb-2">'
+            userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">'
+            userHTML += '<div class="media-body"><strong>' + e.name + '</strong>'
+            userHTML += '<div class="media-body-actions">'
+            userHTML += '<button class="btn btn-outline-primary btn-sm follow-btn" userid=' + e.id + '><span class="icon icon-user"></span> Follow</button>'
+            userHTML += '</div></div></li>'
+            $('#suggested-users').append(userHTML)
+          })
+          $('.loading-circle-suggested').hide()
+        }, error: function(error) {
+          console.log('Error getting suggested users...')
+        }
+      })
   })
-  $("#tags").tagit();
   // Will fade the delete button in and out when the user hovers over their own comment
   $(document).on('mouseenter', '.comment-block', function() {
     var comment_id = $(this).attr('commentid')
@@ -117,7 +196,7 @@ $('.datepicker').datepicker();
         })
         user_id = {{ user.id }}
         theTag.trigger('data_loaded', data, user_id)
-        $('.loading-circle').hide()
+        $('.loading-circle-posts').hide()
       }, error: function(error) {
         console.log('Error loading posts...')
       }
@@ -129,7 +208,7 @@ $('.datepicker').datepicker();
       page_number++
       reached_bottom = true
       //Show loading gif
-      $('.loading-circle').show()
+      $('.loading-circle-posts').show()
       //Gets more posts
       $.ajax({
         type: "GET",
@@ -150,12 +229,41 @@ $('.datepicker').datepicker();
             console.log('No more posts')
           }
           //Hide loading gif
-          $('.loading-circle').hide()
+          $('.loading-circle-posts').hide()
         }, error: function(error) {
           console.log('Error loading posts...')
         }
         })
       }
+    })
+    $('#post').click(function(e) {
+      var tags = $("#tags").tagit("assignedTags");
+      // $("#deadline").datepicker();
+      user_id = {{ user.id }}
+      var data = {
+        user: user_id,
+        title: $('#title').val(),
+        description: $('#desc').val(),
+        tags: tags.join(", "),
+        // deadline: $("#deadline").datepicker("getDate"),
+      }
+      e.preventDefault()
+      $.ajax({
+        type: "POST",
+        url: root_url + "/posts/api/v1/",
+        data: data,
+        success: function(postData) {
+          console.log(postData)
+          post_data.unshift(postData)
+          page_number = 0;
+          // riot.mount('post-feed', {callback:tagCallBack})
+          theTag.trigger('data_loaded', post_data, user_id)
+          $('#title').val('')
+          $('#desc').val('')
+          $("#tags").tagit("removeAll");
+          $('.form-group-hidden').hide()
+        }
+      });
     })
   }
   function deleteComment(comment_id, post_id) {
@@ -291,31 +399,7 @@ $('.datepicker').datepicker();
     // $(document).on('focusout', '#title', function() {
     //   $('.form-group-hidden').fadeOut()
     // })
-    $('#post').click(function(e) {
-      var tags = $("#tags").tagit("assignedTags");
-      // $("#deadline").datepicker();
-      var data = {
-        user: {{ user.id }},
-        title: $('#title').val(),
-        description: $('#desc').val(),
-        tags: tags.join(", "),
-        // deadline: $("#deadline").datepicker("getDate"),
-      }
-      e.preventDefault()
-      $.ajax({
-        type: "POST",
-        url: root_url + "/posts/api/v1/",
-        data: data,
-        success: function(postData) {
-          page_number = 0;
-          riot.mount('post-feed', {callback:tagCallBack})
-          $('#title').val('')
-          $('#desc').val('')
-          $("#tags").tagit("removeAll");
-          $('.form-group-hidden').hide()
-        }
-      });
-    })
+
   })
   riot.mount('post-feed', {callback:tagCallBack})
 </script>
