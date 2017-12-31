@@ -1183,9 +1183,180 @@ class UserSerializer(serializers.ModelSerializer):
           <p>This is very similar to the <code>ModelForm</code> classes we came across earlier. The <code>Meta</code> class has two key attributes: <code>model</code> and <code>fields</code>. The <code>model</code> attribute tells the serializer what model to interact with and
             the <code>fields</code> atrribute tells the serializer what fields should be included. All of the serializers look very similar, thus this will be the only one we shall talk about here.</p>
 
-          <h3 id="subtite8">How It All Works</h3>
+          <h3 id="subtite8">API Views</h3>
 
-          <p></p>
+          <p>I can extend Django REST framework's <code>APIView</code> class to create my own API views. Each <code>APIView</code> class has two key attributes: <code>authenticaiton_classes</code> and <code>permission_classes</code>, these attributes are tuples that define how
+          the view handles authenticaiton and permissions. The methods of the class define what the view is to do with each type of CRUD (create, update, delete and destroy) operation. For example the code in the <code>get</code> method will run when a GET request is send to
+        server will the url linked to the view. I can pass it arguments taken from the url, in the example below a url ending with "/25/10/" would give the <code>get</code> method a <code>pk</code> of 25 and a <code>page_size</code> of 10.
+         It will then return serialised data in the body of the response form of JSON.</p>
+
+        <pre class="line-by-line"><code class="language-python">
+class SuggestedUsers(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, pk=None, page_size=None):
+                                                                      # Get the logged in user
+        main_user = get_object_or_404(models.User, pk=pk)
+                                                                      # Get the users the logged in user follows
+        following = main_user.following.all()
+                                                                      # Get tags of the logged in user
+        main_user_tags = models.UserPreferenceTag.objects.filter(user=main_user)
+                                                                      # Put the tags into a list (rather than a querysey)
+        main_user_tags_list = [tag.tag.lower() for tag in main_user_tags]
+
+        score_dict = {}
+
+        suggested_users = 0
+
+        for user in following:
+                                                                      # Get the users they follow
+            user_following = user.following.all()
+                                                                      # Loop through each user
+            for user in user_following:
+
+                if not user in main_user.following.all():
+                                                                      # Get the user's tags
+                    tags = models.UserPreferenceTag.objects.filter(user=user)
+                    tags = [tag.tag.lower() for tag in tags]
+                    count = 0
+                    score = 0
+                    for tag in tags:
+                        if tag in main_user_tags_list:
+                            score += (1 / (1 + math.exp(-main_user_tags[count].weight)))
+                        count += 1
+                    score_dict.update({user.id: score})
+                    # print('Id: {} and score: {}'.format(user.id, score))
+
+        sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
+        output = {}
+        for k in sorted_score_dict:
+            output.update({k: score_dict})
+        user_ids = list(output.keys())[::-1][:page_size]
+
+        data = []
+        for id_ in user_ids:
+            user = get_object_or_404(models.User, pk=id_)
+            if not user == main_user:
+                data.append(
+                    {
+                        'id': user.id,
+                        'name': user.name,
+                        'profile_pic': get_profile_images(user.id)['user_profile_pic'],
+                    }
+                )
+
+        return Response(data)
+        </code></pre>
+
+          <h4 id="subtitle8-1">URLs</h4>
+          <p>I have mentioned urls (universal resource locators) on several occasions, I feel it necessary to address them in greater depth. Each app has and the project root itself has a <code>urls.py</code> file.
+          In the <code>urls.py</code> file I can define paths using Django's <code>path()</code> function (this is new in Django 2.0, previous versions used a function called <code>url()</code>), below is an example from Peerspace's posts app:</p>
+
+          <pre class="line-by-line"><code class="language-python">
+# Standard imports
+from django.urls import path
+
+# Import any viewsW
+from . import views
+
+# Define the namespace
+app_name = 'posts'
+
+# Define the url patterns to look for
+urlpatterns = [
+    # View urls
+    path(
+        '',
+        views.post_list,
+        name='post_list'
+    ),
+    path(
+        '&lt;int:pk&gt;/',
+        views.post_view,
+        name='post_detail'
+    ),
+    path(
+        '&lt;int:pk&gt;/edit/',
+        views.post_edit,
+        name='edit'
+    ),
+    path(
+        '&lt;int:pk&gt;/delete/',
+        views.DeletePost.as_view(),
+        name='delete'
+    ),
+    path(
+        '&lt;int:pk&gt;/prove/',
+        views.prove_post,
+        name='prove'
+    ),
+    path(
+        '&lt;int:pk&gt;/prove/delete_confirm/',
+        views.prove_post_delete_confirm,
+        name='prove_delete_confirm'
+    ),
+    path(
+        '&lt;int:pk&gt;/prove/delete/',
+        views.prove_post_delete,
+        name='prove_delete'
+    ),
+    # API urls
+    path(
+        'api/v1/',
+        views.ListCreatePost.as_view(),
+        name='API_post_list'
+    ),
+    path(
+        'api/v1/profile/&lt;int:user_id&gt;/',
+        views.ProfilePostList.as_view(),
+        name='API_profile_posts'
+    ),
+    path(
+        'api/v1/&lt;pk&gt;/',
+        views.RetrieveUpdateDestroyPost.as_view(),
+        name='API_post_detail'
+    ),
+    path(
+        'api/v1/&lt;int:pk&gt;/like',
+        views.PostLikeAPI.as_view(),
+        name='API_post_like'
+    ),
+    path(
+        'api/v1/&lt;int:pk&gt;/verify',
+        views.PostVerficationAPI.as_view(),
+        name='API_post_verifys'
+    ),
+    path(
+        'api/v1/&lt;int:pk&gt;/comment',
+        views.ListCreateComment.as_view(),
+        name='API_post_comment'
+    ),
+    path(
+        'api/v1/comments/&lt;int:pk&gt;/',
+        views.DestroyViewComment.as_view(),
+        name='API_post_comment_delete'
+    ),
+    path(
+        'api/v1/feed/&lt;int:user_id&gt;/&lt;int:page_number&gt;/',
+        views.FeedPostList.as_view(),
+        name='feed'
+        ]
+    ),
+          </code></pre>
+
+          <p>If a request is made to a url that matches one of the urls defined then Django will run the view that is defined in the <code>path()</code> function. The first argument defines the url, the second argument
+            defines the view to run and the third argument defines its name (therefore to use the function: <code>path(url, view, name)</code>).
+
+            <section>
+
+              <h2 id="title5">Conclusion</h2>
+
+              <p>Building Peerspace has been an intresting journey, I am proud of my creation but I am aware there is much more work to be done, many elements of Peerspace (as they are now) simply wouldn't scale, thus limiting the
+                potential of the site from the get go. In completing (or abandoning as I would never say a project is ever complete) Peerspace I have learning a vast amount about the web, Python and Django. These tools will certainly come in
+                extremely useful when working on future projects. I hope you have as much fun on Peerspace as I had making it. Cheers.</p>
+
+            </section>
 
       </article>
       <!-- END Main content -->

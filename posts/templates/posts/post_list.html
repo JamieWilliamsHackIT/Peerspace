@@ -17,7 +17,7 @@
       <div class="card card-profile mb-4">
         <div class="card-header" style="background-image: url({{ profile_pictures.user_cover_pic }});"></div>
         <div class="card-body text-center">
-          <a href="profile/index.html">
+          <a href="{% url 'users:profile_user' %}">
             <img class="card-profile-img" src="{{ profile_pictures.user_profile_pic }}">
           </a>
           <h6 class="card-title">
