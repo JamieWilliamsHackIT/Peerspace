@@ -307,6 +307,7 @@ $('.datepicker').datepicker();
         url: root_url + "/posts/api/v1/",
         data: data,
         success: function(postData) {
+          page_number = 0;
           riot.mount('post-feed', {callback:tagCallBack})
           $('#title').val('')
           $('#desc').val('')
