@@ -58,7 +58,7 @@
     </div>
     <div class="col-lg-3 spacer"></div>
     <ul class="col-lg-6 media-list media-list-stream mb-3" id="post-container">
-      <form class="create-post" method="POST">
+      <form class="" method="POST">
         <div class="form-group">
           <!-- <label for="exampleFormControlInput1">Title:</label> -->
           <input type="text" placeholder="Create Post" class="form-control" id="title" placeholder="">
@@ -80,7 +80,6 @@
         </div>
       </form>
       <post-feed></post-feed>
-      <p class="text-center mt-2 no-search-results">No results...</p>
       <img class='loading-circle loading-circle-posts' src={% static 'img/loading.gif' %}>
     </ul>
     <div class="col-lg-3 right-pane">
@@ -142,7 +141,6 @@
   // For production
   // var root_url = 'https://peerspace.herokuapp.com'
   $(document).ready(function() {
-    $('.no-search-results').hide()
     $("#tags").tagit()
     $('.ui-widget-content')
       .attr('placeholder', 'Tags')
@@ -174,7 +172,7 @@
           $('#suggested-users').html('Error getting suggested users...')
         }
       })
-    })
+  })
   // Will fade the delete button in and out when the user hovers over their own comment
   $(document).on('mouseenter', '.comment-block', function() {
     var comment_id = $(this).attr('commentid')
@@ -273,36 +271,6 @@
           $('.form-group-hidden').hide()
         }
       });
-    })
-    // User search
-    $(document).on('click', '.search-btn', function(e) {
-      e.preventDefault()
-      var search_term = $('.search-input').val()
-      if (search_term) {
-        // Show loading circle
-        $('.loading-circle-posts').show()
-        $('.no-search-results').hide()
-        // Get search term
-        var page_size = 10;
-        $('.create-post').hide()
-        $.ajax({
-          type: "GET",
-          url: root_url + "/search/{{ user.id }}/" + search_term + "/" + page_size,
-          dataType: 'json',
-          success: function(data) {
-            if (!data.length) {
-              $('.no-search-results').show()
-            } else {
-              $('.no-search-results').hide()
-            }
-            user_id = {{ user.id }}
-            theTag.trigger('data_loaded', data, user_id)
-            $('.loading-circle-posts').hide()
-          }, error: function(error) {
-            console.log('Error searching for posts...')
-          }
-        })
-      }
     })
   }
   //Sends follow

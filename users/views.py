@@ -12,7 +12,6 @@ from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-
 # Import any models
 from . import models
 from posts.models import Post
@@ -268,7 +267,7 @@ class SuggestedUsers(APIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, format=None, pk=None):
+    def get(self, request, format=None, pk=None, page_size=None):
         main_user = get_object_or_404(models.User, pk=pk)
         following = main_user.following.all()
 
@@ -277,12 +276,14 @@ class SuggestedUsers(APIView):
 
         score_dict = {}
 
+        suggested_users = 0
+
         for user in following:
             # Get the users they follow
             user_following = user.following.all()
-            print(user_following)
 
             for user in user_following:
+                # if suggested_users <= page_size:
                 if not user in main_user.following.all():
                     # Get the user's tags
                     tags = models.UserPreferenceTag.objects.filter(user=user)
@@ -295,18 +296,19 @@ class SuggestedUsers(APIView):
                         count += 1
                     score_dict.update({user.id: score})
                     # print('Id: {} and score: {}'.format(user.id, score))
+                    # suggested_users += 1
 
-            sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
-            output = {}
-            for k in sorted_score_dict:
-                output.update({k: score_dict})
-            user_ids = list(output.keys())[::-1]
 
-            print(user_ids)
+        sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
+        output = {}
+        for k in sorted_score_dict:
+            output.update({k: score_dict})
+        user_ids = list(output.keys())[::-1][:page_size]
 
-            data = []
-            for id_ in user_ids:
-                user = get_object_or_404(models.User, pk=id_)
+        data = []
+        for id_ in user_ids:
+            user = get_object_or_404(models.User, pk=id_)
+            if not user == main_user:
                 data.append(
                     {
                         'id': user.id,
@@ -315,12 +317,7 @@ class SuggestedUsers(APIView):
                     }
                 )
 
-            return Response(data)
-
-
-
-
-
+        return Response(data)
 
 # These classes render the rest_framework's API views for the user
 class ListCreateUser(generics.ListCreateAPIView):

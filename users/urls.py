@@ -64,7 +64,7 @@ urlpatterns = [
         name='followers'
     ),
     path(
-        'api/v2/suggested_users/<int:pk>/',
+        'api/v2/suggested_users/<int:pk>/<int:page_size>/',
         views.SuggestedUsers.as_view(),
         name='suggested_users'
     ),
