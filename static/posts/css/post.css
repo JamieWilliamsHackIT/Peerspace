@@ -78,3 +78,9 @@
   display: block;
   padding-bottom: 40px;
 }
+
+.tags {
+  display: inline;
+  color: grey;
+  font-style: italic;
+}

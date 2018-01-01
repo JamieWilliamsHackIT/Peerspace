@@ -10,6 +10,9 @@
         <p>
           {post.description}
         </p>
+        <p each={tag in post.tags.split(', ')} class="tags">
+          #{tag}
+        </p>
       </div>
     </li>
     <div if={post.proof_description && post.proof_pic} id="accordion{post.id}" role="tablist">
@@ -57,11 +60,11 @@
     this.on('mount', function() {
       opts.callback(this)
     })
-    // this.on('update')
     this.on('data_loaded', function(data, user_id) {
       opts.posts = data
-      // root_url = 'https://127.0.0.8:8000'
-      root_url = 'https://peerspace.herokuapp.com'
+      // root_url = 'http://127.0.0.1:8000'
+      // root_url = 'https://peerspace.herokuapp.com'
+      root_url = 'https://www.peerspace.io'
       this.update()
     })
   </script>

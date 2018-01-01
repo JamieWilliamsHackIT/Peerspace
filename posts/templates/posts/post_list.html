@@ -140,7 +140,9 @@
   // For development
   // var root_url = 'http://127.0.0.1:8000'
   // For production
-  var root_url = 'https://peerspace.herokuapp.com'
+  // var root_url = 'https://peerspace.herokuapp.com'
+  // Official url
+  var root_url = 'https://www.peerspace.io'
   $(document).ready(function() {
     $('.no-search-results').hide()
     $("#tags").tagit()
@@ -253,7 +255,7 @@
         user: user_id,
         title: $('#title').val(),
         description: $('#desc').val(),
-        tags: tags.join(", "),
+        tags: tags.join(", #"),
         // deadline: $("#deadline").datepicker("getDate"),
       }
       e.preventDefault()
@@ -262,7 +264,6 @@
         url: root_url + "/posts/api/v1/",
         data: data,
         success: function(postData) {
-          console.log(postData)
           post_data.unshift(postData)
           page_number = 0;
           // riot.mount('post-feed', {callback:tagCallBack})
