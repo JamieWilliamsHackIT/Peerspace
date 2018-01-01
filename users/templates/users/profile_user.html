@@ -12,8 +12,8 @@
 <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
 <!-- Tagit specific stylesheets -->
 <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="	https://unpkg.com/popper.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script> -->
+<!-- <script src="	https://unpkg.com/popper.js"></script> -->
 <div class="container">
   <div class="row">
     <div class="card card-profile">
@@ -62,6 +62,13 @@
           <span>{{completion_percentage}}%</span>
           <div class="slice"><div class="bar"></div><div class="fill"></div></div>
         </div>
+        <!-- <hr> -->
+        <h6>Level (total points: {{user.points}})</h6>
+        <div class="green c100 p{{user.level_percentage}} center my-4">
+          <span>{{user.level_floor}}</span>
+          <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+        </div>
+        <hr>
         <h6 class="mb-3">About <small>· <a href="{% url 'users:edit' %}">Edit</a></small></h6>
         <ul class="list-unstyled list-spaced">
           <li><span class="text-muted icon icon-graduation-cap mr-3"></span>Went to <a href="#">{{user.education}}</a>
@@ -94,7 +101,16 @@
       </div>
       <ul class="media-list media-list-stream post-feed-profile mb-3">
         <post-feed></post-feed>
+        <img class='loading-circle loading-circle-posts' src="{% static 'img/loading.gif' %}">
       </ul>
+    </div>
+    <div class="card d-md-block col-lg-3 mt-3 d-lg-block mb-4" style="height: 100%;">
+      <div class="card-body">
+        <h6 class="mb-3">Your proof photos <small>· <a href="#">View all</a></small></h6>
+        <div data-grid="images" class="images">
+        </div>
+        <img class='loading-circle loading-circle-images' src="{% static 'img/loading.gif' %}">
+      </div>
     </div>
   </div>
 </div>
@@ -126,25 +142,70 @@
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
   // For development
-  // var root_url = 'http://127.0.0.1:8000'
+  var root_url = 'http://127.0.0.1:8000'
   // For production
   // var root_url = 'https://peerspace.herokuapp.com'
   // Official url
-  var root_url = 'https://www.peerspace.io'
+  // var root_url = 'https://www.peerspace.io'
   // Initialise the tag input field
   $("#tags").tagit();
   // Get the posts and mount the riot.js tag
+  var post_data = []
+  var post_ids = []
+  var page_number = 0
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/profile/{{ user.id }}",
+      url: root_url + "/posts/api/v1/profile/{{ user.id }}/" + page_number,
       dataType: "json",
       success: function(data) {
+        post_data = data
+        $.each(post_data, function(i, post) {
+          post_ids.push(post.id)
+        })
         user_id = {{ user.id }}
         theTag.trigger('data_loaded', data, user_id)
+        $('.loading-circle-posts').hide()
+      }, error: function(error) {
+        console.log('Error loading posts...')
       }
     });
+    var reached_bottom = false
+    $(window).scroll(function() {
+      toScroll = $(document).height() - $(window).height() - 100;
+      if ( $(this).scrollTop() > toScroll && !reached_bottom) {
+      page_number++
+      reached_bottom = true
+      //Show loading gif
+      $('.loading-circle-posts').show()
+      //Gets more posts
+      $.ajax({
+        type: "GET",
+        url: root_url + "/posts/api/v1/feed/{{ user.id }}/" + page_number,
+        dataType: 'json',
+        success: function(data) {
+          $.each(data, function(i, post) {
+            if ($.inArray(post.id, post_ids) == -1) {
+              post_data.push(post)
+            }
+          })
+          user_id = {{ user.id }}
+          if (data.length) {
+            reached_bottom = false
+            theTag.trigger('data_loaded', post_data, user_id)
+          } else {
+            reached_bottom = true
+            console.log('No more posts')
+          }
+          //Hide loading gif
+          $('.loading-circle-posts').hide()
+        }, error: function(error) {
+          console.log('Error loading posts...')
+        }
+        })
+      }
+    })
   }
   // Handle the folowers and following modals
   $(document).on('click', '#followers', function() {
@@ -353,7 +414,23 @@
         }
       });
     })
+    // Get user proof images
+    $.ajax({
+      url: root_url + "/posts/api/v1/proof_images/" + {{ user.id }} + "/" + 10,
+      method: "GET",
+      dataType: "json",
+      success: function(data) {
+        $.each(data, function(i, e) {
+          $('.images').append('<img href="' + e.post_url + '" class="img-fluid image" style="padding: 10px;" data-width="' + e.proof_pic_width + '" data-height="' + e.proof_pic_height + '" src="' + e.proof_pic_url + '">')
+        })
+        $('.loading-circle-images').hide()
+        // $('.images').imageGrid()
+      }
   })
+  $(document).on('click', '.image', function() {
+    window.location.href = $(this).attr('href');
+  })
+})
   riot.mount('post-feed', {callback:tagCallBack})
 </script>
 </body>

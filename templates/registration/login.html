@@ -5,15 +5,29 @@
 
 {% block body_content %}
 <link rel="stylesheet" href="{% static 'users/css/user_form.css' %}">
-<div class="user-form-login">
-  <h1>Login</h1>
-  <form method='POST'>
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">Login</button>
-        <a href="http://peerspace.herokuapp.com/users/password_reset/" class="btn btn-primary">Forgot Password?</a>
-    {% endbuttons %}
-  </form>
+<div class="user-form-login container">
+  <div class="row">
+    <div class="col-lg-6">
+      <h1>Login</h1>
+      <hr>
+      <form method='POST'>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a href="{% url 'users:signup' %}" class="btn btn-primary">Signup</a>
+            <a href="https://peerspace.io/users/password_reset/" class="float-right btn btn-primary">Forgot Password?</a>
+        {% endbuttons %}
+      </form>
+    </div>
+    <div class="card mb-4 d-none col-lg-6 d-lg-block">
+      <div class="card-body">
+        <h6 class="mb-3">News</h6>
+        <div data-grid="images" data-target-height="150"><img class="media-object" data-width="640" data-height="640" data-action="zoom" src="{% static 'img/coding.jpg' %}" style="width: 239px; height: 225px; margin-bottom: 10px; margin-right: 0px; display: inline-block; vertical-align: bottom;"></div>
+        <p><strong>Find out how Peerspace works.</strong> View the documentation for a line-by-line explaination of how the site operates.</p>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'docs' %}">View docs</a>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -10,11 +10,6 @@ app_name = 'posts'
 # Define the url patterns to look for
 urlpatterns = [
     # View urls
-    # path(
-    #     '',
-    #     views.post_list,
-    #     name='post_list'
-    # ),
     path(
         '<int:pk>/',
         views.post_view,
@@ -52,7 +47,7 @@ urlpatterns = [
         name='API_post_list'
     ),
     path(
-        'api/v1/profile/<int:user_id>/',
+        'api/v1/profile/<int:user_id>/<int:page_number>/',
         views.ProfilePostList.as_view(),
         name='API_profile_posts'
     ),
@@ -86,4 +81,9 @@ urlpatterns = [
         views.FeedPostList.as_view(),
         name='feed'
     ),
+    path(
+        'api/v1/proof_images/<int:pk>/<int:page_size>/',
+        views.PostProofImageApi.as_view(),
+        name='proof_images'
+    )
 ]

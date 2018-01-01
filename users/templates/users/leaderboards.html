@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title_tag %}Profile | {{ block.super }}{% endblock %}
+{% block body_content %}
+<!-- Peerspace specific stylesheets  -->
+<link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
+<!-- Percentage circles stylesheets -->
+<link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
+<link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
+<!-- jQueryUi specific stylesheets -->
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
+<!-- Tagit specific stylesheets -->
+<link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+<div class="container leaderboards-container">
+  <div class="row">
+    <div class="card d-md-block col-lg-3 d-lg-block mb-4" style="height: 100%;">
+      <div class="card-body">
+        <h6 class="mb-3">Your stats</h6>
+        <ul class="list-unstyled list-spaced">
+          <li><span class="text-muted icon icon-globe mr-3"></span>Overall position <a href="#"></a>
+          </li><li><span class="text-muted icon icon-medal mr-3"></span>Points position <a href="#"></a>
+          </li><li><span class="text-muted icon icon-check mr-3"></span>Percentage position <a href="#"></a>
+        </li></ul>
+        <hr>
+        <h6 class="mb-4">Post completion <small>· <a href="#">More</a></small></h6>
+        <div class="c100 p{{completion_percentage}} center mb-4">
+          <span>{{completion_percentage}}%</span>
+          <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+        </div>
+        <!-- <hr> -->
+        <h6>Level (total points: {{user.points}})</h6>
+        <div class="green c100 p{{user.level_percentage}} center my-4">
+          <span>{{user.level_floor}}</span>
+          <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="user-list col-lg-9">
+      <div class="user-list-inner">
+        <ul>
+          <li class="slot">
+            <img class="profile-pic" src="{{ user.profile_pic.url }}"><span class="username ml-2">{{user.name}}</span>
+            <div class="stats">
+              <span class="text-muted icon icon-globe mr-1"></span>
+              <span class="text-muted icon icon-medal ml-3 mr-1"></span>{{user.points}}
+              <span class="text-muted icon icon-check ml-3 mr-1"></span>{{completion_percentage}}
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Riot.js compiler  -->
+<script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
+<!-- Makes getting the csrf token easier -->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- jQueryUi -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- Popper JS -->
+<script src="	https://unpkg.com/popper.js"></script>
+<!-- Toolkit JS -->
+<script src="{% static 'dist/toolkit.js' %}"></script>
+<!-- Tagit -->
+<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+<!-- Adds CSRF token to the request headers -->
+<script src="{% static 'js/csrf.js' %}"></script>
+<!-- Riot.js custom tag -->
+<script src="{% static 'tags/post-feed.js' %}"></script>
+</body>
+{% endblock body_content %}

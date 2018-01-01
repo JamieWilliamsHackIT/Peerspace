@@ -54,6 +54,8 @@ class UserManager(BaseUserManager):
         # Return the superuser
         return user
 
+from numpy import arctan
+from math import floor
 
 # This class is my custom user model
 class User(AbstractBaseUser, PermissionsMixin):
@@ -89,6 +91,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     cover_pic = models.ImageField(blank=True, null=True)
 
+    points = models.IntegerField(default=0, blank=True, null=True)
+
     education = models.CharField(max_length=50, blank=True, default='')
 
     work = models.CharField(max_length=50, blank=True, default='')
@@ -101,6 +105,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     # This attribute tells Django that the "name" field is required
     REQUIRED_FIELDS = ['name']
+
+    @property
+    def level(self):
+        return (10 * arctan(self.points / 550))
+
+    @property
+    def level_floor(self):
+        return floor(self.level)
+
+    @property
+    def level_percentage(self):
+        return floor((self.level - floor(self.level)) * 100)
+
+
+
 
 
 # This class holds the user's preferences

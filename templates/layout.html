@@ -8,50 +8,89 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'dist/toolkit.css' %}">
-    <link rel="stylesheet" href="{% static 'dist/toolkit.css.map' %}">
+    <link rel="stylesheet" href="{% static 'css/application.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <!-- Percentage circles stylesheets -->
+    <link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
+    <link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
-  <body>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <!-- <div class="navbar-container"> -->
-        <a class="navbar-brand" href="{% url 'feed' %}">
-            <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="Go to feed">
-            Peerspace
+  <body class="">
+
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark app-navbar">
+    <div class="container">
+    <a class="navbar-brand" href="{% url 'feed' %}">
+      <img src="{% static 'img/logo.png' %}" alt="brand">
+    </a>
+
+    <button class="navbar-toggler navbar-toggler-right d-md-none" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="../index.html">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../profile/index.html">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" href="#msgModal">Messages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../docs/index.html">Docs</a>
+        </li>
+
+        <li class="nav-item d-md-none">
+          <a class="nav-link" href="../notifications/index.html">Notifications</a>
+        </li>
+        <li class="nav-item d-md-none">
+          <a class="nav-link" data-action="growl">Growl</a>
+        </li>
+        <li class="nav-item d-md-none">
+          <a class="nav-link" href="../login/index.html">Logout</a>
+        </li>
+
+      </ul>
+
+      <form class="form-inline float-right d-none d-md-flex">
+        <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
+      </form>
+
+      <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-0 d-none d-md-flex">
+        <!-- <li class="nav-item">
+          <a class="app-notifications nav-link" href="../notifications/index.html">
+            <span class="icon icon-bell"></span>
           </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        </li> -->
+        <li class="nav-item ml-2">
+          <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover" data-original-title="" title="">
+            <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:profile_user' %}">Profile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'feed' %}">Feed</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:logout' %}">Logout</a>
-              </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-light mr-0 my-2 my-sm-0 search-btn" type="submit"><span class="icon icon-magnifying-glass"></span></button>
-            </form>
-          </div>
-      </div>
-    </nav>
-</div>
-    {% block body_content %}
-    {% endblock body_content %}
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+          <span class="username">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav d-none" id="js-popoverContent">
+        <li class="nav-item"><a class="nav-link" href="{% url 'users:profile_user' %}">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'users:logout' %}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+  </nav>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script> -->
+  <script src="{% static 'dist/toolkit.js' %}"></script>
+  <script src="{% static 'js/application.js' %}"></script>
+  {% block body_content %}
+  {% endblock body_content %}
+
   </body>
 </html>

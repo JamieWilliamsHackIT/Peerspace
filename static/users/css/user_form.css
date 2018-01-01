@@ -4,6 +4,9 @@
 }
 
 .user-form-login {
-  width: 20%;
-  margin:  80px auto;
+  /* width: 50%; */
+  margin: 80px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
 }

@@ -83,8 +83,14 @@ class ProfilePostList(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
-        queryset = models.Post.objects.filter(user=user_id).order_by('-created_at')
+        page_number = self.kwargs['page_number']
+        page_size = 10
+        slice1 = page_size * page_number
+        slice2 = (page_size * page_number) + page_size
+
+        queryset = models.Post.objects.filter(user=user_id).order_by('-created_at')[slice1:slice2]
         return queryset
+
 
 from users.views import get_profile_images, post_stats
 
@@ -324,8 +330,14 @@ class PostVerficationAPI(APIView):
             return HttpResponseRedirect(reverse_lazy('login'))
 
         if post.verifications.count() >= 5:
+            # Complete the post
             post.completed = True
             post.save()
+
+            # Add points to the user
+            post_user = post.user
+            post_user.points += 50 + (2 * post.likes.count())
+            post_user.save()
 
         data = {
             'verified_user': verified_user,
@@ -401,6 +413,36 @@ class ListCreateComment(generics.ListCreateAPIView):
             return super(ListCreateComment, self).post(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('login'))
+
+
+class PostProofImageApi(APIView):
+    authenication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, pk=None, page_size=None):
+        # Get user
+        user = get_object_or_404(User, pk=pk)
+        # Get their posts
+        posts = models.Post.objects.filter(user=user).order_by('-created_at')
+
+        # Get the picture for each post
+        data = []
+        for post in posts[:page_size]:
+            if post.proof_description and post.proof_pic:
+                # Serialise data
+                data.append(
+                    {
+                        'id': post.id,
+                        'proof_description': post.proof_description,
+                        'proof_pic_url': post.proof_pic.url,
+                        'proof_pic_width': post.proof_pic.width,
+                        'proof_pic_height': post.proof_pic.height,
+                        'post_url': post.get_absolute_url(),
+                    }
+                )
+
+        return Response(data)
+
 
 
 class DestroyViewComment(generics.RetrieveDestroyAPIView):

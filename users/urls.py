@@ -42,6 +42,11 @@ urlpatterns = [
         views.profile_view,
         name='profile'
     ),
+    path(
+        'leaderboards/',
+        views.leaderboards_view,
+        name='leaderboards'
+    ),
     # API urls
     path(
         'api/v2/',

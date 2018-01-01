@@ -8,3 +8,12 @@
   margin: 0 auto;
   margin-top: 60px;
 }
+
+.images img {
+  max-width: 100px;
+  height: auto;
+}
+
+.loading-circle-images {
+
+}

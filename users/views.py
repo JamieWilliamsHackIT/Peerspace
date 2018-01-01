@@ -319,6 +319,37 @@ class SuggestedUsers(APIView):
 
         return Response(data)
 
+
+class TopUserAPI(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, page_size=None):
+        # Get users ordered by points
+        # (Is there are way to improve this by reducing the number of db queries?)
+        users = models.User.objects.all().order_by('-created_at')
+
+        data = []
+        for user in users[:page_size]:
+            data.append(
+                {
+                    'id': user.id,
+                    'name': user.name,
+                    'profile_pic': get_profile_images(user.id)['user_profile_pic'],
+                }
+            )
+
+        return Response(data)
+
+
+def leaderboards_view(request):
+    return render(request, 'users/leaderboards.html',
+                      {
+                        'completion_percentage': post_stats(request.user.id)['completion_percentage'], 
+                      }
+                  )
+
+
 # These classes render the rest_framework's API views for the user
 class ListCreateUser(generics.ListCreateAPIView):
     queryset = models.User.objects.all()

@@ -1,0 +1,28 @@
+.leaderboards-container {
+  margin-top: 60px;
+}
+
+.user-list-inner {
+  background-color: white;
+}
+
+.slot {
+  list-style-type: none;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(230, 230, 230, 1);
+}
+
+.slot img {
+  width: 32px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.slot .username {
+  color: black;
+}
+
+.slot .stats {
+  float: right;
+  padding-right: 50px;
+}

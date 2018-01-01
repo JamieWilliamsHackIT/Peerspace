@@ -8023,12 +8023,7 @@ textarea {
 .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
   font-weight: inherit; }
 
-.navbar-btn-avatar,
-.navbar-btn-avatar:active,
-.navbar-btn-avatar:hover,
-.navbar-btn-avatar:focus,
-.navbar-btn-avatar:hover:active,
-.navbar-btn-avatar:active:focus {
+.navbar-btn-avatar {
   padding: 0;
   border: 0;
   background: transparent;

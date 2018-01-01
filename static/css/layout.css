@@ -3,6 +3,25 @@ body {
 }
 
 .navbar {
-  /* padding: 5px 29.6%!important; */
-  margin: 0;
+  background-color: #6A0F49!important;
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+}
+
+.navbar-brand img {
+  height: 32px;
+  width: 32px!important;
+}
+
+.username {
+  color: white;
+  /* border-right: 1px solid white; */
+}
+
+.points {
+
+}
+
+.app-notifications span {
+  font-size: 32px;
 }

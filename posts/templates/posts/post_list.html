@@ -47,6 +47,12 @@
             <span>{{completion_percentage}}%</span>
             <div class="slice"><div class="bar"></div><div class="fill"></div></div>
           </div>
+          <hr>
+          <!-- <h6>Level (total points: {{user.points}})</h6>
+          <div class="green c100 p{{user.level_percentage}} center my-4">
+            <span>{{user.level_floor}}</span>
+            <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+          </div> -->
           <h6 class="mb-3">About <small>· <a href="{% url 'users:edit' %}">Edit</a></small></h6>
           <ul class="list-unstyled list-spaced">
             <li><span class="text-muted icon icon-graduation-cap mr-3"></span>Went to <a href="#">{{user.education}}</a>
@@ -130,19 +136,20 @@
 </div>
 <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/csrf.js' %}"></script>
 <script src="{% static 'tags/post-feed.js' %}"></script>
+<script src="{% static 'dist/toolkit.js' %}"></script>
 <script>
 // $('.datepicker').datepicker();
   // For development
-  // var root_url = 'http://127.0.0.1:8000'
+  var root_url = 'http://127.0.0.1:8000'
   // For production
   // var root_url = 'https://peerspace.herokuapp.com'
   // Official url
-  var root_url = 'https://www.peerspace.io'
+  // var root_url = 'https://www.peerspace.io'
   $(document).ready(function() {
     $('.no-search-results').hide()
     $("#tags").tagit()
@@ -275,35 +282,37 @@
         }
       });
     })
-    // User search
-    $(document).on('click', '.search-btn', function(e) {
-      e.preventDefault()
-      var search_term = $('.search-input').val()
-      if (search_term) {
-        // Show loading circle
-        $('.loading-circle-posts').show()
-        $('.no-search-results').hide()
-        // Get search term
-        var page_size = 10;
-        $('.create-post').hide()
-        $.ajax({
-          type: "GET",
-          url: root_url + "/search/{{ user.id }}/" + search_term + "/" + page_size,
-          dataType: 'json',
-          success: function(data) {
-            if (!data.length) {
-              $('.no-search-results').show()
-            } else {
-              $('.no-search-results').hide()
-            }
-            user_id = {{ user.id }}
-            theTag.trigger('data_loaded', data, user_id)
-            $('.loading-circle-posts').hide()
-          }, error: function(error) {
-            console.log('Error searching for posts...')
+    // User search`
+    $(document).on("keydown", ".search-input", function (e) {
+        if (e.which == 13 && $(this).val()) {
+          e.preventDefault()
+          var search_term = $('.search-input').val()
+          if (search_term) {
+            // Show loading circle
+            $('.loading-circle-posts').show()
+            $('.no-search-results').hide()
+            // Get search term
+            var page_size = 10;
+            $('.create-post').hide()
+            $.ajax({
+              type: "GET",
+              url: root_url + "/search/{{ user.id }}/" + search_term + "/" + page_size,
+              dataType: 'json',
+              success: function(data) {
+                if (!data.length) {
+                  $('.no-search-results').show()
+                } else {
+                  $('.no-search-results').hide()
+                }
+                user_id = {{ user.id }}
+                theTag.trigger('data_loaded', data, user_id)
+                $('.loading-circle-posts').hide()
+              }, error: function(error) {
+                console.log('Error searching for posts...')
+              }
+            })
           }
-        })
-      }
+        }
     })
   }
   //Sends follow
