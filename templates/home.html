@@ -21,7 +21,7 @@
   </head>
   <body>
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{{root_url}}/posts/">
+      <a class="navbar-brand" href="{% url 'feed' %}">
           <img src="{% static 'img/logo-reversed.png' %}" width="30" height="30" class="d-inline-block align-top" alt="Go to feed">
           Peerspace
         </a>
@@ -63,7 +63,7 @@
         <div class="container info-block">
           <div class="intro-text mb-5">
             <h2 class="display-3 text-center">What is Peerspace?</h2>
-            <p class="lead text-center">Add why would you care?</p>
+            <p class="lead text-center">And why would you care?</p>
             <div class="container mt-5">
               <div class="row justify-content-between">
                 <div class="col-3 text-center">
@@ -94,7 +94,7 @@
         <div class="background-color-1">
           <div class="container">
             <h2 class="display-3 text-center pt-5">How does Peerspace Work?</h2>
-            <p class="lead text-center pb-5">A breif overview of the nuts, bolts and cogs of the site.</p>
+            <p class="lead text-center pb-5">A brief overview of the nuts, bolts, and cogs of the site.</p>
             <div class="row justify-content-between info-row mt-5">
               <div class="col-3 my-auto">
                 <img class="logo img-fluid" src="{% static 'img/django-logo.png' %}">
@@ -111,8 +111,8 @@
             </div>
             <div class="row justify-content-between info-row">
               <div class="col-8">
-                <h3 class="display-4">Postgres Won't Forget<weak class="small-text ml-2">(Hopefully)</weak></h3>
-                <p class="lead">PostgreSQL is the memory of Peerspace, it remembers everything from user information to what I had for dinner last night, four years ago, to
+                <h3 class="display-4">PostgreSQL Won't Forget<weak class="small-text ml-2">(Hopefully)</weak></h3>
+                <p class="lead">PostgreSQL is the memory of Peerspace. It remembers everything from user information to what I had for dinner last night, four years ago, to
                                 every post created in Peerspace history. Django's object relational mapper (ORM) makes it very easy to interface
                                 with the PostgreSQL database, this is one of my favourite features of Django. In a previous project I used PHP and a MySQL database. Using PHP for the backend
                                 meant I had to write the SQL statements myself, Django's ORM does this for me. Find out more <a target="_blank" href="https://www.postgresql.org/">here</a>.

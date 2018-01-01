@@ -10,11 +10,11 @@ app_name = 'posts'
 # Define the url patterns to look for
 urlpatterns = [
     # View urls
-    path(
-        '',
-        views.post_list,
-        name='post_list'
-    ),
+    # path(
+    #     '',
+    #     views.post_list,
+    #     name='post_list'
+    # ),
     path(
         '<int:pk>/',
         views.post_view,
