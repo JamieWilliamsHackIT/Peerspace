@@ -83,7 +83,10 @@ def get_most_relevent(user_pk, page_number, page_size):
                 follower_tag_count += 1
             # print(tag_score)
         # Get all of the current post's tags
-        post_tag_list = post.tags.split(", ")
+        if post.tags:
+            post_tag_list = post.tags.split(", ")
+        else:
+            post_tag_list = []
         # Lower case all tags with a list comprehension
         post_tag_list = [tag.lower() for tag in post_tag_list]
         for user_tag in user_tag_list:

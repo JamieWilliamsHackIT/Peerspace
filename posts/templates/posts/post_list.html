@@ -137,6 +137,13 @@
 <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+<script>
+(function($) {
+    if (!$.curCSS) {
+       $.curCSS = $.css;
+    }
+})(jQuery);
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/csrf.js' %}"></script>
@@ -145,7 +152,7 @@
 <script>
   $(document).ready(function() {
     $('.no-search-results').hide()
-    $("#tags").tagit()
+    $("#tags").tagit({caseSensitive:false})
     $('.ui-widget-content')
       .attr('placeholder', 'Tags')
       .addClass('form-contol')
@@ -255,7 +262,7 @@
         user: user_id,
         title: $('#title').val(),
         description: $('#desc').val(),
-        tags: tags.join(", #"),
+        tags: tags.join(', '),
         // deadline: $("#deadline").datepicker("getDate"),
       }
       e.preventDefault()
