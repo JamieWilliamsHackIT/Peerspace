@@ -76,12 +76,6 @@
 <!-- Toolkit JS -->
 <script src="{% static 'dist/toolkit.js' %}"></script>
 <script>
-  // For development
-  // var root_url = 'http://127.0.0.1:8000'
-  // For production
-  // var root_url = 'https://peerspace.herokuapp.com'
-  // Official url
-  var root_url = 'https://www.peerspace.io'
   page_number = 0;
   leaderboard_group = "global";
   leaderboard_type = "points";
@@ -89,7 +83,7 @@
     // Gets posts
     $.ajax({
       type: "GET",
-      url: root_url + "/users/leaderboards/api/v3/{{ user.id }}/" + leaderboard_group + "/" + leaderboard_type + "/" + page_number,
+      url: "/users/leaderboards/api/v3/{{ user.id }}/" + leaderboard_group + "/" + leaderboard_type + "/" + page_number,
       dataType: 'json',
       success: function(data) {
         user_id = {{ user.id }}
@@ -99,7 +93,7 @@
     $(".group").change(function() {
       $.ajax({
         type: "GET",
-        url: root_url + "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
+        url: "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
         dataType: 'json',
         success: function(data) {
           user_id = {{ user.id }}
@@ -110,7 +104,7 @@
     $(".type").change(function() {
       $.ajax({
         type: "GET",
-        url: root_url + "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
+        url: "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
         dataType: 'json',
         success: function(data) {
           user_id = {{ user.id }}

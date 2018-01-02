@@ -141,12 +141,6 @@
 <!-- Riot.js custom tag -->
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
-  // For development
-  // var root_url = 'http://127.0.0.1:8000'
-  // For production
-  // var root_url = 'https://peerspace.herokuapp.com'
-  // Official url
-  var root_url = 'https://www.peerspace.io'
   // Initialise the tag input field
   $("#tags").tagit();
   // Get the posts and mount the riot.js tag
@@ -157,7 +151,7 @@
     //Gets posts
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/profile/{{ user.id }}/" + page_number,
+      url: "/posts/api/v1/profile/{{ user.id }}/" + page_number,
       dataType: "json",
       success: function(data) {
         post_data = data
@@ -182,7 +176,7 @@
       //Gets more posts
       $.ajax({
         type: "GET",
-        url: root_url + "/posts/api/v1/profile/{{ user.id }}/" + page_number,
+        url: "/posts/api/v1/profile/{{ user.id }}/" + page_number,
         dataType: 'json',
         success: function(data) {
           $.each(data, function(i, post) {
@@ -212,7 +206,7 @@
     // Get all of the user's followers
     $.ajax({
       type: "GET",
-      url: root_url + "/users/api/v2/" + {{ user.id }} + "/followers",
+      url: "/users/api/v2/" + {{ user.id }} + "/followers",
       dataType: "json",
       success: function(data) {
         $('#followers-model-content').html('')
@@ -239,7 +233,7 @@
     this_button = $(this)
     $.ajax({
       type: "GET",
-      url: root_url + "/users/api/v2/" + this_button.attr('userid') + "/follow/",
+      url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
       dataType: "json",
       success: function(data) {
         if (data.following) {
@@ -253,7 +247,7 @@
   // Handle the deleting of comments here
   function deleteComment(comment_id, post_id) {
     $.ajax({
-      url: root_url + "/posts/api/v1/comments/" + comment_id,
+      url: "/posts/api/v1/comments/" + comment_id,
       type: "DELETE",
       // This MUST be in the callback due to the asynchronus nature of javascript
       success: function() {
@@ -265,7 +259,7 @@
     //Gets comments
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/" + post_id + "/comment",
+      url: "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
         $('.comment-list-' + post_id).html('')
@@ -311,7 +305,7 @@
       e.preventDefault()
       var this_button = $(this)
       $.ajax({
-        url: root_url + "/posts/api/v1/" + this_button.attr('id') + "/like",
+        url: "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         data: {},
         success: function(data) {
@@ -356,7 +350,7 @@
           }
           // Sends comment
           $.ajax({
-            url: root_url + "/posts/api/v1/" + post_id + "/comment",
+            url: "/posts/api/v1/" + post_id + "/comment",
             method: "POST",
             data: data,
             success: function(data) {
@@ -373,7 +367,7 @@
       post_id = $(this).attr("post-id")
       this_button = $(this)
       $.ajax({
-        url: root_url + "/posts/api/v1/" + post_id + "/verify",
+        url: "/posts/api/v1/" + post_id + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {
@@ -404,7 +398,7 @@
       e.preventDefault()
       $.ajax({
         type: "POST",
-        url: root_url + "/posts/api/v1/",
+        url: "/posts/api/v1/",
         data: data,
         success: function(postData) {
           riot.mount('post-feed', {callback:tagCallBack})
@@ -416,7 +410,7 @@
     })
     // Get user proof images
     $.ajax({
-      url: root_url + "/posts/api/v1/proof_images/" + {{ user.id }} + "/" + 10,
+      url: "/posts/api/v1/proof_images/" + {{ user.id }} + "/" + 10,
       method: "GET",
       dataType: "json",
       success: function(data) {
