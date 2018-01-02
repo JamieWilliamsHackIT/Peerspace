@@ -3,7 +3,7 @@ riot.tag2('leaderboard', '<li each="{slot in opts.slots}" class="slot"> <img cla
       opts.callback(this)
     })
     this.on('data_loaded', function(data, user_id) {
-      console.log(data)
+
       opts.slots = data
 
       root_url = 'https://www.peerspace.io'

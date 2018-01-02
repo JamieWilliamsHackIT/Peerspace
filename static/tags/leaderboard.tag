@@ -12,7 +12,7 @@
       opts.callback(this)
     })
     this.on('data_loaded', function(data, user_id) {
-      console.log(data)
+      // console.log(data)
       opts.slots = data
       // root_url = 'http://127.0.0.1:8000'
       // root_url = 'https://peerspace.herokuapp.com'
