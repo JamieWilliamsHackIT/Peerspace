@@ -52,7 +52,7 @@
   </div>
   <div class="comment-form comment-form-{post.id}" style="display:none;">
       <div class="form-group">
-        <input type="text" class="form-control cmomment" post-id="{post.id}" placeholder="Comment">
+        <input type="text" class="form-control comment" post-id="{post.id}" placeholder="Comment">
       </div>
   </div>
 </div>

@@ -137,7 +137,7 @@ def post_stats(user_id):
     else:
         completion_percentage = 0
 
-    completion_index = completion_percentage * number_of_posts
+    completion_index = completion_percentage * posts.count()
 
     data = {
         'number_of_posts': number_of_posts,
@@ -145,6 +145,7 @@ def post_stats(user_id):
         'completion_percentage': completion_percentage,
         'completion_index': completion_index,
     }
+
     return data
 
 
@@ -347,11 +348,23 @@ class TopUserAPI(APIView):
 
 
 def leaderboards_view(request):
+    # Get users positions
+    user = request.user
+    points_position = list(models.User.objects.all().order_by('-points')).index(user) + 1
+    users = models.User.objects.all()
+    for user in users:
+        user.completion_index = post_stats(user.id)['completion_index']
+        user.save()
+    index_position = list(models.User.objects.all().order_by('-completion_index')).index(user) + 1
     return render(request, 'users/leaderboards.html',
                       {
+                        'points_position': points_position,
+                        'index_position': index_position,
                         'completion_percentage': post_stats(request.user.id)['completion_percentage'],
                       }
                   )
+
+from itertools import chain
 
 
 class LeaderboardsAPI(APIView):
@@ -384,7 +397,7 @@ class LeaderboardsAPI(APIView):
             # Get the user
             user = get_object_or_404(models.User, pk=pk)
             # Get the users they follow
-            following = user.following.all()
+            following = user.following.all() | models.User.objects.filter(id=user.id)
             if leaderboard_type == 'points':
                 # Order the users by pointss
                 results = following.order_by('-points')[slice1:slice2]
@@ -396,13 +409,17 @@ class LeaderboardsAPI(APIView):
             # Get the user
             user = get_object_or_404(models.User, pk=pk)
             # Get the user's followers
-            followers = user.follows.all().order_by('-points')
+            followers = user.follows.all()
+
+            # if user.follows.all().count():
             if leaderboard_type == 'points':
                 # Order users by points
-                results = followers.order_by('points')[slice1:slice2]
+                results = followers.order_by('-points')[slice1:slice2]
             elif leaderboard_type == 'completion index':
                 # Order the users by completion_index
                 results = followers.order_by('-completion_index')[slice1:slice2]
+            # else:
+            #     results = [user]
 
         data = []
         for user in results:
@@ -411,6 +428,7 @@ class LeaderboardsAPI(APIView):
                     'id': user.id,
                     'name': user.name,
                     'profile_pic_url': user.profile_pic.url,
+                    'position': list(results).index(user) + 1,
                     'points': user.points,
                     'level': user.level_floor,
                     'completion_index': user.completion_index,

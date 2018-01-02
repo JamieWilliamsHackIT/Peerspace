@@ -109,7 +109,7 @@
           <!-- Toggle buttons and brand -->
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
-              <span class="glyphicon glyphicon-option-vertical"></span>
+              <span class="icon icon-option-vertical"></span>
             </button>
 
             <button type="button" class="navbar-toggle for-sidebar" data-toggle="offcanvas">
@@ -617,7 +617,7 @@ def profile_view(request, pk):
                   &lt;nav class=&quot;navbar fixed-top navbar-expand-lg navbar-dark bg-dark&quot;&gt;
                     &lt;div class=&quot;container&quot;&gt;
                       &lt;!-- &lt;div class=&quot;navbar-container&quot;&gt; --&gt;
-                      &lt;a class=&quot;navbar-brand&quot; href=&quot;{% url 'posts:post_list' %}&quot;&gt;
+                      &lt;a class=&quot;navbar-brand&quot; href=&quot;{% url 'feed' %}&quot;&gt;
                           &lt;img src=&quot;{% static 'img/logo.png' %}&quot; width=&quot;30&quot; height=&quot;30&quot; class=&quot;d-inline-block align-top&quot; alt=&quot;Go to feed&quot;&gt;
                           Peerspace
                         &lt;/a&gt;
@@ -630,7 +630,7 @@ def profile_view(request, pk):
                               &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'users:profile_user' %}&quot;&gt;Profile&lt;/a&gt;
                             &lt;/li&gt;
                             &lt;li class=&quot;nav-item&quot;&gt;
-                              &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'posts:post_list' %}&quot;&gt;Feed&lt;/a&gt;
+                              &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'feed' %}&quot;&gt;Feed&lt;/a&gt;
                             &lt;/li&gt;
                             &lt;li class=&quot;nav-item&quot;&gt;
                               &lt;a class=&quot;nav-link&quot; href=&quot;{% url 'users:logout' %}&quot;&gt;Logout&lt;/a&gt;

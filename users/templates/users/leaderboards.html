@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
-{% block title_tag %}Profile | {{ block.super }}{% endblock %}
+{% block title_tag %}Leaderboards | {{ block.super }}{% endblock %}
 {% block body_content %}
 <!-- Peerspace specific stylesheets  -->
 <link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
@@ -17,9 +17,9 @@
       <div class="card-body">
         <h6 class="mb-3">Your stats</h6>
         <ul class="list-unstyled list-spaced">
-          <li><span class="text-muted icon icon-globe mr-3"></span>Overall position <a href="#"></a>
-          </li><li><span class="text-muted icon icon-medal mr-3"></span>Points position <a href="#"></a>
-          </li><li><span class="text-muted icon icon-check mr-3"></span>Percentage position <a href="#"></a>
+          <li><span class="text-muted icon icon-globe mr-3 overall_position"></span>Overall position: {{ overall_position }}</a>
+          </li><li><span class="text-muted icon icon-medal mr-3 points_pos"></span>Points position: {{ points_position }}</a>
+          </li><li><span class="text-muted icon icon-check mr-3 percentage_pos"></span>Completion: index position {{ index_position }}</a>
         </li></ul>
         <hr>
         <h6 class="mb-4">Post completion <small>· <a href="#">More</a></small></h6>

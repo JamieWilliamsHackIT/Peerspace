@@ -11,6 +11,8 @@ from django.conf import settings
 
 from django_fields import DefaultStaticImageField
 
+from posts.models import Post
+
 # The user manager class controls how users and superusers are created
 # It extends the base user manager that comes with Django
 class UserManager(BaseUserManager):
@@ -119,6 +121,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def level_percentage(self):
         return floor((self.level - floor(self.level)) * 100)
+
 
 
 # This class holds the user's preferences
