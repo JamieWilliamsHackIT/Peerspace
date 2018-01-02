@@ -202,7 +202,7 @@
  var post_ids = []
  var page_number = 0
   function tagCallBack(theTag) {
-    //Gets posts
+    // Gets posts
     $.ajax({
       type: "GET",
       url: root_url + "/posts/api/v1/feed/{{ user.id }}/" + page_number,

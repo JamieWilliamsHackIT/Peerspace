@@ -56,16 +56,16 @@
       </div>
   </div>
 </div>
-  <script>
-    this.on('mount', function() {
-      opts.callback(this)
-    })
-    this.on('data_loaded', function(data, user_id) {
-      opts.posts = data
-      root_url = 'http://127.0.0.1:8000'
-      // root_url = 'https://peerspace.herokuapp.com'
-      // root_url = 'https://www.peerspace.io'
-      this.update()
-    })
-  </script>
+<script>
+  this.on('mount', function() {
+    opts.callback(this)
+  })
+  this.on('data_loaded', function(data, user_id) {
+    opts.posts = data
+    root_url = 'http://127.0.0.1:8000'
+    // root_url = 'https://peerspace.herokuapp.com'
+    // root_url = 'https://www.peerspace.io'
+    this.update()
+  })
+</script>
 </post-feed>

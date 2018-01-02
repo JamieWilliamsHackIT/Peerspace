@@ -36,16 +36,22 @@
       </div>
     </div>
     <div class="user-list col-lg-9">
-      <div class="user-list-inner">
+      <div class="user-list-inner card">
+        <div class="controls container py-4 ml-5">
+          <div class="row">
+            <select class="form-control mr-2 col-lg-4 group">
+              <option>Global</option>
+              <option>Following</option>
+              <option>Followers</option>
+            </select>
+            <select class="form-control col-lg-4 type">
+              <option>Points</option>
+              <option>Completion Index</option>
+            </select>
+          </div>
+        </div>
         <ul>
-          <li class="slot">
-            <img class="profile-pic" src="{{ user.profile_pic.url }}"><span class="username ml-2">{{user.name}}</span>
-            <div class="stats">
-              <span class="text-muted icon icon-globe mr-1"></span>
-              <span class="text-muted icon icon-medal ml-3 mr-1"></span>{{user.points}}
-              <span class="text-muted icon icon-check ml-3 mr-1"></span>{{completion_percentage}}
-            </div>
-          </li>
+          <leaderboard></leaderboard>
         </ul>
       </div>
     </div>
@@ -61,13 +67,61 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- Popper JS -->
 <script src="	https://unpkg.com/popper.js"></script>
-<!-- Toolkit JS -->
-<script src="{% static 'dist/toolkit.js' %}"></script>
 <!-- Tagit -->
 <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <!-- Adds CSRF token to the request headers -->
 <script src="{% static 'js/csrf.js' %}"></script>
 <!-- Riot.js custom tag -->
-<script src="{% static 'tags/post-feed.js' %}"></script>
+<script src="{% static 'tags/leaderboard.js' %}"></script>
+<!-- Toolkit JS -->
+<script src="{% static 'dist/toolkit.js' %}"></script>
+<script>
+  // For development
+  var root_url = 'http://127.0.0.1:8000'
+  // For production
+  // var root_url = 'https://peerspace.herokuapp.com'
+  // Official url
+  // var root_url = 'https://www.peerspace.io'
+  page_number = 0;
+  leaderboard_group = "global";
+  leaderboard_type = "points";
+  function tagCallBack(theTag) {
+    // Gets posts
+    $.ajax({
+      type: "GET",
+      url: root_url + "/users/leaderboards/api/v3/{{ user.id }}/" + leaderboard_group + "/" + leaderboard_type + "/" + page_number,
+      dataType: 'json',
+      success: function(data) {
+        user_id = {{ user.id }}
+        theTag.trigger('data_loaded', data, user_id)
+      }
+    })
+    $(".group").change(function() {
+      $.ajax({
+        type: "GET",
+        url: root_url + "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
+        dataType: 'json',
+        success: function(data) {
+          user_id = {{ user.id }}
+          theTag.trigger('data_loaded', data, user_id)
+        }
+      })
+    });
+    $(".type").change(function() {
+      $.ajax({
+        type: "GET",
+        url: root_url + "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
+        dataType: 'json',
+        success: function(data) {
+          user_id = {{ user.id }}
+          theTag.trigger('data_loaded', data, user_id)
+        }
+      })
+    });
+  }
+  $(document).ready(function() {
+    riot.mount('leaderboard', {callback:tagCallBack})
+  })
+</script>
 </body>
 {% endblock body_content %}

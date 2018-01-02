@@ -93,6 +93,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     points = models.IntegerField(default=0, blank=True, null=True)
 
+    completion_index = models.IntegerField(default=0, blank=True, null=True)
+
     education = models.CharField(max_length=50, blank=True, default='')
 
     work = models.CharField(max_length=50, blank=True, default='')
@@ -117,9 +119,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def level_percentage(self):
         return floor((self.level - floor(self.level)) * 100)
-
-
-
 
 
 # This class holds the user's preferences

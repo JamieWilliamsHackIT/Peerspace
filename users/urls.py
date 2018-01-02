@@ -93,4 +93,9 @@ urlpatterns = [
         views.delete_tag,
         name='delete_user_tag'
     ),
+    path(
+        'leaderboards/api/v3/<int:pk>/<leaderboard_group>/<leaderboard_type>/<int:page_number>/',
+        views.LeaderboardsAPI.as_view(),
+        name='leaderboards_API'
+    ),
 ]

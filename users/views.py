@@ -136,10 +136,14 @@ def post_stats(user_id):
         completion_percentage = math.floor((completed_posts / number_of_posts) * 100)
     else:
         completion_percentage = 0
+
+    completion_index = completion_percentage * number_of_posts
+
     data = {
         'number_of_posts': number_of_posts,
         'completed_posts': completed_posts,
         'completion_percentage': completion_percentage,
+        'completion_index': completion_index,
     }
     return data
 
@@ -345,9 +349,75 @@ class TopUserAPI(APIView):
 def leaderboards_view(request):
     return render(request, 'users/leaderboards.html',
                       {
-                        'completion_percentage': post_stats(request.user.id)['completion_percentage'], 
+                        'completion_percentage': post_stats(request.user.id)['completion_percentage'],
                       }
                   )
+
+
+class LeaderboardsAPI(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, pk=None, leaderboard_group=None, leaderboard_type=None, page_number=None):
+        # Get some stats
+        users = models.User.objects.all()
+        for user in users:
+            user.completion_index = post_stats(user.id)['completion_index']
+            user.save()
+        # Define slices
+        page_size = 10
+        slice1 = (page_number * page_size)
+        slice2 = (page_number * page_size) + page_size
+        # Make the arguments case insensitive
+        leaderboard_group = leaderboard_group.lower()
+        leaderboard_type = leaderboard_type.lower()
+        # Determine what type of leaderboard is being requested
+        if leaderboard_group == 'global':
+            if leaderboard_type == 'points':
+                # Get the users and order them by their points
+                results = models.User.objects.all().order_by('-points')[slice1:slice2]
+            elif leaderboard_type == 'completion index':
+                # Order the users by completion_index
+                results = models.User.objects.all().order_by('-completion_index')[slice1:slice2]
+
+        if leaderboard_group == 'following':
+            # Get the user
+            user = get_object_or_404(models.User, pk=pk)
+            # Get the users they follow
+            following = user.following.all()
+            if leaderboard_type == 'points':
+                # Order the users by pointss
+                results = following.order_by('-points')[slice1:slice2]
+            elif leaderboard_type == 'completion index':
+                # Order the users by completion_index
+                results = following.order_by('-completion_index')[slice1:slice2]
+
+        if leaderboard_group == 'followers':
+            # Get the user
+            user = get_object_or_404(models.User, pk=pk)
+            # Get the user's followers
+            followers = user.follows.all().order_by('-points')
+            if leaderboard_type == 'points':
+                # Order users by points
+                results = followers.order_by('points')[slice1:slice2]
+            elif leaderboard_type == 'completion index':
+                # Order the users by completion_index
+                results = followers.order_by('-completion_index')[slice1:slice2]
+
+        data = []
+        for user in results:
+            data.append(
+                {
+                    'id': user.id,
+                    'name': user.name,
+                    'profile_pic_url': user.profile_pic.url,
+                    'points': user.points,
+                    'level': user.level_floor,
+                    'completion_index': user.completion_index,
+                }
+            )
+
+        return Response(data)
 
 
 # These classes render the rest_framework's API views for the user
