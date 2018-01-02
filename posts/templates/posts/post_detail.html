@@ -22,17 +22,11 @@
 <script src="{% static 'js/csrf.js' %}"></script>
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
-  // For development
-  //var root_url = 'https://127.0.0.8:8000'
-  // For production
-  // var root_url = 'https://peerspace.herokuapp.com'
-  // Official url
-  var root_url = 'https://www.peerspace.io'
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/{{ post.id }}",
+      url: "/posts/api/v1/{{ post.id }}",
       dataType: 'json',
       success: function(data) {
         user_id = {{ user.id }}
@@ -45,7 +39,7 @@
   }
   function deleteComment(comment_id, post_id) {
     $.ajax({
-      url: root_url + "/posts/api/v1/comments/" + comment_id,
+      url: "/posts/api/v1/comments/" + comment_id,
       type: "DELETE",
       // This MUST be in the callback due to the asynchronus nature of javascript
       success: function() {getComments(post_id)}
@@ -55,7 +49,7 @@
     //Gets comments
     $.ajax({
       type: "GET",
-      url: root_url + "/posts/api/v1/" + post_id + "/comment",
+      url: "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
         $('.comment-list-' + post_id).html('')
@@ -101,7 +95,7 @@
       e.preventDefault()
       var this_button = $(this)
       $.ajax({
-        url: root_url + "/posts/api/v1/" + this_button.attr('id') + "/like",
+        url: "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         data: {},
         success: function(data) {
@@ -124,7 +118,7 @@
             post: post_id
           }
           $.ajax({
-            url: root_url + "/posts/api/v1/" + post_id + "/comment",
+            url: "/posts/api/v1/" + post_id + "/comment",
             method: "POST",
             data: data,
             success: function(data) {
@@ -158,7 +152,7 @@
       post_id = $(this).attr("post-id")
       this_button = $(this)
       $.ajax({
-        url: root_url + "/posts/api/v1/" + post_id + "/verify",
+        url: "/posts/api/v1/" + post_id + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {

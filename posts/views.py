@@ -10,8 +10,6 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 
-from users.models import User
-
 from . import forms
 from . import models
 from users.models import User
@@ -95,12 +93,16 @@ class ProfilePostList(generics.ListAPIView):
 
 
 from users.views import get_profile_images, post_stats
+from notifications.models import Notification
 
 def post_list(request):
     if request.user.is_authenticated:
         user = request.user
         profile_pictures = get_profile_images(user.id)
         number_of_posts = models.Post.objects.filter(user=user.id).count()
+        notification_num = Notification.objects.filter(user_rx=user).count()
+        if notification_num > 10:
+            notification_num = '10+'
         return render(request, 'posts/post_list.html',
                         {
                             'user': user,
@@ -108,6 +110,7 @@ def post_list(request):
                             'number_of_posts': post_stats(user.id)['number_of_posts'],
                             'completed_posts': post_stats(user.id)['completed_posts'],
                             'completion_percentage': post_stats(user.id)['completion_percentage'],
+                            'notification_num': notification_num,
                         }
                     )
     else:
@@ -240,6 +243,7 @@ class DeletePost(LoginRequiredMixin, generic.DeleteView):
 
 import decimal
 from users.models import UserPreferenceTag
+from notifications.models import Notification
 
 
 class PostLikeAPI(APIView):
@@ -251,6 +255,24 @@ class PostLikeAPI(APIView):
         # post_url = post.get_absolute_url()
         # Get the user object from the
         user = self.request.user
+
+        # Create a notification for the post owner
+        if not user in post.likes.all() and not user == post.user:
+            notifications = Notification.objects.filter(user_tx=user)
+            notified = False
+            for notification in notifications:
+                if notification.redirect_url == post.get_absolute_url():
+                    notified = True
+            if not notified:
+                # Create notification if ine hasn't been made already
+                notification = Notification()
+                notification._type = 'like'
+                notification.redirect_url = post.get_absolute_url()
+                # I am using rx to mean receiver and tx to mean transceiver
+                notification.user_rx = post.user
+                notification.user_tx = user
+                notification.post = post
+                notification.save()
 
         # Initialise some variables
         liked = False
@@ -382,6 +404,19 @@ class ListCreateComment(generics.ListCreateAPIView):
             post = get_object_or_404(models.Post, pk=post_id)
             post.comments.add(comment)
             post.save()
+
+            # Create a notification for the post owner
+            if not request.user == post.user:
+                # Create notification if ine hasn't been made already
+                notification = Notification()
+                notification._type = 'comment'
+                notification.comment = comment.comment
+                notification.redirect_url = post.get_absolute_url()
+                # I am using rx to mean receiver and tx to mean transceiver
+                notification.user_rx = post.user
+                notification.user_tx = request.user
+                notification.post = post
+                notification.save()
 
             # Define how much to adjust the weights by
             adjustment = 0.020

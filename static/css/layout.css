@@ -25,3 +25,68 @@ body {
 .app-notifications span {
   font-size: 32px;
 }
+
+.notifications {
+  color: white;
+  font-size: 24px;
+  vertical-align: middle;
+  /* border: 1px solid white;
+  border-radius: 50%; */
+}
+
+.notification-list {
+  /* width: 300px; */
+}
+
+.popover {
+  max-width: 800px;
+  min-width: 400px;
+  /* width: 800px; */
+}
+
+.notification-popover {
+  max-width: none!important;
+  width: 400px;
+}
+
+.user-link {
+  display: inline-block;;
+}
+
+.user-link img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
+#notifications {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-num {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: inline;
+  color: white;
+  font-size: 10px;
+  background-color: red;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  text-align: center;
+}
+
+.icon-controller-record {
+  color: #6A0F49;
+}
+
+.notification_proof_pic {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  right: 100px;
+  top: calc(40% - 18px);
+}
