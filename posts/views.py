@@ -18,8 +18,10 @@ from users.models import User
 from . import serializers
 from .feed import get_most_relevent
 
+# Official url
+root_url = 'https://www.peerspace.io'
 # Use this url for production
-root_url = 'https://peerspace.herokuapp.com'
+# root_url = 'https://peerspace.herokuapp.com'
 # Use this url for development
 # root_url = 'https://127.0.0.8:8000'
 

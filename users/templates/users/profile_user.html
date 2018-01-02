@@ -182,7 +182,7 @@
       //Gets more posts
       $.ajax({
         type: "GET",
-        url: root_url + "/posts/api/v1/feed/{{ user.id }}/" + page_number,
+        url: root_url + "/posts/api/v1/profile/{{ user.id }}/" + page_number,
         dataType: 'json',
         success: function(data) {
           $.each(data, function(i, post) {
