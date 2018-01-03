@@ -3,6 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+
 
 # Import the Message model
 from . import models
@@ -12,7 +15,7 @@ from users.models import User
 
 
 # Render to messages page
-def messages(request):
+def messages(request, conversation_id=None):
     return render(request, 'user_messages/messages.html')
 
 class ConversationAPI(APIView):
@@ -134,5 +137,63 @@ class MessageAPI(APIView):
             )
         return Response(data)
 
-    def post(self, request, format=None, sender_id=None, sent_to_id=None, body=None):
-        pass
+    def post(self, request, conversation_id=None, page_number=None, *args, **kwargs):
+        # Get user
+        user = request.user
+        # Get conversation
+        conversation = get_object_or_404(models.Conversation, id=conversation_id)
+        # Get the message data from the POST body
+        body = request.POST.get('body')
+        # Add the message to the conversation instance
+        # Create message instance
+        message = models.Message(body=body, user=user)
+        message.save()
+        conversation.messages.add(message)
+
+        if message.user.profile_pic:
+            profile_pic_url = message.user.profile_pic.url
+        else:
+            profile_pic_url = '/static/default_profile_pic.svg'
+
+        data = {
+            'id': message.id,
+            'body': message.body,
+            'user_id': message.user.id,
+            'user_name': message.user.name,
+            'profile_pic_url': profile_pic_url,
+            'created_at': message.created_at,
+        }
+
+        return Response(data)
+
+
+class MessageRedirectAPI(APIView):
+    authenication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    # This code will run on the receipt a GET request, it will get 'pk' and
+    # 'page_number' from the kwargs in the url
+    def get(self, request, format=None, pk=None):
+        # Get requesting user
+        user = request.user
+        # Get the other user
+        other_user = get_object_or_404(User, pk=pk)
+
+        if models.Conversation.objects.filter(users=user and other_user):
+            conversation = get_object_or_404(models.Conversation, users=user and other_user)
+            data = {
+                'conversation_id': conversation.id,
+            }
+        else:
+            conversation = models.Conversation()
+            conversation.save()
+            conversation.users.add(user)
+            conversation.users.add(other_user)
+            conversation.name = other_user.name
+            conversation.save()
+            data = {
+                'conversation_id': conversation.id,
+            }
+
+
+        return Response(data)

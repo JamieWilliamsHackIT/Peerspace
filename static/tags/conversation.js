@@ -4,6 +4,7 @@ riot.tag2('conversation', '<div each="{message in opts.messages}"> <li if="{mess
     })
     this.on('data_loaded', function(data, user_id) {
       opts.messages = data
+      console.log(data)
       this.update()
     })
 });

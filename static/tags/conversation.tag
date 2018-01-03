@@ -33,6 +33,7 @@
     })
     this.on('data_loaded', function(data, user_id) {
       opts.messages = data
+      console.log(data)
       this.update()
     })
   </script>

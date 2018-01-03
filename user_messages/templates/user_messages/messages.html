@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
-{% block title_tag %}Leaderboards | {{ block.super }}{% endblock %}
+{% block title_tag %}Messages | {{ block.super }}{% endblock %}
 {% block body_content %}
 <!-- Peerspace specific stylesheets  -->
 <link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
@@ -63,30 +63,101 @@
       }
     })
   }
+  var conversation_id;
+  var message_data;
+  var has_run = false
+
+  // function messagesCallback(theTag) {
+  //   $(document).on('click', '.conversation', function() {
+  //     conversation_id = $(this).attr('data-id')
+  //     page_number = 0;
+  //     message_data = [];
+  //     $.ajax({
+  //       type: "GET",
+  //       url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number,
+  //       dataType: "json",
+  //       success: function(data) {
+  //         user_id = {{user.id}}
+  //         message_data.push(data)
+  //         theTag.trigger('data_loaded', message_data[0], user_id)
+  //       }
+  //     })
+  //   })
+  //   $(document).on("keydown", "#message-input", function (e) {
+  //       if (e.which == 13 && $(this).val()) {
+  //         e.preventDefault()
+  //         var message = $('#message-input').val()
+  //         if (message) {
+  //           data = {
+  //               body: message
+  //           }
+  //           $.ajax({
+  //             type: "POST",
+  //             url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number + "/",
+  //             data: data,
+  //             success: function(data) {
+  //               $('#message-input').val('')
+  //               user_id = {{user.id}}
+  //               message_data[0].push(data)
+  //               theTag.trigger('data_loaded', message_data[0], user_id)
+  //             }
+  //           })
+  //         }
+  //       }
+  //   })
+  // }
+  if (window.location.href !== '{% url "messages:messages" %}') {
   function messagesCallback(theTag) {
-    $(document).on('click', '.conversation', function() {
-      var conversation_id = $(this).attr('data-id')
-      page_number = 0
+    function get_conversation(redirect, this_button) {
+      if (redirect) {
+        conversation_id = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
+      } else {
+        conversation_id = this_button.attr('data-id')
+      }
+      page_number = 0;
+      message_data = [];
       $.ajax({
         type: "GET",
         url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number,
         dataType: "json",
         success: function(data) {
           user_id = {{user.id}}
-          theTag.trigger('data_loaded', data, user_id)
+          message_data.push(data)
+          theTag.trigger('data_loaded', message_data[0], user_id)
         }
       })
-    })
-    $(document).on("keydown", ".search-input", function (e) {
+    $(document).on("keydown", "#message-input", function (e) {
         if (e.which == 13 && $(this).val()) {
           e.preventDefault()
           var message = $('#message-input').val()
           if (message) {
-
+            data = {
+                body: message
+            }
+            $.ajax({
+              type: "POST",
+              url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number + "/",
+              data: data,
+              success: function(data) {
+                $('#message-input').val('')
+                user_id = {{user.id}}
+                message_data[0].push(data)
+                theTag.trigger('data_loaded', message_data[0], user_id)
+              }
+            })
           }
         }
     })
   }
+  if (!has_run) {
+    get_conversation(true)
+    has_run = true
+  }
+  $(document).on('click', '.conversation', function() {
+    get_conversation(false, $(this))
+  })
+}
+}
   $(document).ready(function() {
     riot.mount('conversations', {callback:usersCallback})
     riot.mount('conversation', {callback:messagesCallback})

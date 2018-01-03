@@ -25,7 +25,7 @@
           <span class="icon icon-add-user"></span> Follow
         </button>
         {% endif %}
-        <a class="btn btn-outline-primary btn-sm mx-1" href="#">
+        <a class="btn btn-outline-primary btn-sm mx-1 message-btn" href="#">
           <span class="icon icon-message"></span> Message
         </a>
         <ul class="card-menu mx-auto mt-3">
@@ -379,6 +379,17 @@
     })
     $(document).on('click', '.image', function() {
       window.location.href = $(this).attr('href');
+    })
+    // Handles messages
+    $(document).on('click', '.message-btn', function() {
+      $.ajax({
+        type: "GET",
+        url: "/messages/api/v5/messages/redirect/{{ user.id }}/",
+        dataType: "json",
+        success: function(data) {
+          window.location.href = "/messages/" + data.conversation_id
+        }
+      })
     })
   })
   riot.mount('post-feed', {callback:tagCallBack})
