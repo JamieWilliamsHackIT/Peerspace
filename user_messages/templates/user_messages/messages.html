@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title_tag %}Leaderboards | {{ block.super }}{% endblock %}
+{% block body_content %}
+<!-- Peerspace specific stylesheets  -->
+<link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
+<!-- Percentage circles stylesheets -->
+<link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
+<link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
+<!-- jQueryUi specific stylesheets -->
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
+<!-- Tagit specific stylesheets -->
+<link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+<div class="container leaderboards-container">
+  <div class="row">
+    <div class="card d-md-block col-lg-4 d-lg-block mb-4" style="height: 100%;">
+      <div class="card-body">
+        <ul class="media-list media-list-users list-group">
+          <conversations></conversations>
+        </ul>
+      </div>
+    </div>
+    <div class="user-list col-lg-8">
+      <div class="user-list-inner card p-4">
+        <ul class="media-list media-list-conversation c-w-md">
+          <conversation></conversation>
+          <form class="form-inline">
+            <input class="form-contol w-100" type="text" id="message-input" placeholder="Message">
+          </form>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Riot.js compiler  -->
+<script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
+<!-- Makes getting the csrf token easier -->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- jQueryUi -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- Popper JS -->
+<script src="	https://unpkg.com/popper.js"></script>
+<!-- Tagit -->
+<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+<!-- Adds CSRF token to the request headers -->
+<script src="{% static 'js/csrf.js' %}"></script>
+<!-- Riot.js custom tags -->
+<script src="{% static 'tags/conversations.js' %}"></script>
+<script src="{% static 'tags/conversation.js' %}"></script>
+<!-- Toolkit JS -->
+<script src="{% static 'dist/toolkit.js' %}"></script>
+<script>
+  function usersCallback(theTag) {
+    page_number = 0
+    $.ajax({
+      type: "GET",
+      url: "/messages/api/v5/conversations/" + page_number,
+      dataType: "json",
+      success: function(data) {
+        theTag.trigger('data_loaded', data)
+      }
+    })
+  }
+  function messagesCallback(theTag) {
+    $(document).on('click', '.conversation', function() {
+      var conversation_id = $(this).attr('data-id')
+      page_number = 0
+      $.ajax({
+        type: "GET",
+        url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number,
+        dataType: "json",
+        success: function(data) {
+          user_id = {{user.id}}
+          theTag.trigger('data_loaded', data, user_id)
+        }
+      })
+    })
+    $(document).on("keydown", ".search-input", function (e) {
+        if (e.which == 13 && $(this).val()) {
+          e.preventDefault()
+          var message = $('#message-input').val()
+          if (message) {
+
+          }
+        }
+    })
+  }
+  $(document).ready(function() {
+    riot.mount('conversations', {callback:usersCallback})
+    riot.mount('conversation', {callback:messagesCallback})
+  })
+</script>
+</body>
+{% endblock body_content %}

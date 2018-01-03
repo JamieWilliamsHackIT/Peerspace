@@ -29,9 +29,10 @@ urlpatterns = [
     path('posts/', include('posts.urls', namespace='posts')),
     path('search/', include('search.urls', namespace='search')),
     path('notifications/', include('notifications.urls', namespace='notifications')),
+    path('messages/', include('user_messages.urls', namespace='messages')),
 ]
 
-
+# Tell Django to serve static files in development
 from django.conf import settings
 
 if settings.DEBUG:

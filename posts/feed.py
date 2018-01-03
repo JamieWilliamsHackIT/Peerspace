@@ -1,56 +1,109 @@
-# Input: a user
-# Output: a prediction of the most relevent posts
+"""
 
-# Get the user's tags
-# Get the post's tags
-# Compare tags
-# If tags match multiply score by tag's weight
-# Multiply score by output of the date relevance function
+This is the Peerspace post relevance algorithm, it is the brain of Peerspace
+----------------------------------------------------------------------------
 
-from users.models import UserPreferenceTag
-from users.models import User
-from posts.models import Post
+The function in the file generates the relevance predictions for each post. Its
+basic operation:
 
+>   Take a user's id
+<   Output a list of posts that are likely to be the relevant to the user
+
+As Peerspace developes this is where most of the work will be done, this
+algorithm is currently extremely simple and its predictions rely on data with
+large amounts of information such as tags. In the future, alongside Django's
+middleware I would like to make the algorithm rely less on user inputed data and
+more so on user interaction. This would involve large data sets and ultimetly
+some form of machine/deep learning algorithm.
+
+What you see below is the entirity of my datascience knowledge, as I learn more
+on the subject I will work to develope this algorithm.
+
+My first step towards building a relevance algorithm that uses interaction data
+was to give each user's tag a weight. As the user interacts will posts the weight
+will be adjusted as so:
+
+    If a user likes a post, any matching tag's weights will be increased by x
+
+    If a user comments on a post, any matching tag's weights will be increased
+    by y
+
+I have made another assumption that y > x as a comment takes more time and
+effort to write than it takes to simply like a post.
+
+As users like and comment on posts their tags will be adjusted automatically in
+the background, the objective is for the accuracy of the relevance algorithm to
+improve as the time goes on. So once the user has been using the site for a
+month for example their tag's weights will have adjusted to shape their
+experience on the site.
+
+"""
+
+# Standard imports
 from django.shortcuts import get_object_or_404
 
+# Mathematical imports
 import math
 import random
 import decimal
 
+# Import the User, UserPreferenceTag and Post models
+from users.models import UserPreferenceTag
+from users.models import User
+from posts.models import Post
+
+# The algorithm itself
 def get_most_relevent(user_pk, page_number, page_size):
 
     # Get user's information
     user = get_object_or_404(User, pk=user_pk)
-    #Get all user's tags
+    # Get all user's tags
     user_tags = UserPreferenceTag.objects.filter(user=user_pk)
-    # Get all posts (in last x amount of time)
+    # Form slices
     post_slice1 = (page_number * page_size)
     post_slice2 = (page_number * page_size) + 10
-    posts = Post.objects.order_by('-created_at')[post_slice1:post_slice2]
 
     # The slicing prevents the algorithm from re-running on the same posts twice
 
     # E.g.
 
-    # No slicing
+    # No slicing: every post's relevance is re-evaluated with each run
+
     # post_ids:  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18...]
     # first run:  ^ ^ ^ ^ ^ ^ ^ ^ ^ ^  ^  ^  ^  ^  ^  ^  ^  ^
 
-    # With slicing
+    # With slicing: only the posts in question will have a relevance score
+    # evaluated for them
+
     # post_ids:  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18...]
     # first run:  ^ ^ ^ ^ ^ ^ ^ ^ ^
 
     # post_ids:  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18...]
     # second run:                   ^  ^  ^  ^  ^  ^  ^  ^  ^
 
-    # Gives a list of all the user's tags
+    # Get the posts limited by the slice, this will prevent the algorithm running
+    # on every post every time the function runs, this is key as it prevents the
+    # server from decoming criplingly slow.
+
+    # The Post.objects.order_by() call returns a queryset, this is NOT data, it
+    # simply represents a prepared SQL statement. By slicing the query set this
+    # limits the number of queries or hits on the database, thereby increasing
+    # efficiency.
+
+    # Get post objects from database
+    posts = Post.objects.order_by('-created_at')[post_slice1:post_slice2]
+
+    # Gives a list of all the user's tags. I have lowered each tag to make the
+    # comparison case-insensitive
     user_tag_list = [tag.tag.lower() for tag in user_tags]
 
     # Initialise the results dictionary
     score_dict = {}
-    runtimes = 0
+    # Runtimes was a performance metric, it stored how many times the function
+    # ran, it is not relied on by the algorithm
+    # runtimes = 0
     for post in posts:
-        runtimes += 1
+        # runtimes += 1
         # Initialise some varibles
         total_score = 0
         tag_score = 0
@@ -66,7 +119,9 @@ def get_most_relevent(user_pk, page_number, page_size):
         # If the user follows the post owner then increase the relevance with each
         # preference tag that matches
         if post_owner in user.following.all():
-            # Even if no preference tags match, increase base relevance
+            # Even if no preference tags match, increase base relevance. This
+            # is based off the assumption that a post by a user that one follows
+            # is off a little extra relevance
             tag_score = 0.15
 
             does_follow = True
@@ -75,20 +130,35 @@ def get_most_relevent(user_pk, page_number, page_size):
             post_owner_tags = UserPreferenceTag.objects.filter(user=post_owner)
             post_owner_tags = [tag.tag.lower() for tag in post_owner_tags]
 
-            # Add to the tag_score if any posts match
+            # If any of the user's tags match those of the post owner then
+            # increase the tag_score by the weight of the tag
+
+            # For of the post owner's tags check if they match any of the user's
+            # tags
             for tag in post_owner_tags:
                 if tag in user_tag_list:
+                    # If they match then increase the tag score. I decided that
+                    # the number of that match should have more of an affect
+                    # than one tag with a large weight, therefore each tag's
+                    # weight is normalised using the logistic sigmoid function
+                    # (I have gone through this in more detail in the docs)
                     tag_score += (1 / (1 + math.exp(-user_tags[count].weight)))
                     # print('Tag weigth: ', user_tags[count].weight, '+ ', (1 / (1 + math.exp(-user_tags[count].weight))) )
                 follower_tag_count += 1
-            # print(tag_score)
+
         # Get all of the current post's tags
         if post.tags:
+            # The tags for each post are stored as a comma-seperated list as
+            # they have no weight attribute
             post_tag_list = post.tags.split(", ")
         else:
             post_tag_list = []
-        # Lower case all tags with a list comprehension
+        # Make all tags lower case with a list comprehension
         post_tag_list = [tag.lower() for tag in post_tag_list]
+        # This is a very similar process to the one seen above, it iterates
+        # through the user's tags and compares them to the post's tags. If any
+        # match then the user tag's weight is normalised and added to the tag
+        # score
         for user_tag in user_tag_list:
             if user_tag in post_tag_list:
                 # Normalise the weight (make sure it is in range 0 to 1) by using
@@ -98,9 +168,15 @@ def get_most_relevent(user_pk, page_number, page_size):
             count += 1
         # print(tag_score)
 
+        # I did not want to completely disregard any posts where no tags matched
+        # so I introduced a "wildcard score". This is a psuedo random score that
+        # is assigned to the post, it means that some posts will appear higher
+        # in the user's feed, this may introduce them to a new interest
         if not num_tags_match:
-            # If no tags match then give the post a random score. This may
-            # introduce the user to a new area of interest
+            # If no tags match then give the post a random score. Add the tag
+            # score, as even though no post tags matched the score tag may be
+            # non-zero as the post may be by someone the user followers and
+            # some follower tags may have matched
             wildcard_score = (random.random() * 0.4) + tag_score
             # This is the same date relevance and normalisation process as seen
             # below
@@ -114,16 +190,21 @@ def get_most_relevent(user_pk, page_number, page_size):
             total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days))
             # Output scores to a dictionary
             score_dict.update({post.id: total_relevance})
-        # This line is extremely useful for development purposes.
-        # print(('Id: {}, title: {}, score: {}. {} tags matched. User follows: {} and {} follower tags matched. Posted {} days(s) ago.').format(
-        #                                                                                                             post.id,
-        #                                                                                                             post.title,
-        #                                                                                                             total_relevance,
-        #                                                                                                             num_tags_match,
-        #                                                                                                             does_follow,
-        #                                                                                                             follower_tag_count,
-        #                                                                                                             num_days,
-        #                                                                                                         )
+        # This is extremely useful for development purposes.
+        # print(('Id: {},
+                  # title: {},
+                  # score: {}.
+                  # {} tags matched.
+                  # User follows: {} and {} follower tags matched.
+                  # Posted {} days(s) ago.').format(
+                                            #     post.id,
+                                            #     post.title,
+                                            #     total_relevance,
+                                            #     num_tags_match,
+                                            #     does_follow,
+                                            #     follower_tag_count,
+                                            #     num_days,
+                                            # )
         #         )
 
     # Order score_dict by value and give an ordered list of post ids
@@ -133,9 +214,8 @@ def get_most_relevent(user_pk, page_number, page_size):
         output.update({k: score_dict})
     post_ids = list(output.keys())
     post_ids = post_ids[::-1]
-    print(post_ids, runtimes)
+    # Also useful for development
+    # print(post_ids, runtimes)
 
-    # When considering efficieny this function queries the database 2 + n times
-    # where n is the number of posts in the last 10 days
-
+    # Return a list of post ids sorted in descending order of relevance
     return post_ids

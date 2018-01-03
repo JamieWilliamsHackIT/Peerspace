@@ -1,3 +1,11 @@
+"""
+None of the code is this manage.py file is mine, it is automatically generated
+by Django when I ran 'django-admin startproject Peerspace' in the commandline.
+
+The code in this file is the entry point to the project, it lets me run vital
+commands from the commandline.
+"""
+
 #!/usr/bin/env python
 import os
 import sys

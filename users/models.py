@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     profile_pic = DefaultStaticImageField(
                                     blank=True,
-                                    default='/media/default_profile_pic.svg',
+                                    default='/static/default_profile_pic.svg',
                                     )
 
     cover_pic = models.ImageField(blank=True, null=True)

@@ -1,3 +1,8 @@
+"""
+The urls.py files in each app route http requests to views in each app's views.py
+"""
+
+
 # Standard imports
 from django.urls import path
 
@@ -12,8 +17,8 @@ urlpatterns = [
     # View urls
     # path(
     #     '<int:pk>/',
-    #     views.post_view,
-    #     name='post_detail'
+    #     views.notification_view,
+    #     name='notifications'
     # ),
     # API urls
     path(
