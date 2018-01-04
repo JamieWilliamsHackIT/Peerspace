@@ -62,9 +62,7 @@
   })
   this.on('data_loaded', function(data, userId) {
     opts.posts = data
-    // root_url = 'http://127.0.0.1:8000'
-    // root_url = 'https://peerspace.herokuapp.com'
-    root_url = 'https://www.peerspace.io'
+    console.log(data)
     this.update()
   })
 </script>

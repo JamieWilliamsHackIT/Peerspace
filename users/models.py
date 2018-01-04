@@ -88,10 +88,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     profile_pic = DefaultStaticImageField(
                                     blank=True,
-                                    default='/static/default_profile_pic.svg',
+                                    default='/default_profile_pic.svg',
                                     )
 
-    cover_pic = models.ImageField(blank=True, null=True)
+    cover_pic = DefaultStaticImageField(
+                                    blank=True,
+                                    default='/default_cover_pic.jpg',
+                                    )
 
     points = models.IntegerField(default=0, blank=True, null=True)
 

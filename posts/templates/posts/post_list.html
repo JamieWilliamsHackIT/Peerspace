@@ -261,8 +261,8 @@
         type: "POST",
         url: "/posts/api/v1/",
         data: data,
-        success: function(postData) {
-          postData.unshift(postData)
+        success: function(data) {
+          postData.unshift(data)
           pageNumber = 0;
           // riot.mount('post-feed', {callback:tagCallBack})
           theTag.trigger('data_loaded', postData, userID)

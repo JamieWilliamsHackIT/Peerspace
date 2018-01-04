@@ -1,15 +1,18 @@
 # Standard imports
 from rest_framework import generics
-from rest_framework import permissions, authentication
+from rest_framework import permissions
+from rest_framework import authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 
 # Import the User model
 from users.models import User
+
 # Import the Notification model
 from . import models
 
@@ -39,7 +42,7 @@ class NotificationAPI(APIView):
             if notification.user_tx.profile_pic:
                 user_tx_pic_url = notification.user_tx.profile_pic.url
             else:
-                user_tx_pic_url = '/static/default_profile_pic.svg'
+                user_tx_pic_url = '/default_profile_pic.svg'
 
             # If the post has a proof pic then get the url
             if notification.post.proof_pic:

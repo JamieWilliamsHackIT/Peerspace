@@ -1,10 +1,12 @@
 # Standard imports
 from rest_framework import generics
 from rest_framework import viewsets
-from rest_framework import permissions, authentication
+from rest_framework import permissions
+from rest_framework import authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -26,12 +28,6 @@ from . import serializers
 # Import the relevance function
 from .feed import get_most_relevent
 
-# Official url
-root_url = 'https://www.peerspace.io'
-# Use this url for production
-# root_url = 'https://peerspace.herokuapp.com'
-# Use this url for development
-# root_url = 'https://127.0.0.8:8000'
 
 # Define the list/create API view
 class ListCreatePost(generics.ListCreateAPIView):
@@ -40,12 +36,14 @@ class ListCreatePost(generics.ListCreateAPIView):
     # Define the serialiser class to use
     serializer_class = serializers.PostSerializer
 
+
 # Define the list/update/delete API view
 class RetrieveUpdateDestroyPost(generics.RetrieveUpdateDestroyAPIView):
     # Define the queryset to use
     queryset = models.Post.objects.all()
     # Define the serialiser class to use
     serializer_class = serializers.PostSerializer
+
 
 # This API view provides the post data for the feed
 class FeedPostList(APIView):
@@ -74,22 +72,22 @@ class FeedPostList(APIView):
                 proof_pic = ''
             data.append(
                 {
-                    'id': post.id,
-                    'title': post.title,
-                    'description': post.description,
-                    'created_at': post.created_at,
-                    'days_since': post.time_since_creation,
-                    'completed': post.completed,
-                    'user_name': post.user.name,
-                    'user_url': post.user.profile_pic.url,
-                    'user': post.user.id,
-                    'likes': [like.id for like in post.likes.all()],
-                    'tags': post.tags,
-                    'proof_description': post.proof_description,
-                    'proof_pic': proof_pic,
-                    'days_taken': post.days_taken,
-                    'comments': [comment.id for comment in post.comments.all()],
-                    'verifications': [verf.id for verf in post.verifications.all()],
+                    'id'                 :  post.id,
+                    'title'              :  post.title,
+                    'description'        :  post.description,
+                    'created_at'         :  post.created_at,
+                    'days_since'         :  post.time_since_creation,
+                    'completed'          :  post.completed,
+                    'user_name'          :  post.user.name,
+                    'user_url'           :  post.user.profile_pic.url,
+                    'user'               :  post.user.id,
+                    'likes'              :  [like.id for like in post.likes.all()],
+                    'tags'               :  post.tags,
+                    'proof_description'  :  post.proof_description,
+                    'proof_pic'          :  proof_pic,
+                    'days_taken'         :  post.days_taken,
+                    'comments'           :  [comment.id for comment in post.comments.all()],
+                    'verifications'      :  [verf.id for verf in post.verifications.all()],
                 }
             )
         return Response(data)
@@ -113,6 +111,7 @@ class ProfilePostList(generics.ListAPIView):
 from users.views import get_profile_images, post_stats
 from notifications.models import Notification
 
+
 def post_list(request):
     if request.user.is_authenticated:
         user = request.user
@@ -134,6 +133,7 @@ def post_list(request):
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
 
+
 def post_view(request, pk):
     # Check to see if the user is logged in
     if request.user.is_authenticated:
@@ -148,15 +148,13 @@ def post_view(request, pk):
                             {
                                 'post'              :  post,
                                 'user_profile_pic'  :  user_profile_pic,
-                                'root_url'          :  root_url,
                             }
                          )
         else:
             # If the user doesn't own the post then render the post_detail page
             return render(request, 'posts/post_detail.html',
                             {
-                                'post'      :  post,
-                                'root_url'  :  root_url,
+                                'post'  :  post,
                             }
                          )
     else:
@@ -215,8 +213,8 @@ def prove_post(request, pk=None):
                 post.save()
                 return HttpResponseRedirect(post.get_absolute_url())
             context = {
-                'pk': pk,
-                'form': form,
+                'pk'    :  pk,
+                'form'  :  form,
             }
             return render(request, 'posts/prove_post.html', context)
         else:
@@ -356,6 +354,7 @@ class PostLikeAPI(APIView):
             'updated'  :  updated,
         }
         return Response(data)
+
 
 class PostVerficationAPI(APIView):
     authenication_classes = (authentication.SessionAuthentication,)

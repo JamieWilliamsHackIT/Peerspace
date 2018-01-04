@@ -4,8 +4,7 @@ riot.tag2('post-feed', '<div each="{post in opts.posts}"> <li class="media post 
   })
   this.on('data_loaded', function(data, userId) {
     opts.posts = data
-
-    root_url = 'https://www.peerspace.io'
+    console.log(data)
     this.update()
   })
 });

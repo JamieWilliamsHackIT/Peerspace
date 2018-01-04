@@ -1,10 +1,14 @@
-# Standard imports
-from django.contrib.auth import authenticate, login, logout
+# Standard imports (I am aware of using commas to import multilpe things on one
+# line but as I am trying to keep to PEP8 I have seperated them only their own)
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from rest_framework import generics
@@ -107,7 +111,7 @@ def get_profile_images(user_id):
         user_profile_pic = user_profile_pic.url
     else:
         # If not then display the default profile picutre
-        user_profile_pic = '/media/default_profile_pic.svg'
+        user_profile_pic = '/default_profile_pic.svg'
 
     # If the user has a cover picture then display the latest one
     user_cover_pic = models.User.objects.filter(id=user_id).latest('id').cover_pic
@@ -115,7 +119,7 @@ def get_profile_images(user_id):
         user_cover_pic = user_cover_pic.url
     else:
         # If not then display the default cover picutre
-        user_cover_pic = '/media/default_cover_pic.jpg'
+        user_cover_pic = '/default_cover_pic.jpg'
 
     data = {
         'user_profile_pic': user_profile_pic,
@@ -162,11 +166,11 @@ def profile_view_user(request):
         # Render the template with the user object, profile pictures and post stats
         # in a context dictionary
         return render(request, 'users/profile_user.html', {
-            'user': user,
-            'profile_pictures': profile_pictures,
-            'number_of_posts': post_stats(user.id)['number_of_posts'],
-            'completed_posts': post_stats(user.id)['completed_posts'],
-            'completion_percentage': post_stats(user.id)['completion_percentage'],
+            'user'                   :  user,
+            'profile_pictures'       :  profile_pictures,
+            'number_of_posts'        :  post_stats(user.id)['number_of_posts'],
+            'completed_posts'        :  post_stats(user.id)['completed_posts'],
+            'completion_percentage'  :  post_stats(user.id)['completion_percentage'],
         })
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
@@ -192,13 +196,13 @@ def profile_view(request, pk):
         # Render the template with the user object and user_profile_pic url in
         # context dictionary
         return render(request, 'users/profile.html', {
-            'user': user,
-            'user_viewing': request.user.id,
-            'following': following,
-            'profile_pictures': profile_pictures,
-            'number_of_posts': post_stats(user.id)['number_of_posts'],
-            'completed_posts': post_stats(user.id)['completed_posts'],
-            'completion_percentage': post_stats(user.id)['completion_percentage'],
+            'user'                   :  user,
+            'user_viewing'           :  request.user.id,
+            'following'              :  following,
+            'profile_pictures'       :  profile_pictures,
+            'number_of_posts'        :  post_stats(user.id)['number_of_posts'],
+            'completed_posts'        :  post_stats(user.id)['completed_posts'],
+            'completion_percentage'  :  post_stats(user.id)['completion_percentage'],
         })
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
@@ -226,8 +230,8 @@ class FollowUser(APIView):
                 following = True
             updated = True
         data = {
-            'following': following,
-            'updated': updated
+            'following'  :  following,
+            'updated'    :  updated
         }
         return Response(data)
 
@@ -255,11 +259,11 @@ class UserFollowers(APIView):
 
             data.append(
                 {
-                    'id': follower.id,
-                    'name': follower.name,
-                    'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
-                    'you_follow_them': you_follow_them,
-                    'user_viewing_follow_them': user_viewing_follow_them,
+                    'id'                       :  follower.id,
+                    'name'                     :  follower.name,
+                    'profile_pic'              :  get_profile_images(follower.id)['user_profile_pic'],
+                    'you_follow_them'          :  you_follow_them,
+                    'user_viewing_follow_them' :  user_viewing_follow_them,
                 }
             )
 
@@ -316,9 +320,9 @@ class SuggestedUsers(APIView):
             if not user == main_user:
                 data.append(
                     {
-                        'id': user.id,
-                        'name': user.name,
-                        'profile_pic': get_profile_images(user.id)['user_profile_pic'],
+                        'id'           :  user.id,
+                        'name'         :  user.name,
+                        'profile_pic'  :  get_profile_images(user.id)['user_profile_pic'],
                     }
                 )
 
@@ -338,9 +342,9 @@ class TopUserAPI(APIView):
         for user in users[:page_size]:
             data.append(
                 {
-                    'id': user.id,
-                    'name': user.name,
-                    'profile_pic': get_profile_images(user.id)['user_profile_pic'],
+                    'id'           :  user.id,
+                    'name'         :  user.name,
+                    'profile_pic'  :  get_profile_images(user.id)['user_profile_pic'],
                 }
             )
 
@@ -358,9 +362,9 @@ def leaderboards_view(request):
     index_position = list(models.User.objects.all().order_by('-completion_index')).index(user) + 1
     return render(request, 'users/leaderboards.html',
                       {
-                        'points_position': points_position,
-                        'index_position': index_position,
-                        'completion_percentage': post_stats(request.user.id)['completion_percentage'],
+                        'points_position'        :  points_position,
+                        'index_position'         :  index_position,
+                        'completion_percentage'  :  post_stats(request.user.id)['completion_percentage'],
                       }
                   )
 
@@ -425,13 +429,13 @@ class LeaderboardsAPI(APIView):
         for user in results:
             data.append(
                 {
-                    'id': user.id,
-                    'name': user.name,
-                    'profile_pic_url': user.profile_pic.url,
-                    'position': list(results).index(user) + 1,
-                    'points': user.points,
-                    'level': user.level_floor,
-                    'completion_index': user.completion_index,
+                    'id'                :  user.id,
+                    'name'              :  user.name,
+                    'profile_pic_url'   :  user.profile_pic.url,
+                    'position'          :  list(results).index(user) + 1,
+                    'points'            :  user.points,
+                    'level'             :  user.level_floor,
+                    'completion_index'  :  user.completion_index,
                 }
             )
 
