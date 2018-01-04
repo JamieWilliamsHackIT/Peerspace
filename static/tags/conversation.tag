@@ -7,7 +7,11 @@
         </div>
         <div class="media-footer">
           <small class="text-muted">
-            <a href="/users/{message.user_id}">{message.user_name}</a> at {message.created_at}
+            <a href="/users/{message.user_id}">{message.user_name}</a>
+            <div style="display: inline;" if={message.time_ago < 60}> {Math.round(message.time_ago)} second<span if={Math.round(message.time_ago) !== 1}>s</span> ago</div>
+            <div style="display: inline;" if={message.time_ago >= 60 && message.time_ago < 3600}> {Math.round(message.time_ago / 60)} min<span if={Math.round(message.time_ago / 60) !== 1}>s</span> ago</div>
+            <div style="display: inline;" if={message.time_ago >= 3600 && message.time_ago < (24 * 3600)}> {Math.round(message.time_ago / 3600)} hour<span if={Math.round(message.time_ago / 3600) !== 1}>s</span> ago</div>
+            <div style="display: inline;" if={message.time_ago >= (24 * 3600)}> {Math.round(message.time_ago / (3600 * 24))} day<span if={Math.round(message.time_ago / (3600 * 24)) !== 1}>s</span> ago</div>
           </small>
         </div>
       </div>
@@ -21,7 +25,11 @@
         </div>
         <div class="media-footer">
           <small class="text-muted">
-            <a href="/users/{message.user_id}">{message.user_name}</a> at {message.created_at}
+            <a href="/users/{message.user_id}">{message.user_name}</a>
+            <div style="display: inline;" if={message.time_ago < 60}> {Math.round(message.time_ago)} second<span if={Math.round(message.time_ago) !== 1}>s</span> ago</div>
+            <div style="display: inline;" if={message.time_ago >= 60 && message.time_ago < 3600}> {Math.round(message.time_ago / 60)} min<span if={Math.round(message.time_ago / 60) !== 1}>s</span> ago</div>
+            <div style="display: inline;" if={message.time_ago >= 3600 && message.time_ago < (24 * 3600)}> {Math.round(message.time_ago / 3600)} hour<span if={Math.round(message.time_ago / 3600) !== 1}>s</span> ago</div>
+            <div style="display: inline;" if={message.time_ago >= (24 * 3600)}> {Math.round(message.time_ago / (3600 * 24))} day<span if={Math.round(message.time_ago / (3600 * 24)) !== 1}>s</span> ago</div>
           </small>
         </div>
       </div>
@@ -33,7 +41,6 @@
     })
     this.on('data_loaded', function(data, user_id) {
       opts.messages = data
-      console.log(data)
       this.update()
     })
   </script>

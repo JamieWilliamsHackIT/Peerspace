@@ -32,29 +32,29 @@ class ConversationAPI(APIView):
         slice1 = (page_number * page_size)
         slice2 = (page_number * page_size) + page_size
         # Get all user's conversations
-        conversations = models.Conversation.objects.filter(users=user)[slice1:slice2]
+        conversations = models.Conversation.objects.filter(users=user).order_by('-created_at')[slice1:slice2]
         # Create JSON data
         data = []
         for conversation in conversations:
-            user_list = []
+            display_user = {}
             for user in conversation.users.all():
                 if user.profile_pic:
                     profile_pic_url = user.profile_pic.url
                 else:
                     profile_pic_url = '/static/default_profile_pic.svg'
-                user_list.append(
-                    {
-                        'id'               :  user.id,
-                        'name'             :  user.name,
-                        'profile_pic_url'  :  profile_pic_url,
-                    }
-                )
+                if not user.id == request.user.id:
+                    display_user = {
+                            'id'               :  user.id,
+                            'name'             :  user.name,
+                            'profile_pic_url'  :  profile_pic_url,
+                        }
+
             data.append(
                 {
                     'id'          :  conversation.id,
                     'name'        :  conversation.name,
                     'created_at'  :  conversation.created_at,
-                    'users'       :  user_list,
+                    'user'        :  display_user,
                 }
             )
         return Response(data)
@@ -118,7 +118,11 @@ class MessageAPI(APIView):
         # Get conversation
         conversation = get_object_or_404(models.Conversation, id=conversation_id)
         # Get messages
-        messages = conversation.messages.all().order_by('created_at')[slice1:slice2]
+        if not page_number:
+            messages = conversation.messages.all().order_by('-created_at')[slice1:slice2][::-1]
+        else:
+            messages = conversation.messages.all().order_by('-created_at')[slice1:slice2]
+
         data = []
         for message in messages:
             if message.user.profile_pic:
@@ -132,9 +136,10 @@ class MessageAPI(APIView):
                     'user_id': message.user.id,
                     'user_name': message.user.name,
                     'profile_pic_url': profile_pic_url,
-                    'created_at': message.created_at,
+                    'time_ago': message.time_ago,
                 }
             )
+
         return Response(data)
 
     def post(self, request, conversation_id=None, page_number=None, *args, **kwargs):
@@ -161,7 +166,7 @@ class MessageAPI(APIView):
             'user_id': message.user.id,
             'user_name': message.user.name,
             'profile_pic_url': profile_pic_url,
-            'created_at': message.created_at,
+            'time_ago': message.time_ago,
         }
 
         return Response(data)
@@ -179,12 +184,17 @@ class MessageRedirectAPI(APIView):
         # Get the other user
         other_user = get_object_or_404(User, pk=pk)
 
-        if models.Conversation.objects.filter(users=user and other_user):
-            conversation = get_object_or_404(models.Conversation, users=user and other_user)
+        # Get the conversation
+        conversation = models.Conversation.objects.filter(users=user).filter(users=other_user)
+        if conversation:
+            # If a conversation between the two exists then send the id
+            conversation = conversation.get()
             data = {
                 'conversation_id': conversation.id,
             }
         else:
+            # If no conversation between the two exists the create a new one and
+            # send the id
             conversation = models.Conversation()
             conversation.save()
             conversation.users.add(user)
@@ -194,6 +204,5 @@ class MessageRedirectAPI(APIView):
             data = {
                 'conversation_id': conversation.id,
             }
-
 
         return Response(data)

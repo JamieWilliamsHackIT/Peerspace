@@ -15,6 +15,11 @@ class Message(models.Model):
     # Store the date and time sent
     created_at = models.DateTimeField(default=timezone.now)
 
+    @property
+    def time_ago(self):
+        return (timezone.now() - self.created_at)
+
+
 # Define the Conversation model
 class Conversation(models.Model):
     # Conversation name
@@ -25,3 +30,7 @@ class Conversation(models.Model):
     messages = models.ManyToManyField(Message, blank=True, related_name='messages')
     # Define when the conversation started
     created_at = models.DateTimeField(default=timezone.now)
+
+    @property
+    def time_ago(self):
+        return (timezone.now() - self.created_at)

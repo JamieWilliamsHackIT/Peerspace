@@ -24,7 +24,7 @@ class NotificationAPI(APIView):
         # Get the user
         user = get_object_or_404(User, pk=pk)
         # Define the number of notifications to return
-        page_size = 5
+        page_size = 10
         # Form slices (this helps reduce the number of hits on the database and
         # should improve performance).
         slice1 = (page_number * page_size)

@@ -72,9 +72,9 @@
              data-trigger="focus"
              data-placement="bottom"
              title="<b>Notifications · <a href='#'><small>View all</small></a></b>"
-             data-content="<ul class=' ml-0 pl-0 notification-list'></ul>">
+             data-content="<ul class=' ml-0 pl-0 notification-list'><notification></notification><img class='loading-circle loading-circle-notifications' src={% static 'img/loading.gif' %}></ul>">
 
-             <span class="icon icon-bell notifications"></span><span class="notification-num"></span></a>
+          <span class="icon icon-bell notifications"></span><span class="notification-num"></span></a>
           <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover" data-original-title="" title="">
             <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
           </button>
@@ -90,6 +90,7 @@
   </div>
   </nav>
   <!-- Optional JavaScript -->
+  <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
@@ -97,83 +98,83 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script> -->
   <script src="{% static 'dist/toolkit.js' %}"></script>
   <script src="{% static 'js/application.js' %}"></script>
+  <script src="{% static 'tags/notification.js' %}"></script>
   {% block body_content %}
   {% endblock body_content %}
   <script>
   $(function(){
-    // Define pluralise function
-    function pluralise(num, unit) {
-      if (Math.round(num) !== 1) {
-        unit += 's'
-      }
-      return unit + ' ago'
-    }
+    // This function stops the body from scrooling when scrolling in popover
+    $.fn.scrollGuard = function() {
+    return this
+        .on( 'mousewheel', function (e) {
+            var event = e.originalEvent;
+            var d = event.wheelDelta || -event.detail;
+            this.scrollTop += (d < 0 ? 1 : -1) * 30;
+            e.preventDefault();
+        });
+    };
     // Enables popover
-    var notification_ids = [];
-    page_number_notifications = 0;
+    var notification_data = [];
+    var last_scroll_top = 0;
     $("[data-toggle=notification-popover]").popover({container: 'body'});
-    $('#notifications').on('show.bs.popover', function () {
-      $.ajax({
-        type: "GET",
-        url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
-        dataType: "json",
-        success: function(data) {
-          $.each(data, function(i, e) {
-            var icon;
-            notification_ids.push(e.id)
-            if (e.type == 'like') {
-              icon = 'thumbs-up'
-            } else if (e.type == 'follow') {
-              icon = 'add-user'
-            } else if (e.tpye == 'comment') {
-              icon = 'message'
-            } else if (e.type == 'verify') {
-              icon = 'shield'
+    var reached_bottom_notifications = false;
+    $('#notifications').on('shown.bs.popover', function () {
+    var page_number_notifications = 0;
+    riot.mount('notification', {callback:tagCallBack})
+    $('.popover').scrollGuard()
+    function tagCallBack(theTag) {
+      if (!notification_data.length) {
+        $.ajax({
+          type: "GET",
+          url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
+          dataType: "json",
+          success: function(data) {
+            notification_data = data
+            theTag.trigger('data_loaded', notification_data)
+            $('.loading-circle-notifications').hide()
+          }
+        })
+      } else {
+        theTag.trigger('data_loaded', notification_data)
+        $('.loading-circle-notifications').hide()
+        $('.popover').scrollTop(last_scroll_top)
+      }
+      $('.popover').scroll(function() {
+        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reached_bottom_notifications) {
+          page_number_notifications++
+          reached_bottom_notifications = true
+          //Show loading gif
+          $('.loading-circle-notifications').show()
+          //Gets more posts
+          $.ajax({
+            type: "GET",
+            url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
+            dataType: 'json',
+            success: function(data) {
+              $.each(data, function(i, notification) {
+                notification_data.push(notification)
+              })
+              if (data.length == 10) {
+                reached_bottom_notifications = false
+                // console.log(data)
+                // console.log(notification_data)
+              } else {
+                reached_bottom_notifications = true
+                console.log('No more notifications')
+              }
+              theTag.trigger('data_loaded', notification_data)
+              //Hide loading gif
+              $('.loading-circle-notifications').hide()
+            }, error: function(error) {
+              console.log('Error loading posts...')
             }
-            var time;
-            if (e.time_ago < 60) {
-              time = Math.round(e.time_ago) + pluralise(e.time_ago, ' second')
-            } else if (e.time_ago >= 60 && e.time_ago < 3600) {
-              time = Math.round(e.time_ago / 60) + pluralise(e.time_ago / 60, ' min')
-            } else if (e.time_ago >= 3600 && e.time_ago < (3600 * 24)) {
-              time = Math.round(e.time_ago / 3600) + pluralise(e.time_ago / 3600, ' hour')
-            } else {
-              time = (e.time_ago / (3600 * 24)) + pluralise(e.time_ago / (3600 * 24), ' day')
-            }
-            // <span class="icon icon-' + icon + ' text-muted mr-2"></span>
-            var notificationHTML = '<li class=" list-group-item media p-4 notification">';
-            notificationHTML += '<div class="media-body"><small class="text-muted float-right">' + time + '</small><div class="media-heading">';
-            // if (!e.viewed) {
-            //   notificationHTML += '<span class="icon icon-controller-record mr-2"></span>'
-            // }
-            notificationHTML += '<a class="user-link" href="/users/' + e.user_tx_id + '"><img src="' + e.user_tx_pic_url + '" <strong>' + e.user_tx_name + '</strong></a> ';
-            if (e.type == 'like') {
-              notificationHTML += 'liked your <a href="/posts/' + e.post_id + '">post</a><p style="display: block; margin-left: 32px;"><small>' + e.post_title + '</small></p>'
-            } else if (e.type == 'comment') {
-              notificationHTML += 'commented on your <a href="/posts/' + e.post_id + '">post</a><p style="display: block; margin-left: 32px;"><small>' + e.post_title + '</small></p>'
-              notificationHTML += '<p style="display: block; margin-left: 32px; color: grey; font-style: italic;" class="my-1"><small>"' + e.comment + '"</small></p>'
-            } else if (e.type == 'verify') {
-              notificationHTML += 'verified your <a href="/posts/' + e.post_id + '">post</a><p style="display: block; margin-left: 32px;"><small>' + e.post_title + '</small></p>'
-            }
-            if (e.post_proof_pic) {
-              notificationHTML += '<img src="' + e.post_proof_pic + '" class="ml-3 notification_proof_pic">'
-            }
-            notificationHTML += '</div></div></li>';
-            $('.notification-list').append(notificationHTML)
-          })
-        }
+            })
+          }
       })
+    }
     })
     $('#notifications').on('hide.bs.popover', function () {
-      // Make call to set the viewed to true
-      $.ajax({
-        type: "GET",
-        url: "/notifications/api/v4/{{ user.id }}/" + notification_ids + "/viewed",
-        dataType: "json",
-        success: function(data) {
-          $('.notification-num').html({{ notification_num }} - notification_ids.length)
-        }
-      })
+      last_scroll_top = $('.popover').scrollTop()
     })
   });
   </script>

@@ -3,7 +3,7 @@
 {% block title_tag %}Messages | {{ block.super }}{% endblock %}
 {% block body_content %}
 <!-- Peerspace specific stylesheets  -->
-<link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
+<link rel="stylesheet" href="{% static 'messages/css/messages.css' %}">
 <!-- Percentage circles stylesheets -->
 <link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
 <link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
@@ -16,18 +16,33 @@
     <div class="card d-md-block col-lg-4 d-lg-block mb-4" style="height: 100%;">
       <div class="card-body">
         <ul class="media-list media-list-users list-group">
+          <h3 class="mb-3">Your conversations</h3>
           <conversations></conversations>
+          <li class="list-group-item conversation new-converation">
+            <div class="media w-100">
+              <img class="media-object rounded-circle mr-3" src="{% static 'img/talk.png' %}">
+              <div class="media-body align-self-center">
+                <strong>New conversation</strong>
+                <small></small>
+              </div>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
-    <div class="user-list col-lg-8">
-      <div class="user-list-inner card p-4">
-        <ul class="media-list media-list-conversation c-w-md">
+    <div class="message-list col-lg-8">
+      <div class="message-list-inner card p-4">
+        <h3 class="conversation-name"></h3>
+        <ul class="media-list media-list-conversation c-w-md" id="message-box">
+          <img class='loading-circle loading-circle-messages' src={% static 'img/loading.gif' %}>
+          <p class="no-more-messages">No more messages.</p>
           <conversation></conversation>
-          <form class="form-inline">
-            <input class="form-contol w-100" type="text" id="message-input" placeholder="Message">
-          </form>
         </ul>
+        <form>
+          <div class="form-group">
+            <textarea class="form-control w-100" id="message-input" rows="3" placeholder="Message"></textarea>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -60,60 +75,31 @@
       dataType: "json",
       success: function(data) {
         theTag.trigger('data_loaded', data)
+        var conversation_id = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
+        $('.conversation-' + conversation_id).trigger('click')
       }
     })
   }
   var conversation_id;
   var message_data;
   var has_run = false
+  var reached_top = false;
 
-  // function messagesCallback(theTag) {
-  //   $(document).on('click', '.conversation', function() {
-  //     conversation_id = $(this).attr('data-id')
-  //     page_number = 0;
-  //     message_data = [];
-  //     $.ajax({
-  //       type: "GET",
-  //       url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number,
-  //       dataType: "json",
-  //       success: function(data) {
-  //         user_id = {{user.id}}
-  //         message_data.push(data)
-  //         theTag.trigger('data_loaded', message_data[0], user_id)
-  //       }
-  //     })
-  //   })
-  //   $(document).on("keydown", "#message-input", function (e) {
-  //       if (e.which == 13 && $(this).val()) {
-  //         e.preventDefault()
-  //         var message = $('#message-input').val()
-  //         if (message) {
-  //           data = {
-  //               body: message
-  //           }
-  //           $.ajax({
-  //             type: "POST",
-  //             url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number + "/",
-  //             data: data,
-  //             success: function(data) {
-  //               $('#message-input').val('')
-  //               user_id = {{user.id}}
-  //               message_data[0].push(data)
-  //               theTag.trigger('data_loaded', message_data[0], user_id)
-  //             }
-  //           })
-  //         }
-  //       }
-  //   })
-  // }
-  if (window.location.href !== '{% url "messages:messages" %}') {
+  $('.no-more-messages').hide()
+
   function messagesCallback(theTag) {
-    function get_conversation(redirect, this_button) {
-      if (redirect) {
-        conversation_id = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
-      } else {
-        conversation_id = this_button.attr('data-id')
-      }
+    $(document).on('click', '.conversation', function() {
+      var this_button = $(this)
+      // Hide no more messages text
+      $('.no-more-messages').hide()
+      // Indicate there may be more posts to come
+      reached_top = false
+      //Show loading gif
+      $('.loading-circle-messages').show()
+      // Get id of conversation from button
+      conversation_id = $(this).attr('data-id')
+      // display_user_name =
+      $('.conversation-name').text($(this).attr('display-user'))
       page_number = 0;
       message_data = [];
       $.ajax({
@@ -124,12 +110,23 @@
           user_id = {{user.id}}
           message_data.push(data)
           theTag.trigger('data_loaded', message_data[0], user_id)
+          var scrollDiv = document.getElementById("message-box");
+          scrollDiv.scrollTop = scrollDiv.scrollHeight;
+          // Hide loading gif
+          $('.loading-circle-messages').hide()
+          // Reset colour of all conversation buttons
+          $('.conversation').css('background-color', '#FFF')
+          $('.conversation').css('color', '#000')
+          // Change colour of conversation button
+          this_button.css('background-color', '#6A0F49')
+          this_button.css('color', '#FFF')
         }
       })
+    })
     $(document).on("keydown", "#message-input", function (e) {
         if (e.which == 13 && $(this).val()) {
           e.preventDefault()
-          var message = $('#message-input').val()
+          var message = $.trim($('#message-input').val())
           if (message) {
             data = {
                 body: message
@@ -143,24 +140,54 @@
                 user_id = {{user.id}}
                 message_data[0].push(data)
                 theTag.trigger('data_loaded', message_data[0], user_id)
+                console.log($('.media-list-conversation')[0].scrollHeight)
+                $('.media-list-conversation').scrollTop($('.media-list-conversation')[0].scrollHeight)
               }
             })
           }
         }
     })
+    $('.media-list-conversation').scroll(function() {
+      // toScroll = $(document).height() - $(window).height() - 100;
+      if ( $(this).scrollTop() == 0 && !reached_top) {
+        console.log('at top')
+        page_number++
+        reached_top = true
+        //Show loading gif
+        $('.loading-circle-messages').show()
+        //Gets more messages
+        $.ajax({
+          type: "GET",
+          url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number + "/",
+          dataType: 'json',
+          success: function(data) {
+            $.each(data, function(i, message) {
+                message_data[0].unshift(message)
+            })
+            user_id = {{ user.id }}
+            if (data.length == 10) {
+              reached_top = false
+              $('.media-list-conversation').scrollTop(10)
+            } else {
+              reached_top = true
+              $('.no-more-messages').show()
+              console.log('No more posts')
+            }
+            theTag.trigger('data_loaded', message_data[0], user_id)
+            //Hide loading gif
+            $('.loading-circle-messages').hide()
+          }, error: function(error) {
+            console.log('Error loading posts...')
+          }
+          })
+        }
+    })
   }
-  if (!has_run) {
-    get_conversation(true)
-    has_run = true
-  }
-  $(document).on('click', '.conversation', function() {
-    get_conversation(false, $(this))
-  })
-}
-}
+
   $(document).ready(function() {
     riot.mount('conversations', {callback:usersCallback})
     riot.mount('conversation', {callback:messagesCallback})
+    $('.loading-circle-messages').hide()
   })
 </script>
 </body>

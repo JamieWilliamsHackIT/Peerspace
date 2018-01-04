@@ -1,0 +1,53 @@
+.leaderboards-container {
+  margin-top: 60px;
+}
+
+.message-list-inner {
+  background-color: white;
+  height: 80vh;
+}
+
+.media-list-conversation {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.conversation:hover {
+  cursor: pointer;
+}
+
+.loading-circle-messages {
+  height: 32px;
+  width: 32px;
+  margin: 0 auto;
+  display: block;
+}
+
+.no-more-messages {
+  color: grey;
+  text-align: center;
+}
+
+.media-list-conversation::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.media-list-conversation::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+.media-list-conversation::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #A3A3A3;
+}
+
+.media-list-conversation li {
+  margin-right: 10px;
+}

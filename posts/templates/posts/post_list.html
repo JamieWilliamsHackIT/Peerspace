@@ -87,7 +87,7 @@
       </form>
       <post-feed></post-feed>
       <p class="text-center mt-2 no-search-results">No results...</p>
-      <img class='loading-circle loading-circle-posts' src={% static 'img/loading.gif' %}>
+      <img class='loading-circle loading-circle-posts' src="{% static 'img/loading.gif' %}">
     </ul>
     <div class="col-lg-3 right-pane">
 
@@ -134,7 +134,7 @@
         </div>
   </div>
 </div>
-<script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
+<!-- <script src="{% static 'bower_components/riot/riot.min.js' %}"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <script>
@@ -222,37 +222,37 @@
     var reached_bottom = false
     $(window).scroll(function() {
       toScroll = $(document).height() - $(window).height() - 100;
-      if ( $(this).scrollTop() > toScroll && !reached_bottom) {
-      page_number++
-      reached_bottom = true
-      //Show loading gif
-      $('.loading-circle-posts').show()
-      //Gets more posts
-      $.ajax({
-        type: "GET",
-        url: "/posts/api/v1/feed/{{ user.id }}/" + page_number,
-        dataType: 'json',
-        success: function(data) {
-          $.each(data, function(i, post) {
-            if ($.inArray(post.id, post_ids) == -1) {
-              post_data.push(post)
+      if ($(this).scrollTop() > toScroll && !reached_bottom) {
+        page_number++
+        reached_bottom = true
+        //Show loading gif
+        $('.loading-circle-posts').show()
+        //Gets more posts
+        $.ajax({
+          type: "GET",
+          url: "/posts/api/v1/feed/{{ user.id }}/" + page_number,
+          dataType: 'json',
+          success: function(data) {
+            $.each(data, function(i, post) {
+              if ($.inArray(post.id, post_ids) == -1) {
+                post_data.push(post)
+              }
+            })
+            user_id = {{ user.id }}
+            if (data.length == 10) {
+              reached_bottom = false
+            } else {
+              reached_bottom = true
+              console.log('No more posts')
             }
-          })
-          user_id = {{ user.id }}
-          if (data.length) {
-            reached_bottom = false
             theTag.trigger('data_loaded', post_data, user_id)
-          } else {
-            reached_bottom = true
-            console.log('No more posts')
+            //Hide loading gif
+            $('.loading-circle-posts').hide()
+          }, error: function(error) {
+            console.log('Error loading posts...')
           }
-          //Hide loading gif
-          $('.loading-circle-posts').hide()
-        }, error: function(error) {
-          console.log('Error loading posts...')
+          })
         }
-        })
-      }
     })
     $('#post').click(function(e) {
       var tags = $("#tags").tagit("assignedTags");
