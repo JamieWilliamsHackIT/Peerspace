@@ -93,3 +93,10 @@ body {
   right: 100px;
   top: calc(40% - 18px);
 }
+
+.loading-circle {
+  height: 32px;
+  width: 32px;
+  margin: 20px auto;
+  display: block;
+}

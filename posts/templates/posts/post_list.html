@@ -92,7 +92,7 @@
     <div class="col-lg-3 right-pane">
 
 
-          <div class="card mb-4 d-none d-lg-block">
+          <div class="card mb-4 d-none d-lg-block news-card">
             <div class="card-body">
               <h6 class="mb-3">News</h6>
               <div data-grid="images" data-target-height="150"><img class="media-object" data-width="640" data-height="640" data-action="zoom" src="{% static 'img/coding.jpg' %}" style="width: 239px; height: 225px; margin-bottom: 10px; margin-right: 0px; display: inline-block; vertical-align: bottom;"></div>
@@ -101,7 +101,7 @@
             </div>
           </div>
 
-          <div class="card mb-4 d-none d-lg-block">
+          <div class="card mb-4 d-none d-lg-block suggested-users-card">
             <div class="card-body">
             <h6 class="mb-3">Suggested Users <small>· <a href="#">View All</a></small></h6>
             <ul class="media-list media-list-stream" id="suggested-users">
@@ -134,9 +134,7 @@
         </div>
   </div>
 </div>
-<!-- <script src="{% static 'bower_components/riot/riot.min.js' %}"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <script>
 (function($) {
     if (!$.curCSS) {
@@ -151,6 +149,22 @@
 <script src="{% static 'dist/toolkit.js' %}"></script>
 <script>
   $(document).ready(function() {
+    // Make sidebars scroll until user reaches bottom of them
+    $(window).scroll(function() {
+      right_pane_height = $('.right-pane').height()
+      window_height = $(window).height()
+      if (window_height < right_pane_height) {
+        suggested_users_height = $('.suggested-users-card').position().top
+        window_scroll_top = $(window).scrollTop()
+        news_card_height = $('.news-card').height()
+        if (window_scroll_top >= suggested_users_height) {
+          $(".suggested-users-card").css({"margin-top": ($(window).scrollTop() - news_card_height) + "px"});
+        }
+      } else {
+        $(".right-pane").css({"margin-top": ($(window).scrollTop()) + "px"});
+      }
+    });
+
     $('.no-search-results').hide()
     $("#tags").tagit({caseSensitive:false})
     $('.ui-widget-content')

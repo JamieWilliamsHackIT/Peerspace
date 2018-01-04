@@ -26,10 +26,7 @@
 }
 
 .right-pane {
-  position: fixed!important;
-  width: 300px;
-  /* float: right; */
-  margin-left: 840px;
+  height: 100%;
 }
 
 .post {
@@ -81,13 +78,6 @@
 
 .completion-status {
   margin-bottom: 0px;
-}
-
-.loading-circle {
-  height: 100px;
-  margin: 20px auto;
-  display: block;
-  padding-bottom: 40px;
 }
 
 .tags {
