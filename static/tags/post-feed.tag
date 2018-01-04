@@ -1,11 +1,11 @@
 <post-feed>
   <div each={post in opts.posts}>
     <li class="media post post-{post.id} list-group-item p-4 my-3">
-      <img class="media-object mr-3 align-self-start" src="{ post.user_url }">
+      <img class="media-object mr-3 align-self-start profile-pic" src="{post.user_url}">
       <div class="media-body">
         <div class="media-heading">
           <small class="float-right text-muted">{post.days_since} days</small>
-          <h6><a href="{root_url}/users/{post.user}">{post.user_name}</a> made the commitment: <a href="{root_url}/posts/{post.id}">{post.title}</a></h6>
+          <h6><a href="/users/{post.user}">{post.user_name}</a> made the commitment: <a href="/posts/{post.id}">{post.title}</a></h6>
         </div>
         <p>
           {post.description}

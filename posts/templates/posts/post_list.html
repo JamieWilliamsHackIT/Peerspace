@@ -18,7 +18,7 @@
         <div class="card-header" style="background-image: url({{ profile_pictures.user_cover_pic }});"></div>
         <div class="card-body text-center">
           <a href="{% url 'users:profile_user' %}">
-            <img class="card-profile-img" src="{{ profile_pictures.user_profile_pic }}">
+            <img class="card-profile-img profile-pic-lg" src="{{ profile_pictures.user_profile_pic }}">
           </a>
           <h6 class="card-title">
             <a class="text-inherit" href="{% url 'users:profile_user' %}">{{ user.name}}</a>

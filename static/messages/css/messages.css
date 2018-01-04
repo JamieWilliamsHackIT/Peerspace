@@ -16,6 +16,12 @@
   cursor: pointer;
 }
 
+.profile-pic {
+  object-fit: cover;
+  height: 42px;
+  width: 42px;
+}
+
 .loading-circle-messages {
   height: 32px;
   width: 32px;

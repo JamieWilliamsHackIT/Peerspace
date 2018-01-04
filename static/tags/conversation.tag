@@ -15,10 +15,10 @@
           </small>
         </div>
       </div>
-      <img class="rounded-circle media-object ml-3" src="{message.profile_pic_url}">
+      <img class="rounded-circle media-object ml-3 profile-pic" src="{message.profile_pic_url}">
     </li>
     <li if={message.user_id !== user_id} class="media mb-4">
-      <img class="rounded-circle media-object mr-3" src="{message.profile_pic_url}">
+      <img class="rounded-circle media-object mr-3 profile-pic" src="{message.profile_pic_url}">
       <div class="media-body">
         <div class="media-body-text">
           {message.body}

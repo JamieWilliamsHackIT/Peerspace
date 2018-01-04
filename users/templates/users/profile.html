@@ -13,7 +13,7 @@
     <div class="card card-profile">
       <div class="card-header" style="background-image: url({{ profile_pictures.user_cover_pic }});"></div>
       <div class="card-body text-xs-center">
-        <img class="card-profile-img" src="{{ profile_pictures.user_profile_pic }}">
+        <img class="card-profile-img profile-pic-lg" src="{{ profile_pictures.user_profile_pic }}">
         <h5 class="card-title">{{ user.name}}</h5>
         <p class="mb-4">{{ user.bio }}</p>
         {% if following %}
@@ -82,7 +82,7 @@
     </div>
     <div class="card d-md-block col-lg-3 mt-3 d-lg-block mb-4" style="height: 100%;">
       <div class="card-body">
-        <h6 class="mb-3">Your proof photos <small>· <a href="#">View all</a></small></h6>
+        <h6 class="mb-3">Post proof photos <small>· <a href="#">View all</a></small></h6>
         <div data-grid="images" class="images">
         </div>
         <img class='loading-circle loading-circle-images' src="{% static 'img/loading.gif' %}">

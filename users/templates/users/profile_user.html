@@ -19,7 +19,7 @@
     <div class="card card-profile">
       <div class="card-header" style="background-image: url({{ profile_pictures.user_cover_pic }});"></div>
       <div class="card-body text-xs-center">
-        <img class="card-profile-img" src="{{ profile_pictures.user_profile_pic }}">
+        <img class="card-profile-img profile-pic-lg" src="{{ profile_pictures.user_profile_pic }}">
         <h5 class="card-title">{{ user.name}}</h5>
         <p class="mb-4">{{ user.bio }}</p>
         <a class="btn btn-outline-primary btn-sm mx-1" href="{% url 'users:edit' %}">
