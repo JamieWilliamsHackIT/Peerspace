@@ -35,15 +35,15 @@
     </div>
   </div>
   <div class="post-footer pb-3">
-    <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(user_id)}><span class="icon icon-thumbs-up"></span> Liked ({post.likes.length})</a>
-    <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(user_id)}><span class="icon icon-thumbs-up"></span> Like ({post.likes.length})</a>
+    <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(userId)}><span class="icon icon-thumbs-up"></span> Liked ({post.likes.length})</a>
+    <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(userId)}><span class="icon icon-thumbs-up"></span> Like ({post.likes.length})</a>
     <a class="ml-3 pt-3 comment-btn comment-btn-{post.id}" post-id="{post.id}" href="#"><span class="icon icon-message"></span> Comment ({post.comments.length})</a>
-    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(user_id)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
-    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && !post.verifications.includes(user_id)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:grey;" href="#"><span class="icon icon-shield"></span> Verify ({post.verifications.length}/5)</a>
+    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
+    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && !post.verifications.includes(userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:grey;" href="#"><span class="icon icon-shield"></span> Verify ({post.verifications.length}/5)</a>
     <div class="completion-status-container-{post.id}" style="display:inline;">
-      <p if={!post.completed && !(post.proof_description || post.proof_pic)} class="float-right completion-status mr-3 pt-1" style="color: red;"><span class="icon icon-cross"></span> Not completed</p>
-      <p if={!post.completed && (post.proof_description || post.proof_pic)} class="float-right completion-status awaiting-verifcation-{post.id} mr-3 pt-1" style="color: #FFBF00; margin-bottom:0px;"><span class="icon icon-hour-glass"> Awaiting Verification</span></p>
-      <p if={post.completed} class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>
+      <p if={!post.completed && !(post.proof_description || post.proof_pic)} class="float-right completion-status mr-3 pt-1" style="color: red;"><span class="icon icon-cross"></span><span class="d-none d-sm-inline"> Not completed</span></p>
+      <p if={!post.completed && (post.proof_description || post.proof_pic)} class="float-right completion-status awaiting-verifcation-{post.id} mr-3 pt-1" style="color: #FFBF00; margin-bottom:0px;"><span class="icon icon-hour-glass"></span><span class="d-none d-sm-inline"> Awaiting Verification</span></p>
+      <p if={post.completed} class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span><span class="d-none d-sm-inline"> Completed</span></p>
     </div>
   </div>
   <div class="comment-container comment-container-{post.id}" commentsopen="false" style="display:none;">
@@ -60,7 +60,7 @@
   this.on('mount', function() {
     opts.callback(this)
   })
-  this.on('data_loaded', function(data, user_id) {
+  this.on('data_loaded', function(data, userId) {
     opts.posts = data
     // root_url = 'http://127.0.0.1:8000'
     // root_url = 'https://peerspace.herokuapp.com'

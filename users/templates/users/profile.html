@@ -113,52 +113,52 @@
 <!-- Riot.js custom tag -->
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
-    var post_data = []
-    var post_ids = []
-    var page_number = 0
+    var postData = []
+    var postIds = []
+    var pageNumber = 0
     function tagCallBack(theTag) {
       //Gets posts
       $.ajax({
         type: "GET",
-        url: "/posts/api/v1/profile/{{ user.id }}/" + page_number,
+        url: "/posts/api/v1/profile/{{ user.id }}/" + pageNumber,
         dataType: 'json',
         success: function(data) {
-          post_data = data
-          $.each(post_data, function(i, post) {
-            post_ids.push(post.id)
+          postData = data
+          $.each(postData, function(i, post) {
+            postIds.push(post.id)
           })
-          user_id = {{ user.id }}
-          theTag.trigger('data_loaded', data, user_id)
+          userId = {{ user.id }}
+          theTag.trigger('data_loaded', data, userId)
           $('.loading-circle-posts').hide()
         }, error: function(error) {
           console.log('Error loading posts...')
         }
       });
-      var reached_bottom = false
+      var reachedBottom = false
       $(window).scroll(function() {
         toScroll = $(document).height() - $(window).height() - 100;
-        if ( $(this).scrollTop() > toScroll && !reached_bottom) {
-        page_number++
-        reached_bottom = true
+        if ( $(this).scrollTop() > toScroll && !reachedBottom) {
+        pageNumber++
+        reachedBottom = true
         //Show loading gif
         $('.loading-circle-posts').show()
         //Gets more posts
         $.ajax({
           type: "GET",
-          url: "/posts/api/v1/profile/{{ user.id }}/" + page_number,
+          url: "/posts/api/v1/profile/{{ user.id }}/" + pageNumber,
           dataType: 'json',
           success: function(data) {
             $.each(data, function(i, post) {
-              if ($.inArray(post.id, post_ids) == -1) {
-                post_data.push(post)
+              if ($.inArray(post.id, postIds) == -1) {
+                postData.push(post)
               }
             })
-            user_id = {{ user.id }}
+            userId = {{ user.id }}
             if (data.length) {
-              reached_bottom = false
-              theTag.trigger('data_loaded', post_data, user_id)
+              reachedBottom = false
+              theTag.trigger('data_loaded', postData, userId)
             } else {
-              reached_bottom = true
+              reachedBottom = true
               console.log('No more posts')
             }
             //Hide loading gif
@@ -226,7 +226,7 @@
           commentHTML += '<div class="media-body">'
           commentHTML += '<strong>' + e.user_name + ': </strong>'
           commentHTML += e.comment
-          if ({{ user_viewing }} == e.user_id) {
+          if ({{ user_viewing }} == e.userId) {
             //Handle the deleting of comments here
             commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + post_id + ')"><span class="icon icon-cross"></span></button>'
           }

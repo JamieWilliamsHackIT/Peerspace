@@ -66,22 +66,21 @@
 <script src="{% static 'dist/toolkit.js' %}"></script>
 <script>
   function usersCallback(theTag) {
-    page_number = 0
+    pageNumber = 0
     $.ajax({
       type: "GET",
-      url: "/messages/api/v5/conversations/" + page_number,
+      url: "/messages/api/v5/conversations/" + pageNumber,
       dataType: "json",
       success: function(data) {
         theTag.trigger('data_loaded', data)
-        var conversation_id = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
-        $('.conversation-' + conversation_id).trigger('click')
+        var conversationId = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
+        $('.conversation-' + conversationId).trigger('click')
       }
     })
   }
-  var conversation_id;
-  var message_data;
-  var has_run = false
-  var reached_top = false;
+  var conversationId;
+  var messageData;
+  var reachedTop = false;
 
   $('.no-more-messages').hide()
 
@@ -91,23 +90,23 @@
       // Hide no more messages text
       $('.no-more-messages').hide()
       // Indicate there may be more posts to come
-      reached_top = false
+      reachedTop = false
       //Show loading gif
       $('.loading-circle-messages').show()
       // Get id of conversation from button
-      conversation_id = $(this).attr('data-id')
+      conversationId = $(this).attr('data-id')
       // display_user_name =
       $('.conversation-name').text($(this).attr('display-user'))
-      page_number = 0;
-      message_data = [];
+      pageNumber = 0;
+      messageData = [];
       $.ajax({
         type: "GET",
-        url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number,
+        url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber,
         dataType: "json",
         success: function(data) {
-          user_id = {{user.id}}
-          message_data.push(data)
-          theTag.trigger('data_loaded', message_data[0], user_id)
+          userId = {{user.id}}
+          messageData.push(data)
+          theTag.trigger('data_loaded', messageData[0], userId)
           var scrollDiv = document.getElementById("message-box");
           scrollDiv.scrollTop = scrollDiv.scrollHeight;
           // Hide loading gif
@@ -131,13 +130,13 @@
             }
             $.ajax({
               type: "POST",
-              url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number + "/",
+              url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
               data: data,
               success: function(data) {
                 $('#message-input').val('')
-                user_id = {{user.id}}
-                message_data[0].push(data)
-                theTag.trigger('data_loaded', message_data[0], user_id)
+                userId = {{user.id}}
+                messageData[0].push(data)
+                theTag.trigger('data_loaded', messageData[0], userId)
                 console.log($('.media-list-conversation')[0].scrollHeight)
                 $('.media-list-conversation').scrollTop($('.media-list-conversation')[0].scrollHeight)
               }
@@ -147,31 +146,30 @@
     })
     $('.media-list-conversation').scroll(function() {
       // toScroll = $(document).height() - $(window).height() - 100;
-      if ( $(this).scrollTop() == 0 && !reached_top) {
-        console.log('at top')
-        page_number++
-        reached_top = true
+      if ( $(this).scrollTop() == 0 && !reachedTop) {
+        pageNumber++
+        reachedTop = true
         //Show loading gif
         $('.loading-circle-messages').show()
         //Gets more messages
         $.ajax({
           type: "GET",
-          url: "/messages/api/v5/messages/" + conversation_id + "/" + page_number + "/",
+          url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
           dataType: 'json',
           success: function(data) {
             $.each(data, function(i, message) {
-                message_data[0].unshift(message)
+                messageData[0].unshift(message)
             })
-            user_id = {{ user.id }}
+            userId = {{ user.id }}
             if (data.length == 10) {
-              reached_top = false
+              reachedTop = false
               $('.media-list-conversation').scrollTop(10)
             } else {
-              reached_top = true
+              reachedTop = true
               $('.no-more-messages').show()
               console.log('No more posts')
             }
-            theTag.trigger('data_loaded', message_data[0], user_id)
+            theTag.trigger('data_loaded', messageData[0], userId)
             //Hide loading gif
             $('.loading-circle-messages').hide()
           }, error: function(error) {
