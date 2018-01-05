@@ -35,11 +35,11 @@
     </div>
   </div>
   <div class="post-footer pb-3">
-    <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(userId)}><span class="icon icon-thumbs-up"></span> Liked ({post.likes.length})</a>
-    <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(userId)}><span class="icon icon-thumbs-up"></span> Like ({post.likes.length})</a>
+    <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(opts.userId)}><span class="icon icon-thumbs-up"></span> Liked ({post.likes.length})</a>
+    <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(opts.userId)}><span class="icon icon-thumbs-up"></span> Like ({post.likes.length})</a>
     <a class="ml-3 pt-3 comment-btn comment-btn-{post.id}" post-id="{post.id}" href="#"><span class="icon icon-message"></span> Comment ({post.comments.length})</a>
-    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
-    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && !post.verifications.includes(userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:grey;" href="#"><span class="icon icon-shield"></span> Verify ({post.verifications.length}/5)</a>
+    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(opts.userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
+    <a if={(!post.completed && (post.proof_description || post.proof_pic)) && !post.verifications.includes(opts.userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:grey;" href="#"><span class="icon icon-shield"></span> Verify ({post.verifications.length}/5)</a>
     <div class="completion-status-container-{post.id}" style="display:inline;">
       <p if={!post.completed && !(post.proof_description || post.proof_pic)} class="float-right completion-status mr-3 pt-1" style="color: red;"><span class="icon icon-cross"></span><span class="d-none d-sm-inline"> Not completed</span></p>
       <p if={!post.completed && (post.proof_description || post.proof_pic)} class="float-right completion-status awaiting-verifcation-{post.id} mr-3 pt-1" style="color: #FFBF00; margin-bottom:0px;"><span class="icon icon-hour-glass"></span><span class="d-none d-sm-inline"> Awaiting Verification</span></p>
@@ -61,8 +61,9 @@
     opts.callback(this)
   })
   this.on('data_loaded', function(data, userId) {
+    console.log('UserId: ' + userId)
     opts.posts = data
-    console.log(data)
+    opts.userId = userId
     this.update()
   })
 </script>

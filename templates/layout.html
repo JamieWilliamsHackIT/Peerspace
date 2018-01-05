@@ -75,8 +75,8 @@
           <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover" data-original-title="" title="">
             <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
           </button>
-          <span class="username d-md-none d-lg-inline lead">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
-          <span class="username d-lg-none lead">{{ request.user.name }}</span>
+          <span class="username d-md-none d-lg-inline">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
+          <span class="username d-lg-none">{{ request.user.name }}</span>
         </li>
       </ul>
 

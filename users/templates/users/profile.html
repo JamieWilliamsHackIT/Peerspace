@@ -127,7 +127,7 @@
           $.each(postData, function(i, post) {
             postIds.push(post.id)
           })
-          userId = {{ user.id }}
+          userId = {{ user_viewing }}
           theTag.trigger('data_loaded', data, userId)
           $('.loading-circle-posts').hide()
         }, error: function(error) {
@@ -153,7 +153,7 @@
                 postData.push(post)
               }
             })
-            userId = {{ user.id }}
+            userId = {{ user_viewing }}
             if (data.length) {
               reachedBottom = false
               theTag.trigger('data_loaded', postData, userId)
