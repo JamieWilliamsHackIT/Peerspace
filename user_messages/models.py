@@ -11,7 +11,7 @@ class Message(models.Model):
     # Define the message body
     body = models.TextField()
     # Define the ForeignKey relation
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=None, related_name='conversation_user')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='conversation_user', null=True)
     # Store the date and time sent
     created_at = models.DateTimeField(default=timezone.now)
 

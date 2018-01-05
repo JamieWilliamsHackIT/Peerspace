@@ -270,6 +270,7 @@ class DeletePost(LoginRequiredMixin, generic.DeleteView):
             return HttpResponseRedirect(self.object.get_absolute_url())
         return super(DeletePost, self).dispatch(request, *args, **kwargs)
 
+
 import decimal
 from users.models import UserPreferenceTag
 from notifications.models import Notification

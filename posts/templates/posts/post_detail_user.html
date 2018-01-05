@@ -6,9 +6,7 @@
   <div class="row">
     <div class="user-post mt-5 col-lg-3">
       <div class="card card-profile mb-4">
-        <div class="card-header" style="background-image: url({{ profile_pictures.user_cover_pic }});"></div>
         <div class="card-body text-center">
-        <!-- Some post stats to go in here -->
         {% if post.deadline %}
         <h6 class="mb-4">Days to go<small></small></h6>
         <div class="c100 p{{ post.days_to_go_percentage }} center mb-4">

@@ -135,7 +135,7 @@ class UserPreferenceTag(models.Model):
     # algorithm. It holes the weight of the tag as a float
     weight = models.DecimalField(max_digits=10, decimal_places=5, default=0.5)
     # This is the foreign key that relates the user to the tag
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=None)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     # This method reterns the tag name and weight when it is referenced
     def __str__(self):

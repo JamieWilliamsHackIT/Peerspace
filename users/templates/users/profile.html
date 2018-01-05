@@ -93,7 +93,7 @@
 <div class="modal fade bd-example-modal-md" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <ul class="media-list media-list-users list-group" id="followers-model-content">
+      <ul class="media-list media-list-users list-group" id="followers-modal-content">
       </ul>
     </div>
   </div>
@@ -113,6 +113,84 @@
 <!-- Riot.js custom tag -->
 <script src="{% static 'tags/post-feed.js' %}"></script>
 <script>
+  var followerData = []
+  var pageNumberFollowers = 0
+  var reachedBottomFollowers = false
+  var type;
+  function followerCallBack(theTag) {
+    // Handle the folowers and following modals
+    $(document).on('click', '#followers, #following', function() {
+      $('.loading-circle-followers').show()
+      $('#followersModal').modal('toggle')
+      // Get all of the user's followers
+      var userId = {{ user.id }}
+      type = $(this).attr('data-modal-type')
+      pageNumberFollowers = 0
+      reachedBottomFollowers = false
+      $('#followers-modal-content div').remove()
+      $.ajax({
+        type: "GET",
+        url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
+        dataType: "json",
+        success: function(data) {
+          $.each(data, function(i, user) {
+            followerData.push(user)
+          })
+          theTag.trigger('data_loaded', followerData)
+          $('.loading-circle-followers').hide()
+        }
+      });
+    })
+    $('#followers-modal-content').scroll(function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reachedBottomFollowers) {
+        $('.loading-circle-followers').show()
+        pageNumberFollowers++
+        reachedBottomFollowers = true
+        //Show loading gif
+        $('.loading-circle-followers').show()
+        //Gets more posts
+        $.ajax({
+          type: "GET",
+          url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
+          dataType: 'json',
+          success: function(data) {
+            $.each(data, function(i, follower) {
+              followerData.push(follower)
+            })
+            if (data.length == 10) {
+              reachedBottomFollowers = false
+            } else {
+              reachedBottomFollowers = true
+              console.log('No more followers')
+            }
+            theTag.trigger('data_loaded', followerData)
+            //Hide loading gif
+            $('.loading-circle-followers').hide()
+          }, error: function(error) {
+            console.log('Error loading followers...')
+          }
+        })
+      }
+    })
+    //Sends follow
+    $(document).on('click', '.follow-btn', function(e) {
+      e.preventDefault()
+      this_button = $(this)
+      $.ajax({
+        type: "GET",
+        url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
+        dataType: "json",
+        success: function(data) {
+          if (data.following) {
+            this_button.html('<span class="icon icon-check"></span> Following')
+          } else {
+            this_button.html('<span class="icon icon-add-user"></span> Follow')
+          }
+        }
+      })
+    })
+  }
+
     var postData = []
     var postIds = []
     var pageNumber = 0

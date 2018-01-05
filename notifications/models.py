@@ -13,11 +13,11 @@ class Notification(models.Model):
     # This field holds the url of the post or user that has been liked or followed
     redirect_url = models.URLField()
     # This holds a ForeignKey relation between the notification and the recieving user
-    user_rx = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=None, related_name='notifications_rx', default=None)
+    user_rx = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='notifications_rx', default=None, null=True)
     # This holds a ForeignKey relation between the notification and the transcieving user
-    user_tx = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=None, related_name='notifications_tx', default=None)
+    user_tx = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='notifications_tx', default=None, null=True)
     # This holds a ForeignKey relation between the notification and a post
-    post = models.ForeignKey(Post, on_delete=None, related_name='post', default=None, null=True)
+    post = models.ForeignKey(Post, on_delete=models.SET_NULL, related_name='post', default=None, null=True)
     # This holds the comment data if the notification is of _type 'comment'
     comment = models.TextField(default='', blank=True)
     # This stores whether the user has seen the notification (currently not in use)

@@ -16,7 +16,7 @@ class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 unique=False,
                                 null=True,
-                                on_delete=None,
+                                on_delete=models.SET_NULL,
                                 related_name='post'
                             )
     # This makes referencing comment instances in the admin easier
@@ -42,7 +42,7 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 unique=False,
                                 null=True,
-                                on_delete=None,
+                                on_delete=models.SET_NULL,
                                 related_name='posts'
                             )
     # Store any users that like the post
