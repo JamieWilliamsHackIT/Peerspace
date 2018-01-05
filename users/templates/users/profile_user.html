@@ -33,13 +33,13 @@
         </a>
         <ul class="card-menu mx-auto mt-3">
           <li class="card-menu-item text-center">
-            <a href="#" id="followers" class="text-inherit" data-toggle="modal">
+            <a href="" id="followers" class="text-inherit modal-open" data-modal-type="followers" data-toggle="modal">
               Followers
-              <h6 class="my-0">{{ user.follows.count }}</h6>
+              <h6 class="my-0">{{ user.followers.count }}</h6>
             </a>
           </li>
           <li class="card-menu-item text-center">
-            <a href="#" id="following" class="text-inherit" data-toggle="modal">
+            <a href="" id="following" class="text-inherit modal-open" data-modal-type="following" data-toggle="modal">
               Following
               <h6 class="my-0">{{ user.following.count }}</h6>
             </a>
@@ -99,7 +99,7 @@
             </form>
         </div>
       </div>
-      <ul class="media-list media-list-stream post-feed-profile mb-3">
+      <ul class="media-list media-list-stream post-feed-profile mb-3 mt-3">
         <post-feed></post-feed>
         <img class='loading-circle loading-circle-posts' src="{% static 'img/loading.gif' %}">
       </ul>
@@ -117,7 +117,9 @@
 <div class="modal fade bd-example-modal-md" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <ul class="media-list media-list-users list-group" id="followers-model-content">
+      <ul class="media-list media-list-users list-group" id="followers-modal-content">
+        <follower></follower>
+        <img class='loading-circle loading-circle-followers' src="{% static 'img/loading.gif' %}">
       </ul>
     </div>
   </div>
@@ -138,56 +140,57 @@
 <script src="{% static 'js/csrf.js' %}"></script>
 <!-- Riot.js custom tag -->
 <script src="{% static 'tags/post-feed.js' %}"></script>
+<script src="{% static 'tags/follower.js' %}"></script>
 <script>
   // Initialise the tag input field
   $("#tags").tagit();
   // Get the posts and mount the riot.js tag
-  var post_data = []
-  var post_ids = []
-  var page_number = 0
+  var postData = []
+  var postIds = []
+  var pageNumber = 0
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
       type: "GET",
-      url: "/posts/api/v1/profile/{{ user.id }}/" + page_number,
+      url: "/posts/api/v1/profile/{{ user.id }}/" + pageNumber,
       dataType: "json",
       success: function(data) {
-        post_data = data
-        $.each(post_data, function(i, post) {
-          post_ids.push(post.id)
+        postData = data
+        $.each(postData, function(i, post) {
+          postIds.push(post.id)
         })
-        user_id = {{ user.id }}
-        theTag.trigger('data_loaded', data, user_id)
+        userId = {{ user.id }}
+        theTag.trigger('data_loaded', data, userId)
         $('.loading-circle-posts').hide()
       }, error: function(error) {
         console.log('Error loading posts...')
       }
     });
-    var reached_bottom = false
+    var reachedBottom = false
     $(window).scroll(function() {
       toScroll = $(document).height() - $(window).height() - 100;
-      if ( $(this).scrollTop() > toScroll && !reached_bottom) {
-      page_number++
-      reached_bottom = true
+      if ( $(this).scrollTop() > toScroll && !reachedBottom) {
+      pageNumber++
+      reachedBottom = true
       //Show loading gif
       $('.loading-circle-posts').show()
       //Gets more posts
       $.ajax({
         type: "GET",
-        url: "/posts/api/v1/profile/{{ user.id }}/" + page_number,
+        url: "/posts/api/v1/profile/{{ user.id }}/" + pageNumber,
         dataType: 'json',
         success: function(data) {
           $.each(data, function(i, post) {
-            if ($.inArray(post.id, post_ids) == -1) {
-              post_data.push(post)
+            if ($.inArray(post.id, postIds) == -1) {
+              postData.push(post)
             }
           })
-          user_id = {{ user.id }}
+          userId = {{ user.id }}
           if (data.length) {
-            reached_bottom = false
-            theTag.trigger('data_loaded', post_data, user_id)
+            reachedBottom = false
+            theTag.trigger('data_loaded', postData, userId)
           } else {
-            reached_bottom = true
+            reachedBottom = true
             console.log('No more posts')
           }
           //Hide loading gif
@@ -199,49 +202,88 @@
       }
     })
   }
-  // Handle the folowers and following modals
-  $(document).on('click', '#followers', function() {
-    // Get all of the user's followers
-    $.ajax({
-      type: "GET",
-      url: "/users/api/v2/" + {{ user.id }} + "/followers",
-      dataType: "json",
-      success: function(data) {
-        $('#followers-model-content').html('')
-        $.each(data, function(i, e) {
-          var userHTML = '<li class="list-group-item"><div class="media w-100">'
-          userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">'
-          userHTML += '<div class="media-body">'
-          if (e.you_follow_them){
-            userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + '><span class="icon icon-check"></span> Following</button>'
-          } else {
-            userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + '><span class="icon icon-user"></span> Follow</button>'
+  var followerData = []
+  var pageNumberFollowers = 0
+  var reachedBottomFollowers = false
+  var type;
+  function followerCallBack(theTag) {
+    // Handle the folowers and following modals
+    $(document).on('click', '#followers, #following', function() {
+      $('.loading-circle-followers').show()
+      $('#followersModal').modal('toggle')
+      // Get all of the user's followers
+      var userId = {{ user.id }}
+      type = $(this).attr('data-modal-type')
+      pageNumberFollowers = 0
+      reachedBottomFollowers = false
+      $('#followers-modal-content div').remove()
+      $.ajax({
+        type: "GET",
+        url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
+        dataType: "json",
+        success: function(data) {
+          $.each(data, function(i, user) {
+            followerData.push(user)
+          })
+          theTag.trigger('data_loaded', followerData)
+          $('.loading-circle-followers').hide()
+        }
+      });
+    })
+    $('#followers-modal-content').scroll(function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reachedBottomFollowers) {
+        $('.loading-circle-followers').show()
+        pageNumberFollowers++
+        reachedBottomFollowers = true
+        //Show loading gif
+        $('.loading-circle-followers').show()
+        //Gets more posts
+        $.ajax({
+          type: "GET",
+          url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
+          dataType: 'json',
+          success: function(data) {
+            $.each(data, function(i, follower) {
+              followerData.push(follower)
+            })
+            if (data.length == 10) {
+              reachedBottomFollowers = false
+            } else {
+              reachedBottomFollowers = true
+              console.log('No more followers')
+            }
+            theTag.trigger('data_loaded', followerData)
+            //Hide loading gif
+            $('.loading-circle-followers').hide()
+          }, error: function(error) {
+            console.log('Error loading followers...')
           }
-          userHTML += '<strong>' + e.name + '</strong>'
-          userHTML += '</div></div></li>'
-          $('#followers-model-content').append(userHTML)
         })
       }
-    });
-    $('#followersModal').modal('toggle')
-  })
-  //Sends follow
-  $(document).on('click', '.follow-btn', function(e) {
-    e.preventDefault()
-    this_button = $(this)
-    $.ajax({
-      type: "GET",
-      url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
-      dataType: "json",
-      success: function(data) {
-        if (data.following) {
-          this_button.html('<span class="icon icon-check"></span> Following')
-        } else {
-          this_button.html('<span class="icon icon-add-user"></span> Follow')
-        }
-      }
     })
-  })
+    // });
+    //Sends follow
+    $(document).on('click', '.follow-btn', function(e) {
+      e.preventDefault()
+      this_button = $(this)
+      $.ajax({
+        type: "GET",
+        url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
+        dataType: "json",
+        success: function(data) {
+          if (data.following) {
+            this_button.html('<span class="icon icon-check"></span> Following')
+          } else {
+            this_button.html('<span class="icon icon-add-user"></span> Follow')
+          }
+        }
+      })
+    })
+  }
+
+
+  riot.mount('follower', {callback:followerCallBack})
+
   // Handle the deleting of comments here
   function deleteComment(comment_id, post_id) {
     $.ajax({

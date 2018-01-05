@@ -64,19 +64,38 @@ class Post(models.Model):
     # in a readable form
     def __str__(self):
         return 'Id:{}, {} by: {}'.format(self.id, self.title, self.user)
-    # Get the user who created the post
+
+    # Get the name of the user who created the post
     @property
     def get_user(self):
         return user.name
+
     # This will return the number of days since the post was created
     @property
     def time_since_creation(self):
         return (timezone.now() - self.created_at).total_seconds()
+
     # This will return the absolute url of the post
     def get_absolute_url(self):
         return reverse_lazy('posts:post_detail', kwargs={'pk':self.id})
+
     # Check whether the post is verified (not currently in use)
+    @property
     def is_verified(self):
         if self.verifications >= 5:
             return True
         return False
+
+    @property
+    def days_to_go(self):
+        # The number of days to go
+        return (self.deadline - date.today()).days
+
+    @property
+    def days_to_go_percentage(self):
+        # The percentage of the time left
+        total_days = (self.deadline - self.created_at.date()).days
+        if total_days:
+            return round(self.days_to_go / (total_days * 100))
+        else:
+            return 0

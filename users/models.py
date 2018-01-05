@@ -75,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # This field is used to determine whether the user is a staff user
     is_staff = models.BooleanField(default=False)
     # This field is used to hold any accounts the user is followed by
-    follows = models.ManyToManyField(settings.AUTH_USER_MODEL,
+    followers = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     related_name='followed_by',
                                     default='',
                                     blank=True

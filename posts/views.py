@@ -290,7 +290,7 @@ class PostLikeAPI(APIView):
             notifications = Notification.objects.filter(user_tx=user)
             notified = False
             for notification in notifications:
-                if notification.redirect_url == post.get_absolute_url():
+                if notification.post == post and notification._type == 'like':
                     notified = True
             if not notified:
                 # Create notification if ine hasn't been made already
@@ -362,8 +362,30 @@ class PostVerficationAPI(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None, pk=None):
+        # Get post
         post = get_object_or_404(models.Post, pk=pk)
+        # Get user
         user = self.request.user
+        print(post.verifications.all())
+        # Create a notification for the post owner
+        if not user in post.verifications.all() and not user == post.user:
+            notifications = Notification.objects.filter(user_tx=user)
+            notified = False
+            print('runs 1')
+            for notification in notifications:
+                if notification.post == post and notification._type == 'verify':
+                    notified = True
+            if not notified:
+                print('runs 2')
+                # Create notification if ine hasn't been made already
+                notification = Notification()
+                notification._type = 'verify'
+                notification.redirect_url = post.get_absolute_url()
+                # I am using rx to mean receiver and tx to mean transceiver
+                notification.user_rx = post.user
+                notification.user_tx = user
+                notification.post = post
+                notification.save()
 
         # Initialise some variables
         verified_user = False

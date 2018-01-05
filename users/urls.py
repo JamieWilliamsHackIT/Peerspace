@@ -64,7 +64,7 @@ urlpatterns = [
         name='follow'
     ),
     path(
-        'api/v2/<int:pk>/followers/',
+        'api/v2/<int:pk>/followers/<_type>/<int:page_number>/',
         views.UserFollowers.as_view(),
         name='followers'
     ),

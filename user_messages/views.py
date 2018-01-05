@@ -131,12 +131,12 @@ class MessageAPI(APIView):
                 profile_pic_url = '/static/default_profile_pic.svg'
             data.append(
                 {
-                    'id': message.id,
-                    'body': message.body,
-                    'user_id': message.user.id,
-                    'user_name': message.user.name,
-                    'profile_pic_url': profile_pic_url,
-                    'time_ago': message.time_ago,
+                    'id'               :  message.id,
+                    'body'             :  message.body,
+                    'user_id'          :  message.user.id,
+                    'user_name'        :  message.user.name,
+                    'profile_pic_url'  :  profile_pic_url,
+                    'time_ago'         :  message.time_ago,
                 }
             )
 
@@ -161,12 +161,12 @@ class MessageAPI(APIView):
             profile_pic_url = '/static/default_profile_pic.svg'
 
         data = {
-            'id': message.id,
-            'body': message.body,
-            'user_id': message.user.id,
-            'user_name': message.user.name,
-            'profile_pic_url': profile_pic_url,
-            'time_ago': message.time_ago,
+            'id'               :  message.id,
+            'body'             :  message.body,
+            'user_id'          :  message.user.id,
+            'user_name'        :  message.user.name,
+            'profile_pic_url'  :  profile_pic_url,
+            'time_ago'         :  message.time_ago,
         }
 
         return Response(data)

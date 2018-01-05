@@ -45,7 +45,7 @@ body {
 
 .popover {
   max-width: 800px;
-  min-width: 400px;
+  min-width: 450px;
   /* width: 800px; */
   overflow-y: scroll;
   height: 60vh;

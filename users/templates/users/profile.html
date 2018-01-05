@@ -32,7 +32,7 @@
           <li class="card-menu-item text-center">
             <a href="#" id="followers" class="text-inherit" data-toggle="modal">
               Followers
-              <h6 class="my-0 followers-count">{{ user.follows.count }}</h6>
+              <h6 class="my-0 followers-count">{{ user.followers.count }}</h6>
             </a>
           </li>
           <li class="card-menu-item text-center">
@@ -175,7 +175,7 @@
     // Get all of the user's followers
     $.ajax({
       type: "GET",
-      url: "/users/api/v2/" + {{ user.id }} + "/followers",
+      url: "/users/api/v2/" + {{ user.id }} + "/followers/followers",
       dataType: "json",
       success: function(data) {
         $('#followers-model-content').html('')
@@ -253,7 +253,7 @@
       var comment_id = $(this).attr('commentid')
       $('.delete-comment-btn-' + comment_id).fadeOut();
     })
-    //Sends like
+    // Sends like
     $(document).on('click', '.like-btn', function(e) {
       // Stop the page refreshing when the button is clicked
       e.preventDefault()

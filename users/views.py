@@ -19,6 +19,7 @@ from rest_framework.response import Response
 # Import any models
 from . import models
 from posts.models import Post
+from notifications.models import Notification
 # Import any forms
 from . import forms
 # Import serializers
@@ -188,7 +189,7 @@ def profile_view(request, pk):
 
         profile_pictures = get_profile_images(user.id)
 
-        if request.user in user.follows.all():
+        if request.user in user.followers.all():
             following = True
         else:
             following = False
@@ -219,13 +220,29 @@ class FollowUser(APIView):
         following_user = request.user
         to_be_followed_user = get_object_or_404(models.User, pk=pk)
 
+        # Create a notification for the post owner
+        if not following_user in to_be_followed_user.followers.all():
+            notifications = Notification.objects.filter(user_tx=following_user)
+            notified = False
+            for notification in notifications:
+                if notification.user_rx == to_be_followed_user and notification._type == 'follow':
+                    notified = True
+            if not notified:
+                # Create notification if ine hasn't been made already
+                notification = Notification()
+                notification._type = 'follow'
+                # I am using rx to mean receiver and tx to mean transceiver
+                notification.user_rx = to_be_followed_user
+                notification.user_tx = following_user
+                notification.save()
+
         if following_user.is_authenticated:
-            if following_user in to_be_followed_user.follows.all():
-                to_be_followed_user.follows.remove(following_user)
+            if following_user in to_be_followed_user.followers.all():
+                to_be_followed_user.followers.remove(following_user)
                 following_user.following.remove(to_be_followed_user)
                 following = False
             else:
-                to_be_followed_user.follows.add(following_user)
+                to_be_followed_user.followers.add(following_user)
                 following_user.following.add(to_be_followed_user)
                 following = True
             updated = True
@@ -240,32 +257,79 @@ class UserFollowers(APIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, format=None, pk=None):
+    def get(self, request, format=None, pk=None, _type=None, page_number=None):
+        # Get user that the profile belongs to
         user = get_object_or_404(models.User, pk=pk)
-        followers = user.follows.all()
-
+        # Get the user user viewing the page
+        user_viewing = request.user
+        # Set up slices
+        page_size = 7
+        slice1 = (page_size * page_number)
+        slice2 = (page_size * page_number) + page_size
+        # Get either the user's followers or the users they follow
         data = []
+        if _type == 'followers':
+            # Get all the user's followers
+            followers = user.followers.all()[slice1:slice2]
+            for follower in followers:
+                # Check to see if the user is on their own profile
+                user_viewing_follow_them = False
+                you_follow_them = False
+                if user == request.user:
+                    if follower in user.following.all():
+                        you_follow_them = True
+                else:
+                    if follower in user_viewing.following.all():
+                        user_viewing_follow_them = True
 
-        for follower in followers:
-            you_follow_them = False
-            if follower in user.following.all():
-                you_follow_them = True
+                data.append(
+                    {
+                        'id'                        :  follower.id,
+                        'name'                      :  follower.name,
+                        'followers'                 :  follower.followers.count(),
+                        'points'                    :  follower.points,
+                        'profile_pic'               :  get_profile_images(follower.id)['user_profile_pic'],
+                        'you_follow_them'           :  you_follow_them,
+                        'user_viewing_follow_them'  :  user_viewing_follow_them,
+                        'follow_button'             :  True
+                    }
+                )
 
-            user_viewing = request.user
+        elif _type == 'following':
+            # Get all the users followed by the user
+            following = user.following.all()[slice1:slice2]
+            # Check to see if the user is on their own profile
+            if not user == request.user:
+                for user in following:
+                    user_viewing_follow_them = False
+                    if user in user_viewing.following.all():
+                        user_viewing_follow_them = True
 
-            user_viewing_follow_them = False
-            if follower in user_viewing.following.all():
-                user_viewing_follow_them = True
+                    data.append(
+                        {
+                            'id'                        :  follower.id,
+                            'name'                      :  follower.name,
+                            'followers'                 :  follower.followers.count(),
+                            'points'                    :  follower.points,
+                            'profile_pic'               :  get_profile_images(follower.id)['user_profile_pic'],
+                            'user_viewing_follow_them'  :  user_viewing_follow_them,
+                            'follow_button'             :  True
+                        }
+                    )
+            else:
 
-            data.append(
-                {
-                    'id'                       :  follower.id,
-                    'name'                     :  follower.name,
-                    'profile_pic'              :  get_profile_images(follower.id)['user_profile_pic'],
-                    'you_follow_them'          :  you_follow_them,
-                    'user_viewing_follow_them' :  user_viewing_follow_them,
-                }
-            )
+                for user in following:
+
+                    data.append(
+                        {
+                            'id'             :  user.id,
+                            'name'           :  user.name,
+                            'followers'      :  user.followers.count(),
+                            'points'         :  user.points,
+                            'profile_pic'    :  get_profile_images(user.id)['user_profile_pic'],
+                            'follow_button'  :  False
+                        }
+                    )
 
         return Response(data)
 
@@ -409,13 +473,13 @@ class LeaderboardsAPI(APIView):
                 # Order the users by completion_index
                 results = following.order_by('-completion_index')[slice1:slice2]
 
-        if leaderboard_group == 'followers':
+        if leaderboard_group == '':
             # Get the user
             user = get_object_or_404(models.User, pk=pk)
-            # Get the user's followers
-            followers = user.follows.all()
+            # Get the user's
+            followers = user.followers.all()
 
-            # if user.follows.all().count():
+            # if user.followers.all().count():
             if leaderboard_type == 'points':
                 # Order users by points
                 results = followers.order_by('-points')[slice1:slice2]

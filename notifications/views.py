@@ -52,32 +52,46 @@ class NotificationAPI(APIView):
             else:
                 user_tx_pic_url = '/default_profile_pic.svg'
 
-            # If the post has a proof pic then get the url
-            if notification.post.proof_pic:
-                proof_pic_url = notification.post.proof_pic.url
+            if notification.post:
+                # Create the list of objects (JSON)
+                data.append(
+                    {
+                        # Notification info
+                        'id'                :     notification.id,
+                        'type'              :     notification._type,
+                        'redirect_url'      :     notification.redirect_url,
+                        'viewed'            :     notification.viewed,
+                        'time_ago'          :     notification.time_ago(),
+                        # User info
+                        'user_rx_id'        :     notification.user_rx.id,
+                        'user_rx_name'      :     notification.user_rx.name,
+                        'user_tx_id'        :     notification.user_tx.id,
+                        'user_tx_name'      :     notification.user_tx.name,
+                        'user_tx_pic_url'   :     user_tx_pic_url,
+                        # Post info
+                        'post_id'           :     notification.post.id,
+                        'post_title'        :     notification.post.title,
+                        'comment'           :     notification.comment,
+                    }
+                )
             else:
-                proof_pic_url = ''
-            # Create the list of objects (JSON)
-            data.append(
-                {
-                    # Notification info
-                    'id'                :     notification.id,
-                    'type'              :     notification._type,
-                    'redirect_url'      :     notification.redirect_url,
-                    'viewed'            :     notification.viewed,
-                    'time_ago'          :     notification.time_ago(),
-                    # User info
-                    'user_rx_id'        :     notification.user_rx.id,
-                    'user_rx_name'      :     notification.user_rx.name,
-                    'user_tx_id'        :     notification.user_tx.id,
-                    'user_tx_name'      :     notification.user_tx.name,
-                    'user_tx_pic_url'   :     user_tx_pic_url,
-                    # Post info
-                    'post_id'           :     notification.post.id,
-                    'post_title'        :     notification.post.title,
-                    'post_proof_pic'    :     proof_pic_url,
-                    'comment'           :     notification.comment,
-                }
-            )
+                # Create the list of objects (JSON)
+                data.append(
+                    {
+                        # Notification info
+                        'id'                :     notification.id,
+                        'type'              :     notification._type,
+                        'redirect_url'      :     notification.redirect_url,
+                        'viewed'            :     notification.viewed,
+                        'time_ago'          :     notification.time_ago(),
+                        # User info
+                        'user_rx_id'        :     notification.user_rx.id,
+                        'user_rx_name'      :     notification.user_rx.name,
+                        'user_tx_id'        :     notification.user_tx.id,
+                        'user_tx_name'      :     notification.user_tx.name,
+                        'user_tx_pic_url'   :     user_tx_pic_url,
+                    }
+                )
+
         # Return a HTTP response with the JSON data in the body
         return Response(data)

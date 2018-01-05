@@ -26,13 +26,13 @@
           <p class="mb-4">{{ user.bio }}</p>
           <ul class="card-menu">
             <li class="card-menu-item">
-              <a href="#userModal" class="text-inherit" data-toggle="modal">
+              <a id="followers" href="" class="text-inherit" data-toggle="modal">
                 Followers
-                <h6 class="my-0">{{ user.follows.count }}</h6>
+                <h6 class="my-0">{{ user.followers.count }}</h6>
               </a>
             </li>
             <li class="card-menu-item">
-              <a href="#userModal" class="text-inherit" data-toggle="modal">
+              <a href="{% url 'users:profile_user' %}" class="text-inherit">
                 Posts
                 <h6 class="my-0">{{ number_of_posts }}</h6>
               </a>
@@ -116,7 +116,7 @@
         </div>
         <div class="card card-link-list mt-4 links-card">
           <div class="card-body">
-            © 2018 Peerspace
+            2018 © Jamie Williams
             <a href="#">About</a>
             <a href="#">Help</a>
             <a href="#">Terms</a>
@@ -133,6 +133,14 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-md" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <ul class="media-list media-list-users list-group" id="followers-model-content">
+      </ul>
     </div>
   </div>
 </div>
@@ -295,7 +303,7 @@
         }
       });
     })
-    // User search`
+    // User search
     $(document).on("keydown", ".search-input", function (e) {
         if (e.which == 13 && $(this).val()) {
           e.preventDefault()
@@ -474,6 +482,35 @@
     $('.form-group-hidden').hide()
     $(document).on('focus', '#title', function() {
       $('.form-group-hidden').fadeIn()
+    })
+    // Handle the folowers and following modals
+    $(document).on('click', '#followers', function(e) {
+      e.preventDefault()
+      // Get all of the user's followers
+      $.ajax({
+        type: "GET",
+        url: "/users/api/v2/" + {{ user.id }} + "/followers",
+        dataType: "json",
+        success: function(data) {
+          $('#followers-model-content').html('')
+          $.each(data, function(i, e) {
+            var userHTML = '<li class="list-group-item"><div class="media w-100">'
+            userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">'
+            userHTML += '<div class="media-body">'
+            if (e.id !== {{ user.id }}) {
+              if (e.user_viewing_follow_them) {
+                userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + ' main-follow-btn="false"><span class="icon icon-check"></span> Following</button>'
+              } else {
+                userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + ' main-follow-btn="false"><span class="icon icon-user"></span> Follow</button>'
+              }
+            }
+            userHTML += '<strong>' + e.name + '</strong>'
+            userHTML += '</div></div></li>'
+            $('#followers-model-content').append(userHTML)
+          })
+        }
+      });
+      $('#followersModal').modal('toggle')
     })
     // $(document).on('focusout', '#title', function() {
     //   $('.form-group-hidden').fadeOut()

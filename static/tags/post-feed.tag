@@ -6,7 +6,7 @@
         <div class="media-heading">
           <small class="text-muted float-right" if={post.time_ago < 60}>{Math.round(post.time_ago)} second<span if={Math.round(post.time_ago) !== 1}>s</span></small>
           <small class="text-muted float-right" if={post.time_ago >= 60 && post.time_ago < 3600}>{Math.round(post.time_ago / 60)} min<span if={Math.round(post.time_ago / 60) !== 1}>s</span></small>
-          <small class="text-muted float-right" if={post.time_since_creation >= 3600 && post.time_ago < (24 * 3600)}>{Math.round(post.time_ago / 3600)} hour<span if={Math.round(post.time_ago / 3600) !== 1}>s</span></small>
+          <small class="text-muted float-right" if={post.time_ago >= 3600 && post.time_ago < (24 * 3600)}>{Math.round(post.time_ago / 3600)} hour<span if={Math.round(post.time_ago / 3600) !== 1}>s</span></small>
           <small class="text-muted float-right" if={post.time_ago >= (24 * 3600)}>{Math.round(post.time_ago / (24 * 3600))} day<span if={Math.round(post.time_ago / (24 * 3600)) !== 1}>s</span></small>
           <h6><a href="/users/{post.user}">{post.user_name}</a> made the commitment: <a href="/posts/{post.id}">{post.title}</a></h6>
         </div>

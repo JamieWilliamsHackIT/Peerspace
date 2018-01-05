@@ -34,9 +34,6 @@
         <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
       </form>
       <ul class="navbar-nav ml-auto mr-4">
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-        </li> -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'users:leaderboards' %}"><span class="icon icon-list"></span> Leaderboards</a>
         </li>
@@ -54,11 +51,6 @@
 
 
       <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-2 d-none d-md-flex">
-        <!-- <li class="nav-item">
-          <a class="app-notifications nav-link" href="../notifications/index.html">
-            <span class="icon icon-bell"></span>
-          </a>
-        </li> -->
         <li class="nav-item ml-2">
           <a tabindex="0"
              id="notifications"
@@ -72,17 +64,12 @@
              data-content="<ul class=' ml-0 pl-0 notification-list'><notification></notification><img class='loading-circle loading-circle-notifications' src={% static 'img/loading.gif' %}></ul>">
 
           <span class="icon icon-bell notifications"></span><span class="notification-num"></span></a>
-          <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover" data-original-title="" title="">
+          <a class="btn btn-default navbar-btn navbar-btn-avatar" href="{% url 'users:profile_user' %}">
             <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
-          </button>
+          </a>
           <span class="username d-md-none d-lg-inline">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
           <span class="username d-lg-none">{{ request.user.name }}</span>
         </li>
-      </ul>
-
-      <ul class="nav navbar-nav d-none" id="js-popoverContent">
-        <li class="nav-item"><a class="nav-link" href="{% url 'users:profile_user' %}">Profile</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'users:logout' %}">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -164,7 +151,7 @@
               //Hide loading gif
               $('.loading-circle-notifications').hide()
             }, error: function(error) {
-              console.log('Error loading posts...')
+              console.log('Error loading notifications...')
             }
             })
           }
@@ -173,6 +160,19 @@
     })
     $('#notifications').on('hide.bs.popover', function () {
       last_scroll_top = $('.popover').scrollTop()
+    })
+    // Handles messages
+    $(document).on('click', '.message-btn', function(e) {
+      e.preventDefault()
+      conversation_id = $(this).attr('data-user-id')
+      $.ajax({
+        type: "GET",
+        url: "/messages/api/v5/messages/redirect/" + conversation_id + "/",
+        dataType: "json",
+        success: function(data) {
+          window.location.href = "/messages/" + data.conversation_id
+        }
+      })
     })
   });
   </script>
