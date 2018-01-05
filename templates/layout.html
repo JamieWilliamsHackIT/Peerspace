@@ -22,7 +22,7 @@
     <nav class="navbar navbar-expand-md fixed-top navbar-dark app-navbar">
     <div class="container">
     <a class="navbar-brand" href="{% url 'feed' %}">
-      <img src="{% static 'img/logo.png' %}" alt="Peerspace" class="mr-2"><p style="display:inline; vertical-align:middle;">Peerspace</p>
+      <img src="{% static 'img/logo.png' %}" alt="Peerspace" class=""><p style="display:inline; vertical-align:middle;"><spam class="display-2" style="font-size:2rem;"></span></p>
     </a>
 
     <button class="navbar-toggler navbar-toggler-right d-md-none" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,21 +30,21 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
+      <form class="form-inline float-right d-none d-md-flex mr-5">
+        <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
+      </form>
+      <ul class="navbar-nav ml-auto mr-4">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:leaderboards' %}"><span class="icon icon-list"></span> Leaderboards</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:leaderboards' %}">Leaderboards</a>
+          <a class="nav-link" href="{% url 'messages:messages' %}"><span class="icon icon-chat"></span> Messages</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'messages:messages' %}">Messages</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'docs' %}">Docs</a>
-        </li>
-        <li class="nav-item d-md-none">
-          <a class="nav-link" data-action="growl">Growl</a>
+          <a class="nav-link" href="{% url 'docs' %}"><span class="icon icon-book"></span> Docs</a>
         </li>
         <li class="nav-item d-md-none">
           <a class="nav-link" href="../login/index.html">Logout</a>
@@ -52,11 +52,8 @@
 
       </ul>
 
-      <form class="form-inline float-right d-none d-md-flex mr-5">
-        <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
-      </form>
 
-      <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-0 d-none d-md-flex">
+      <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-2 d-none d-md-flex">
         <!-- <li class="nav-item">
           <a class="app-notifications nav-link" href="../notifications/index.html">
             <span class="icon icon-bell"></span>
@@ -78,7 +75,8 @@
           <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover" data-original-title="" title="">
             <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
           </button>
-          <span class="username">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
+          <span class="username d-md-none d-lg-inline lead">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
+          <span class="username d-lg-none lead">{{ request.user.name }}</span>
         </li>
       </ul>
 

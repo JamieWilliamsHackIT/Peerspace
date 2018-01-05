@@ -1,3 +1,11 @@
+"""The notification app is currently at a very early stage. In the future
+I plan to use Django Channels to build an ASGI (asynchronus server gate interface)
+system that uses web sockets, this will mean that notifications, messages and
+other actions can be displayed in real time without the need for a refresh or
+continuous AJAX requests.
+"""
+
+
 # Standard imports
 from rest_framework import generics
 from rest_framework import permissions

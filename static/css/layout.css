@@ -9,6 +9,10 @@ body {
   padding-bottom: 0!important;
 }
 
+.navbar-brand {
+  margin-right: 3px!important;
+}
+
 .navbar-brand img {
   height: 32px;
   width: 32px!important;
@@ -99,4 +103,16 @@ body {
   width: 32px;
   margin: 20px auto;
   display: block;
+}
+
+.search-input {
+  height: 28px;
+  width: 360px!important;
+  margin-top: 3px;
+}
+
+@@media (max-width) {
+  .search-input {
+    width: 240px!important;
+  }
 }
