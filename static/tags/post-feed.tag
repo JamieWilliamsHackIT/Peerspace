@@ -1,10 +1,13 @@
 <post-feed>
-  <div each={post in opts.posts}>
-    <li class="media post post-{post.id} list-group-item p-4 my-3">
+  <div class="mb-3" each={post in opts.posts}>
+    <li class="media post post-{post.id} list-group-item p-4">
       <img class="media-object mr-3 align-self-start profile-pic" src="{post.user_url}">
       <div class="media-body">
         <div class="media-heading">
-          <small class="float-right text-muted">{post.days_since} days</small>
+          <small class="text-muted float-right" if={post.time_ago < 60}>{Math.round(post.time_ago)} second<span if={Math.round(post.time_ago) !== 1}>s</span></small>
+          <small class="text-muted float-right" if={post.time_ago >= 60 && post.time_ago < 3600}>{Math.round(post.time_ago / 60)} min<span if={Math.round(post.time_ago / 60) !== 1}>s</span></small>
+          <small class="text-muted float-right" if={post.time_since_creation >= 3600 && post.time_ago < (24 * 3600)}>{Math.round(post.time_ago / 3600)} hour<span if={Math.round(post.time_ago / 3600) !== 1}>s</span></small>
+          <small class="text-muted float-right" if={post.time_ago >= (24 * 3600)}>{Math.round(post.time_ago / (24 * 3600))} day<span if={Math.round(post.time_ago / (24 * 3600)) !== 1}>s</span></small>
           <h6><a href="/users/{post.user}">{post.user_name}</a> made the commitment: <a href="/posts/{post.id}">{post.title}</a></h6>
         </div>
         <p>
@@ -61,7 +64,6 @@
     opts.callback(this)
   })
   this.on('data_loaded', function(data, userId) {
-    console.log('UserId: ' + userId)
     opts.posts = data
     opts.userId = userId
     this.update()

@@ -46,8 +46,8 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'docs' %}"><span class="icon icon-book"></span> Docs</a>
         </li>
-        <li class="nav-item d-md-none">
-          <a class="nav-link" href="../login/index.html">Logout</a>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:logout' %}"><span class="icon icon-log-out"></span> Logout</a>
         </li>
 
       </ul>

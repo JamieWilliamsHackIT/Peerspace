@@ -4,6 +4,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse_lazy
 
+from datetime import date
+
 # This class defines the Comment model
 class Comment(models.Model):
     # Store the time and date the comment was made
@@ -21,10 +23,11 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment
 
+
 # This class defines the Post model
 class Post(models.Model):
     # The exact time at which the post was created
-    created_at = models.DateTimeField(default=timezone.now, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
     # The title of the posts
     title = models.CharField(max_length=255)
     # The description of the post (max_length is 140 to allow for easy
@@ -32,6 +35,8 @@ class Post(models.Model):
     description = models.TextField()
     # Whether or not the post has been completed
     completed = models.BooleanField(default=False)
+    # Store the deadline set by the user
+    deadline = models.DateField(default=None, null=True, blank=True)
     # The User is the foreign key (one post can belong to one user,
     # one user can have many posts)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -60,12 +65,13 @@ class Post(models.Model):
     def __str__(self):
         return 'Id:{}, {} by: {}'.format(self.id, self.title, self.user)
     # Get the user who created the post
+    @property
     def get_user(self):
         return user.name
     # This will return the number of days since the post was created
     @property
     def time_since_creation(self):
-        return (timezone.now() - self.created_at).days
+        return (timezone.now() - self.created_at).total_seconds()
     # This will return the absolute url of the post
     def get_absolute_url(self):
         return reverse_lazy('posts:post_detail', kwargs={'pk':self.id})

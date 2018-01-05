@@ -27,6 +27,7 @@ class PostSerializer(serializers.ModelSerializer):
             'description',
             'created_at',
             'days_since',
+            'deadline',
             'completed',
             'user_name',
             'user_url',

@@ -26,18 +26,13 @@ class PostSearch(APIView):
         # Get the user searching
         user = get_object_or_404(User, pk=user_pk)
 
-        # Get all the users the user follows
-        following = user.following.all()
+        # Get all the users
+        users = User.objects.all()
 
-        # Get the ids of the users
-        user_ids = [user.id for user in following]
-        print(user_ids)
+        # Get all the posts
+        posts = Post.objects.all()
 
-        # Get all posts by users the user follows
-        posts = Post.objects.filter(user__in=user_ids)
-        print(posts)
-
-        # Now search
+        # Now search posts
         score_dict = {}
         for post in posts:
             post_score = 0
@@ -47,6 +42,8 @@ class PostSearch(APIView):
                 post_score += 0.2
             if term in post.tags.lower():
                 post_score += 2
+            if term in post.user.name.lower():
+                post_score += 5
 
             if post_score:
                 post_score = decimal.Decimal(post_score)
@@ -71,22 +68,22 @@ class PostSearch(APIView):
                 proof_pic = ''
             data.append(
                 {
-                    'id': post.id,
-                    'title': post.title,
-                    'description': post.description,
-                    'created_at': post.created_at,
-                    'days_since': post.time_since_creation,
-                    'completed': post.completed,
-                    'user_name': post.user.name,
-                    'user_url': post.user.profile_pic.url,
-                    'user': post.user.id,
-                    'likes': [like.id for like in post.likes.all()],
-                    'tags': post.tags,
-                    'proof_description': post.proof_description,
-                    'proof_pic': proof_pic,
-                    'days_taken': post.days_taken,
-                    'comments': [comment.id for comment in post.comments.all()],
-                    'verifications': [verf.id for verf in post.verifications.all()],
+                    'id'                 :  post.id,
+                    'title'              :  post.title,
+                    'description'        :  post.description,
+                    'created_at'         :  post.created_at,
+                    'days_since'         :  post.time_since_creation,
+                    'completed'          :  post.completed,
+                    'user_name'          :  post.user.name,
+                    'user_url'           :  post.user.profile_pic.url,
+                    'user'               :  post.user.id,
+                    'likes'              :  [like.id for like in post.likes.all()],
+                    'tags'               :  post.tags,
+                    'proof_description'  :  post.proof_description,
+                    'proof_pic'          :  proof_pic,
+                    'days_taken'         :  post.days_taken,
+                    'comments'           :  [comment.id for comment in post.comments.all()],
+                    'verifications'      :  [verf.id for verf in post.verifications.all()],
                 }
             )
 

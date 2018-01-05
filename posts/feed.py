@@ -1,6 +1,4 @@
-"""
-
-This is the Peerspace post relevance algorithm, it is the brain of Peerspace
+"""This is the Peerspace post relevance algorithm, it is the brain of Peerspace
 ----------------------------------------------------------------------------
 
 The function in the file generates the relevance predictions for each post. Its
@@ -61,7 +59,7 @@ def get_most_relevent(user_pk, page_number, page_size):
     user_tags = UserPreferenceTag.objects.filter(user=user_pk)
     # Form slices
     post_slice1 = (page_number * page_size)
-    post_slice2 = (page_number * page_size) + 10
+    post_slice2 = (page_number * page_size) + page_size
 
     # The slicing prevents the algorithm from re-running on the same posts twice
 
@@ -110,7 +108,7 @@ def get_most_relevent(user_pk, page_number, page_size):
         num_tags_match = 0
         count = 0
         follower_tag_count = 0
-        num_days = post.time_since_creation
+        num_days = post.time_since_creation / (3600 * 24)
         does_follow = False
 
         # Get the user object of the owner of the post

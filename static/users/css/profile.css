@@ -9,6 +9,9 @@
   height: auto;
 }
 
-.loading-circle-images {
-
+.user-info,
+.user-photos {
+  position: sticky;
+  top: 60px;
+  height: 100%;
 }
