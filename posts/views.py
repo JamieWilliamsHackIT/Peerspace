@@ -210,7 +210,7 @@ def prove_post(request, pk=None):
                 # "days_taken" attribute to the number of days between
                 # the post creation and post completion
                 if post.proof_description and post.proof_pic:
-                    post.days_taken = (timezone.now() - post.created_at).days
+                    post.proved_at = timezone.now()
                 post.save()
                 return HttpResponseRedirect(post.get_absolute_url())
             context = {
@@ -522,7 +522,7 @@ class PostProofImageApi(APIView):
                 # Serialise data
                 data.append(
                     {
-                        'id': post.id,
+                        'id'                 :  post.id,
                         'proof_description'  :  post.proof_description,
                         'proof_pic_url'      :  post.proof_pic.url,
                         'proof_pic_width'    :  post.proof_pic.width,

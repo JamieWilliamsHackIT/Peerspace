@@ -18,7 +18,7 @@ What you see below is the entirity of my datascience knowledge, as I learn more
 on the subject I will work to develope this algorithm.
 
 My first step towards building a relevance algorithm that uses interaction data
-was to give each user's tag a weight. As the user interacts will posts the weight
+was to give each user's tag a weight. As the user interacts with posts the weight
 will be adjusted as so:
 
     If a user likes a post, any matching tag's weights will be increased by x
@@ -39,6 +39,7 @@ experience on the site.
 
 # Standard imports
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 # Mathematical imports
 import math
@@ -81,7 +82,7 @@ def get_most_relevent(user_pk, page_number, page_size):
 
     # Get the posts limited by the slice, this will prevent the algorithm running
     # on every post every time the function runs, this is key as it prevents the
-    # server from decoming criplingly slow.
+    # server from becoming criplingly slow.
 
     # The Post.objects.order_by() call returns a queryset, this is NOT data, it
     # simply represents a prepared SQL statement. By slicing the query set this
@@ -144,15 +145,19 @@ def get_most_relevent(user_pk, page_number, page_size):
                     # print('Tag weigth: ', user_tags[count].weight, '+ ', (1 / (1 + math.exp(-user_tags[count].weight))) )
                 follower_tag_count += 1
 
-        # Get all of the current post's tags
-        if post.tags:
-            # The tags for each post are stored as a comma-seperated list as
-            # they have no weight attribute
-            post_tag_list = post.tags.split(", ")
+        # If the post is by the viewing user then ignore the tag system
+        if not post.user == user:
+            # Get all of the current post's tags
+            if post.tags:
+                # The tags for each post are stored as a comma-seperated list as
+                # they have no weight attribute
+                post_tag_list = post.tags.split(", ")
+            else:
+                post_tag_list = []
+            # Make all tags lower case with a list comprehension
+            post_tag_list = [tag.lower() for tag in post_tag_list]
         else:
             post_tag_list = []
-        # Make all tags lower case with a list comprehension
-        post_tag_list = [tag.lower() for tag in post_tag_list]
         # This is a very similar process to the one seen above, it iterates
         # through the user's tags and compares them to the post's tags. If any
         # match then the user tag's weight is normalised and added to the tag
@@ -178,32 +183,41 @@ def get_most_relevent(user_pk, page_number, page_size):
             wildcard_score = (random.random() * 0.4) + tag_score
             # This is the same date relevance and normalisation process as seen
             # below
-            wildcard_score *= math.exp((-1/4) * num_days)
-            total_relevance = 1 / (1 + math.exp(-wildcard_score))
+            # wildcard_score *= math.exp((-1/4) * num_days)
+            if post.proved_at:
+                num_days_since_proved = ((timezone.now() - post.proved_at).total_seconds() / (3600 * 24))
+                wildcard_score *= math.exp((-1/4) * num_days_since_proved)
+            else:
+                wildcard_score *= (math.exp((-1/4) * num_days))
+            total_relevance = wildcard_score
             score_dict.update({post.id: total_relevance})
         else:
             total_relevance = decimal.Decimal(tag_score)
             # Multiply the total relevance by a funtion that is large for a
             # small number of days and small for a large number of days
-            total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days))
+            if post.proof_description and post.proof_pic:
+                num_days_since_proved = ((timezone.now() - post.proved_at).total_seconds() / (3600 * 24))
+                total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days_since_proved))
+            else:
+                total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days))
             # Output scores to a dictionary
             score_dict.update({post.id: total_relevance})
         # This is extremely useful for development purposes.
-        # print(('Id: {},
-                  # title: {},
-                  # score: {}.
-                  # {} tags matched.
-                  # User follows: {} and {} follower tags matched.
-                  # Posted {} days(s) ago.').format(
-                                            #     post.id,
-                                            #     post.title,
-                                            #     total_relevance,
-                                            #     num_tags_match,
-                                            #     does_follow,
-                                            #     follower_tag_count,
-                                            #     num_days,
-                                            # )
-        #         )
+        print(('''Id: {},
+                  title: {},
+                  score: {}.
+                  {} tags matched.
+                  User follows: {} and {} follower tags matched.
+                  Posted {} days(s) ago.''').format(
+                                                post.id,
+                                                post.title,
+                                                total_relevance,
+                                                num_tags_match,
+                                                does_follow,
+                                                follower_tag_count,
+                                                num_days,
+                                            )
+                )
 
     # Order score_dict by value and give an ordered list of post ids
     output = {}

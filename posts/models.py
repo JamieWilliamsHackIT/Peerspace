@@ -53,10 +53,10 @@ class Post(models.Model):
     proof_description = models.TextField(blank=True, null=True, default=None)
     # Store the picture proving the post
     proof_pic = models.ImageField(blank=True, null=True, default=None)
+    # Store the time when proof was submitted
+    proved_at = models.DateTimeField(default=None, blank=True, null=True)
     # Store the users that verified the post proof
     verifications = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='verfs')
-    # Store the number of days taken to submit proof
-    days_taken = models.IntegerField(blank=True, default=None, null=True)
     # Store the comments made on the post
     comments = models.ManyToManyField(Comment, blank=True, related_name='comments')
 
@@ -85,6 +85,13 @@ class Post(models.Model):
         if self.verifications >= 5:
             return True
         return False
+
+    @property
+    def days_taken(self):
+        if self.proved_at:
+            return (self.proved_at - self.created_at).days
+        else:
+            return 0
 
     @property
     def days_to_go(self):
