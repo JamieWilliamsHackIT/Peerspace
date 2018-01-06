@@ -195,7 +195,7 @@ def get_most_relevent(user_pk, page_number, page_size):
             total_relevance = decimal.Decimal(tag_score)
             # Multiply the total relevance by a funtion that is large for a
             # small number of days and small for a large number of days
-            if post.proof_description and post.proof_pic:
+            if post.proved_at:
                 num_days_since_proved = ((timezone.now() - post.proved_at).total_seconds() / (3600 * 24))
                 total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days_since_proved))
             else:
