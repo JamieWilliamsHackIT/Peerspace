@@ -123,7 +123,7 @@ def post_list(request):
             notification_num = '10+'
         return render(request, 'posts/post_list.html',
                 {
-                    'user': user,
+                    'user'                     :    user,
                     'profile_pictures'         :    profile_pictures,
                     'number_of_posts'          :    post_stats(user.id)['number_of_posts'],
                     'completed_posts'          :    post_stats(user.id)['completed_posts'],

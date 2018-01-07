@@ -65,27 +65,43 @@
 <!-- Toolkit JS -->
 <script src="{% static 'dist/toolkit.js' %}"></script>
 <script>
+  // Define the conversations tag's callback
   function usersCallback(theTag) {
+    // Set the page number to 0 (the first page)
     pageNumber = 0
+    // Get conversations
     $.ajax({
       type: "GET",
       url: "/messages/api/v5/conversations/" + pageNumber,
       dataType: "json",
+      // On a successful GET request
       success: function(data) {
+        // Trigger the conversations tag
         theTag.trigger('data_loaded', data)
+        // Get the conversation Id from the URL
         var conversationId = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
+        // Trigger the click event of the corresponding conversation button
         $('.conversation-' + conversationId).trigger('click')
       }
     })
   }
+
+  // Get the user's id
+  userId = {{ user.id }}
+
+  // Initialise some varibles
   var conversationId;
   var messageData;
   var reachedTop = false;
 
+  // Hide the loading gif
   $('.no-more-messages').hide()
 
+  // Define the conversation tag's callback
   function messagesCallback(theTag) {
+    // Listen for the click event on the conversation buttons
     $(document).on('click', '.conversation', function() {
+      // Select the clicked button
       var this_button = $(this)
       // Hide no more messages text
       $('.no-more-messages').hide()
@@ -96,19 +112,28 @@
       // Get id of conversation from button
       conversationId = $(this).attr('data-id')
       // display_user_name =
-      $('.conversation-name').text($(this).attr('display-user'))
+      $('.conversation-name').html('<a href="/users/' + $(this).attr('user-id') + '">' + $(this).attr('display-user') + '</a>')
+
+      // Set the page to the first page
       pageNumber = 0;
+      // Initialise the message data array
       messageData = [];
+
+      // Get messages
       $.ajax({
         type: "GET",
         url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber,
         dataType: "json",
+        // On a successful GET request
         success: function(data) {
-          userId = {{user.id}}
+          // Add message data to array
           messageData.push(data)
+          // Trigger messages tag
           theTag.trigger('data_loaded', messageData[0], userId)
+          // Set the scroll position to the bottom
           var scrollDiv = document.getElementById("message-box");
           scrollDiv.scrollTop = scrollDiv.scrollHeight;
+
           // Hide loading gif
           $('.loading-circle-messages').hide()
           // Reset colour of all conversation buttons
@@ -120,34 +145,47 @@
         }
       })
     })
+
+    // Listen for the enter key to be pressed
     $(document).on("keydown", "#message-input", function (e) {
         if (e.which == 13 && $(this).val()) {
+          // Stop the page refreshing
           e.preventDefault()
+          // Get the message from the input box
           var message = $.trim($('#message-input').val())
+          // If there is a message add the data to an object
           if (message) {
             data = {
                 body: message
             }
+            // Send the message
             $.ajax({
               type: "POST",
               url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
               data: data,
+              // On a successful POST request
               success: function(data) {
+                // Clear the message box
                 $('#message-input').val('')
-                userId = {{user.id}}
+                // Add the message to the end of the array
                 messageData[0].push(data)
+                // Trigger the message tag
                 theTag.trigger('data_loaded', messageData[0], userId)
-                console.log($('.media-list-conversation')[0].scrollHeight)
+                // Set the scroll position to the bottom of the div
                 $('.media-list-conversation').scrollTop($('.media-list-conversation')[0].scrollHeight)
               }
             })
           }
         }
     })
+
+    // Listen for the scroll event on the div
     $('.media-list-conversation').scroll(function() {
-      // toScroll = $(document).height() - $(window).height() - 100;
+      // If the user scrolls to the top
       if ( $(this).scrollTop() == 0 && !reachedTop) {
+        // Increment the page number
         pageNumber++
+        // Indicate they have reached the top
         reachedTop = true
         //Show loading gif
         $('.loading-circle-messages').show()
@@ -156,22 +194,30 @@
           type: "GET",
           url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
           dataType: 'json',
+          // On a successful GET request
           success: function(data) {
+            // Add each message to start of array
             $.each(data, function(i, message) {
                 messageData[0].unshift(message)
             })
-            userId = {{ user.id }}
+            // If a full page comes back (i.e. 10 messages)
             if (data.length == 10) {
+              // Indicate the user is no longer at the top of the page
               reachedTop = false
               $('.media-list-conversation').scrollTop(10)
             } else {
+              // Indicate the user has reached the top of the message stream
               reachedTop = true
+              // Show the "no more messages" notice
               $('.no-more-messages').show()
-              console.log('No more posts')
+              // Log to the console that there are no more messages
+              console.log('No more messages')
             }
+            // Trigeer the messages tag
             theTag.trigger('data_loaded', messageData[0], userId)
             //Hide loading gif
             $('.loading-circle-messages').hide()
+            // On an unsuccessul GET request indicate there was an error
           }, error: function(error) {
             console.log('Error loading posts...')
           }
@@ -180,9 +226,12 @@
     })
   }
 
+  // On page load
   $(document).ready(function() {
+    // Mount both the converstaions and conversation tags
     riot.mount('conversations', {callback:usersCallback})
     riot.mount('conversation', {callback:messagesCallback})
+    // Hide the loading gif
     $('.loading-circle-messages').hide()
   })
 </script>
