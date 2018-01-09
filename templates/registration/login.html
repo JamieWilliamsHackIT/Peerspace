@@ -19,6 +19,9 @@
             <a href="https://peerspace.io/users/password_reset/" class="float-right btn btn-primary">Forgot Password?</a>
         {% endbuttons %}
       </form>
+      <br>
+      <p><strong>-- OR --</strong></p>
+      <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
     </div>
     <div class="card mb-4 d-none col-lg-6 d-lg-block">
       <div class="card-body">

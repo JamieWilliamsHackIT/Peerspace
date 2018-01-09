@@ -17,7 +17,7 @@ from posts.models import Post
 # It extends the base user manager that comes with Django
 class UserManager(BaseUserManager):
     # This method is run when a new user is created
-    def create_user(self, email, name, password):
+    def create_user(self, email, name, password, **kwargs):
         # Check to see if the user has provided an email.
         if not email:
             # If not then raise an error

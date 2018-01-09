@@ -103,6 +103,6 @@ class Post(models.Model):
         # The percentage of the time left
         total_days = (self.deadline - self.created_at.date()).days
         if total_days:
-            return round(self.days_to_go / (total_days * 100))
+            return round((self.days_to_go / total_days) * 100)
         else:
             return 0
