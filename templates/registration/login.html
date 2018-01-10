@@ -16,7 +16,7 @@
         {% buttons %}
             <button type="submit" class="btn btn-primary">Login</button>
             <a href="{% url 'users:signup' %}" class="btn btn-primary">Signup</a>
-            <a href="https://peerspace.io/users/password_reset/" class="float-right btn btn-primary">Forgot Password?</a>
+            <a href="{% url 'password_reset' %}" class="float-right btn btn-primary">Forgot Password?</a>
         {% endbuttons %}
       </form>
       <br>
