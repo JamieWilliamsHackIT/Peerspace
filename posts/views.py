@@ -227,7 +227,7 @@ def prove_post(request, pk=None):
                 'pk': pk,
                 'form': form,
             }
-            
+
             return render(request, 'posts/prove_post.html', context)
         else:
             # If the user doesn't own the post then don't let them edit it and
@@ -428,7 +428,7 @@ class ListCreateComment(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         post_id = self.kwargs['pk']
         post = get_object_or_404(models.Post, pk=post_id)
-        comments = post.comments.all()
+        comments = post.comments.all().order_by('created_at')
         comment_list = []
         for comment in comments:
             comment_list.append(
