@@ -99,3 +99,13 @@
 .delete-comment-btn {
   display: none;
 }
+
+#followers-modal-content {
+  overflow-y: scroll;
+  height: 50vh;
+}
+
+#followers-modal-content img {
+  width: 48px;
+  height: 48px;
+}

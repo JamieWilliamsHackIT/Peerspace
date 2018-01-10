@@ -271,16 +271,16 @@ class UserFollowers(APIView):
         if _type == 'followers':
             # Get all the user's followers
             followers = user.followers.all()[slice1:slice2]
+            # For each follower determine whether the request user follows them
             for follower in followers:
-                # Check to see if the user is on their own profile
                 user_viewing_follow_them = False
-                you_follow_them = False
-                if user == request.user:
-                    if follower in user.following.all():
-                        you_follow_them = True
-                else:
-                    if follower in user_viewing.following.all():
-                        user_viewing_follow_them = True
+                if follower in user_viewing.following.all():
+                    user_viewing_follow_them = True
+
+                follow_button = True
+                if follower == user_viewing:
+                    follow_button = False
+
 
                 data.append(
                     {
@@ -289,9 +289,8 @@ class UserFollowers(APIView):
                         'followers'                 :  follower.followers.count(),
                         'points'                    :  follower.points,
                         'profile_pic'               :  get_profile_images(follower.id)['user_profile_pic'],
-                        'you_follow_them'           :  you_follow_them,
                         'user_viewing_follow_them'  :  user_viewing_follow_them,
-                        'follow_button'             :  True
+                        'follow_button'             :  follow_button
                     }
                 )
 
@@ -299,11 +298,15 @@ class UserFollowers(APIView):
             # Get all the users followed by the user
             following = user.following.all()[slice1:slice2]
             # Check to see if the user is on their own profile
-            if not user == request.user:
-                for user in following:
+            if not user_viewing == user:
+                for follower in following:
                     user_viewing_follow_them = False
-                    if user in user_viewing.following.all():
+                    if follower in user_viewing.following.all():
                         user_viewing_follow_them = True
+
+                    follow_button = True
+                    if follower == user_viewing:
+                        follow_button = False
 
                     data.append(
                         {
@@ -313,9 +316,10 @@ class UserFollowers(APIView):
                             'points'                    :  follower.points,
                             'profile_pic'               :  get_profile_images(follower.id)['user_profile_pic'],
                             'user_viewing_follow_them'  :  user_viewing_follow_them,
-                            'follow_button'             :  True
+                            'follow_button'             :  follow_button
                         }
                     )
+
             else:
 
                 for user in following:

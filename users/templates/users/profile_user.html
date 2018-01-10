@@ -12,8 +12,6 @@
 <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
 <!-- Tagit specific stylesheets -->
 <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script> -->
-<!-- <script src="	https://unpkg.com/popper.js"></script> -->
 <div class="container">
   <div class="row">
     <div class="card card-profile">
@@ -117,7 +115,7 @@
 <div class="modal fade bd-example-modal-md" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <ul class="media-list media-list-users list-group" id="followers-modal-content">
+      <ul class="media-list media-list-users list-group mt-3" id="followers-modal-content">
         <follower></follower>
         <img class='loading-circle loading-circle-followers' src="{% static 'img/loading.gif' %}">
       </ul>

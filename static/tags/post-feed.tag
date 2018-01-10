@@ -1,7 +1,7 @@
 <post-feed>
   <div class="mb-3" each={post in opts.posts}>
     <li class="media post post-{post.id} list-group-item p-4">
-      <img class="media-object mr-3 align-self-start profile-pic" src="{post.user_url}">
+      <a href="/users/{post.user}" data-user-id={post.user}><img class="media-object mr-3 align-self-start profile-pic" src="{post.user_url}"></a>
       <div class="media-body">
         <div class="media-heading">
           <small class="text-muted float-right" if={post.time_ago < 60}>{Math.round(post.time_ago)} second<span if={Math.round(post.time_ago) !== 1}>s</span></small>

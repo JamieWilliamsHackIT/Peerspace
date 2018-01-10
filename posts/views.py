@@ -12,6 +12,9 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
+import decimal
+from users.models import UserPreferenceTag
+from notifications.models import Notification
 
 # Import forms from app
 from . import forms
@@ -72,30 +75,29 @@ class FeedPostList(APIView):
                 proof_pic = ''
             data.append(
                 {
-                    'id'                 :  post.id,
-                    'title'              :  post.title,
-                    'description'        :  post.description,
-                    'created_at'         :  post.created_at,
-                    'time_ago'           :  post.time_since_creation,
-                    'deadline'           :  post.deadline,
-                    'completed'          :  post.completed,
-                    'user_name'          :  post.user.name,
-                    'user_url'           :  post.user.profile_pic.url,
-                    'user'               :  post.user.id,
-                    'likes'              :  [like.id for like in post.likes.all()],
-                    'tags'               :  post.tags,
-                    'proof_description'  :  post.proof_description,
-                    'proof_pic'          :  proof_pic,
-                    'days_taken'         :  post.days_taken,
-                    'comments'           :  [comment.id for comment in post.comments.all()],
-                    'verifications'      :  [verf.id for verf in post.verifications.all()],
+                    'id': post.id,
+                    'title': post.title,
+                    'description': post.description,
+                    'created_at': post.created_at,
+                    'time_ago': post.time_since_creation,
+                    'deadline': post.deadline,
+                    'completed': post.completed,
+                    'user_name': post.user.name,
+                    'user_url': post.user.profile_pic.url,
+                    'user': post.user.id,
+                    'likes': [like.id for like in post.likes.all()],
+                    'tags': post.tags,
+                    'proof_description': post.proof_description,
+                    'proof_pic': proof_pic,
+                    'days_taken': post.days_taken,
+                    'comments': [comment.id for comment in post.comments.all()],
+                    'verifications': [verf.id for verf in post.verifications.all()],
                 }
             )
         return Response(data)
 
 
 class ProfilePostList(generics.ListAPIView):
-
     serializer_class = serializers.PostSerializer
 
     def get_queryset(self):
@@ -122,15 +124,15 @@ def post_list(request):
         if notification_num > 10:
             notification_num = '10+'
         return render(request, 'posts/post_list.html',
-                {
-                    'user'                     :    user,
-                    'profile_pictures'         :    profile_pictures,
-                    'number_of_posts'          :    post_stats(user.id)['number_of_posts'],
-                    'completed_posts'          :    post_stats(user.id)['completed_posts'],
-                    'completion_percentage'    :    post_stats(user.id)['completion_percentage'],
-                    'notification_num'         :    notification_num,
-                }
-            )
+                      {
+                          'user': user,
+                          'profile_pictures': profile_pictures,
+                          'number_of_posts': post_stats(user.id)['number_of_posts'],
+                          'completed_posts': post_stats(user.id)['completed_posts'],
+                          'completion_percentage': post_stats(user.id)['completion_percentage'],
+                          'notification_num': notification_num,
+                      }
+                      )
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
 
@@ -146,18 +148,18 @@ def post_view(request, pk):
             user_profile_pic = User.objects.filter(id=request.user.id).latest('id').profile_pic.url
             # Render the post_detail_user template
             return render(request, 'posts/post_detail_user.html',
-                            {
-                                'post'              :  post,
-                                'user_profile_pic'  :  user_profile_pic,
-                            }
-                         )
+                          {
+                              'post': post,
+                              'user_profile_pic': user_profile_pic,
+                          }
+                          )
         else:
             # If the user doesn't own the post then render the post_detail page
             return render(request, 'posts/post_detail.html',
-                            {
-                                'post'  :  post,
-                            }
-                         )
+                          {
+                              'post': post,
+                          }
+                          )
     else:
         # If the user is not logged in then redirect them to the login page
         return HttpResponseRedirect(reverse_lazy('login'))
@@ -168,21 +170,21 @@ def post_edit(request, pk=None):
     instance = get_object_or_404(models.Post, pk=pk)
     if instance in user_posts:
         form = forms.UpdatePost(
-                        request.POST or None,
-                        request.FILES or None,
-                        instance=instance
-                    )
+            request.POST or None,
+            request.FILES or None,
+            instance=instance
+        )
 
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
             return HttpResponseRedirect(instance.get_absolute_url())
         context = {
-            'pk'           :  pk,
-            'title'        :  instance.title,
-            'description'  :  instance.description,
-            'tags'         :  instance.tags,
-            'form'         :  form,
+            'pk': pk,
+            'title': instance.title,
+            'description': instance.description,
+            'tags': instance.tags,
+            'form': form,
         }
         return render(request, 'posts/edit_post.html', context)
     else:
@@ -199,10 +201,10 @@ def prove_post(request, pk=None):
         # The user is the owner of the post then go ahead and load the form
         if post in user_posts:
             form = forms.ProvePost(
-                                request.POST or None,
-                                request.FILES or None,
-                                instance=post
-                         )
+                request.POST or None,
+                request.FILES or None,
+                instance=post
+            )
             # Validate the form
             if form.is_valid():
                 post = form.save(commit=False)
@@ -211,12 +213,21 @@ def prove_post(request, pk=None):
                 # the post creation and post completion
                 if post.proof_description and post.proof_pic:
                     post.proved_at = timezone.now()
+                post.completed = True
                 post.save()
+
+                # Add points to the user
+                post_user = post.user
+                post_user.points += 50 + (2 * post.likes.count())
+                post_user.save()
+
                 return HttpResponseRedirect(post.get_absolute_url())
+
             context = {
-                'pk'    :  pk,
-                'form'  :  form,
+                'pk': pk,
+                'form': form,
             }
+            
             return render(request, 'posts/prove_post.html', context)
         else:
             # If the user doesn't own the post then don't let them edit it and
@@ -231,7 +242,7 @@ def prove_post_delete_confirm(request, pk=None):
     if request.user.is_authenticated:
         post = get_object_or_404(models.Post, pk=pk)
         return render(request, 'posts/prove_post_delete_confirm.html',
-                                                                {'post': post})
+                      {'post': post})
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
 
@@ -269,11 +280,6 @@ class DeletePost(LoginRequiredMixin, generic.DeleteView):
         if not self.is_allowed(request):
             return HttpResponseRedirect(self.object.get_absolute_url())
         return super(DeletePost, self).dispatch(request, *args, **kwargs)
-
-
-import decimal
-from users.models import UserPreferenceTag
-from notifications.models import Notification
 
 
 class PostLikeAPI(APIView):
@@ -332,6 +338,7 @@ class PostLikeAPI(APIView):
                     tag.weight -= decimal.Decimal(adjustment * polarity)
                 # Commit changes to database
                 tag.save()
+
         # Check if the user is logged in
         if user.is_authenticated:
             # Get the tags of the liked post and increment their weights
@@ -351,9 +358,9 @@ class PostLikeAPI(APIView):
             # If they are not logged in then redirect them to login page
             return HttpResponseRedirect(reverse_lazy('login'))
         data = {
-            'liked'    :  liked,
-            'likes'    :  post.likes.count(),
-            'updated'  :  updated,
+            'liked': liked,
+            'likes': post.likes.count(),
+            'updated': updated,
         }
         return Response(data)
 
@@ -406,21 +413,10 @@ class PostVerficationAPI(APIView):
             # If they are not logged in then redirect them to login page
             return HttpResponseRedirect(reverse_lazy('login'))
 
-        if post.verifications.count() >= 5:
-            # Complete the post
-            post.completed = True
-            post.save()
-
-            # Add points to the user
-            post_user = post.user
-            post_user.points += 50 + (2 * post.likes.count())
-            post_user.save()
-
         data = {
-            'verified_user'  :  verified_user,
-            'verifications'  :  post.verifications.count(),
-            'completed'      :  post.completed,
-            'updated'        :  updated,
+            'verified_user': verified_user,
+            'verifications': post.verifications.count(),
+            'updated': updated,
         }
         return Response(data)
 
@@ -437,11 +433,11 @@ class ListCreateComment(generics.ListCreateAPIView):
         for comment in comments:
             comment_list.append(
                 {
-                    'comment_id'    :  comment.id,
-                    'comment'       :  comment.comment,
-                    'user_id'       :  comment.user.id,
-                    'user_name'     :  comment.user.name,
-                    'user_pic_url'  :  comment.user.profile_pic.url,
+                    'comment_id': comment.id,
+                    'comment': comment.comment,
+                    'user_id': comment.user.id,
+                    'user_name': comment.user.name,
+                    'user_pic_url': comment.user.profile_pic.url,
                 }
             )
         return Response(comment_list)
@@ -449,9 +445,9 @@ class ListCreateComment(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             comment = models.Comment(
-                                comment=request.data['comment'],
-                                user=request.user,
-                            )
+                comment=request.data['comment'],
+                user=request.user,
+            )
             comment.save()
             post_id = request.POST.get('post')
             post = get_object_or_404(models.Post, pk=post_id)
@@ -506,7 +502,7 @@ class ListCreateComment(generics.ListCreateAPIView):
 
 
 class PostProofImageApi(APIView):
-    authenication_classes = (authentication.SessionAuthentication,)
+    authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None, pk=None, page_size=None):
@@ -522,17 +518,16 @@ class PostProofImageApi(APIView):
                 # Serialise data
                 data.append(
                     {
-                        'id'                 :  post.id,
-                        'proof_description'  :  post.proof_description,
-                        'proof_pic_url'      :  post.proof_pic.url,
-                        'proof_pic_width'    :  post.proof_pic.width,
-                        'proof_pic_height'   :  post.proof_pic.height,
-                        'post_url'           :  post.get_absolute_url(),
+                        'id': post.id,
+                        'proof_description': post.proof_description,
+                        'proof_pic_url': post.proof_pic.url,
+                        'proof_pic_width': post.proof_pic.width,
+                        'proof_pic_height': post.proof_pic.height,
+                        'post_url': post.get_absolute_url(),
                     }
                 )
 
         return Response(data)
-
 
 
 class DestroyViewComment(generics.RetrieveDestroyAPIView):
@@ -541,13 +536,13 @@ class DestroyViewComment(generics.RetrieveDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         comment_id = self.kwargs['pk']
-        comment =  get_object_or_404(models.Comment, pk=comment_id)
+        comment = get_object_or_404(models.Comment, pk=comment_id)
         if request.user.is_authenticated:
             if request.user.id == comment.user.id:
                 return super(DestroyViewComment, self).delete(
-                                                        request,
-                                                        *args,
-                                                        **kwargs
-                                                       )
+                    request,
+                    *args,
+                    **kwargs
+                )
             return Response("You can't do that")
         return HttpResponseRedirect(reverse_lazy('login'))

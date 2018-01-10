@@ -7,15 +7,22 @@
     <div class="user-post mt-5 col-lg-3">
       <div class="card card-profile mb-4">
         <div class="card-body text-center">
-          <!-- Some post stats to go in here -->
-          {% if post.deadline %}
-          <h6 class="mb-4">Days to go<small></small></h6>
-          <div class="c100 p{{ post.days_to_go_percentage }} center mb-4">
-            <span>{{ post.days_to_go }} day{{ post.days_to_go | pluralize }}</span>
-            <div class="slice"><div class="bar"></div><div class="fill"></div></div>
-          </div>
+          {% if post.completed %}
+            <h6 class="mb-4"><span class="icon icon-check"></span>Post completed, it took<small></small></h6>
+            <div class="c100 p100 center mb-4">
+              <span>{{ post.days_taken }} day{{ post.days_taken | pluralize }}</span>
+              <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+            </div>
           {% else %}
-          <h6 class="mb-4">This post has no deadline.<small></small></h6>
+            {% if post.deadline %}
+            <h6 class="mb-4">Days to go<small></small></h6>
+            <div class="c100 p{{ post.days_to_go_percentage }} center mb-4">
+              <span>{{ post.days_to_go }} day{{ post.days_to_go | pluralize }}</span>
+              <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+            </div>
+            {% else %}
+            <h6 class="mb-4">This post has no deadline.<small></small></h6>
+            {% endif %}
           {% endif %}
         </div>
       </div>

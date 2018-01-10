@@ -139,7 +139,9 @@
 <div class="modal fade bd-example-modal-md" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <ul class="media-list media-list-users list-group" id="followers-model-content">
+      <ul class="media-list media-list-users list-group mt-3" id="followers-modal-content">
+        <follower></follower>
+        <img class='loading-circle loading-circle-followers' src="{% static 'img/loading.gif' %}">
       </ul>
     </div>
   </div>
@@ -153,10 +155,15 @@
 })(jQuery);
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
-<script src="{% static 'js/csrf.js' %}"></script>
-<script src="{% static 'tags/post-feed.js' %}"></script>
+<!-- Toolkit JS -->
 <script src="{% static 'dist/toolkit.js' %}"></script>
+<!-- Tagit -->
+<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+<!-- Adds CSRF token to the request headers -->
+<script src="{% static 'js/csrf.js' %}"></script>
+<!-- Riot.js custom tags -->
+<script src="{% static 'tags/post-feed.js' %}"></script>
+<script src="{% static 'tags/follower.js' %}"></script>
 <script>
   $(document).ready(function() {
     $('.no-search-results').hide()
@@ -204,6 +211,90 @@
       })
     }
   })
+
+  var followerData = []
+  var pageNumberFollowers = 0
+  var reachedBottomFollowers = false
+  var type = 'followers';
+  function followerCallBack(theTag) {
+    // Handle the folowers and following modals
+    $(document).on('click', '#followers', function() {
+      $('.loading-circle-followers').show()
+      $('#followersModal').modal('toggle')
+      // Get all of the user's followers
+      var userId = {{ user.id }}
+      pageNumberFollowers = 0
+      reachedBottomFollowers = false
+      $('#followers-modal-content div').remove()
+      $.ajax({
+        type: "GET",
+        url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
+        dataType: "json",
+        success: function(data) {
+          $.each(data, function(i, user) {
+            followerData.push(user)
+          })
+          theTag.trigger('data_loaded', followerData)
+          $('.loading-circle-followers').hide()
+        }
+      });
+    })
+    $('#followers-modal-content').scroll(function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reachedBottomFollowers) {
+        $('.loading-circle-followers').show()
+        pageNumberFollowers++
+        reachedBottomFollowers = true
+        //Show loading gif
+        $('.loading-circle-followers').show()
+        //Gets more posts
+        $.ajax({
+          type: "GET",
+          url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
+          dataType: 'json',
+          success: function(data) {
+            $.each(data, function(i, follower) {
+              followerData.push(follower)
+            })
+            if (data.length == 10) {
+              reachedBottomFollowers = false
+            } else {
+              reachedBottomFollowers = true
+              console.log('No more followers')
+            }
+            theTag.trigger('data_loaded', followerData)
+            //Hide loading gif
+            $('.loading-circle-followers').hide()
+          }, error: function(error) {
+            console.log('Error loading followers...')
+          }
+        })
+      }
+    })
+  }
+
+  riot.mount('follower', {callback:followerCallBack})
+
+  $(function() {
+      $("#SeeAllEvents").hide();
+      var timeoutId;
+      $("#NewsStrip").hover(function() {
+          if (!timeoutId) {
+              timeoutId = window.setTimeout(function() {
+                  timeoutId = null;
+                  $("#SeeAllEvents").slideDown('slow');
+             }, 1000);
+          }
+      },
+      function () {
+          if (timeoutId) {
+              window.clearTimeout(timeoutId);
+              timeoutId = null;
+          }
+          else {
+             $("#SeeAllEvents").slideUp('slow');
+          }
+      });
+  });
 
   // Will fade the delete button in and out when the user hovers over their own comment
   $(document).on('mouseenter', '.comment-block', function() {
