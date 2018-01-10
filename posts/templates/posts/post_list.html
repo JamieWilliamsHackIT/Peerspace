@@ -58,7 +58,7 @@
       </div>
     </div>
     <ul class="col-lg-6 media-list media-list-stream mb-3" id="post-container">
-      <form class="create-post" method="POST">
+      <form class="create-post mb-3" method="POST">
         <div class="form-group">
           <!-- <label for="exampleFormControlInput1">Title:</label> -->
           <input type="text" placeholder="Create Post" class="form-control" id="title" placeholder="">
@@ -91,7 +91,7 @@
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-          <strong>Welcome!</strong> Peerspace is currently in its alpha development stage, please get in contact with any suggestions or issues. Thanks!
+          <strong>Welcome!</strong> Peerspace is currently in its alpha development stage, please <a class="message-btn" href="#">get in contact</a> with any suggestions or issues. Thanks!
         </div>
       </div>
       <div class="card mb-4 d-none d-lg-block news-card">
@@ -606,7 +606,17 @@
     // $(document).on('focusout', '#title', function() {
     //   $('.form-group-hidden').fadeOut()
     // })
-
+    // Handles messages
+    $(document).on('click', '.message-btn', function() {
+      $.ajax({
+        type: "GET",
+        url: "/messages/api/v5/messages/redirect/1/",
+        dataType: "json",
+        success: function(data) {
+          window.location.href = "/messages/" + data.conversation_id
+        }
+      })
+    })
   })
   riot.mount('post-feed', {callback:tagCallBack})
 </script>
