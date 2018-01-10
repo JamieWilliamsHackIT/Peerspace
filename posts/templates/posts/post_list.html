@@ -195,8 +195,8 @@
           }
           $.each(data, function(i, e) {
             var userHTML = '<li class="media mb-2">'
-            userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">'
-            userHTML += '<div class="media-body"><strong>' + e.name + '</strong>'
+            userHTML += '<a href="/users/' + e.id + '"><img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '"></a>'
+            userHTML += '<div class="media-body"><a href="/users/' + e.id + '"><strong>' + e.name + '</strong></a>'
             userHTML += '<div class="media-body-actions">'
             userHTML += '<button class="btn btn-outline-primary btn-sm follow-btn" userid=' + e.id + '><span class="icon icon-add-user"></span> Follow</button>'
             userHTML += '</div></div></li>'
