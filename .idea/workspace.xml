@@ -2,100 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1637cfeb-6f96-45d6-bdff-735ef885bd8e" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/user_messages/exceptions.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/user_messages/settings.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/user_messages/utils.py" />
-      <change beforePath="$PROJECT_DIR$/.idea/Peerspace.iml" afterPath="$PROJECT_DIR$/.idea/Peerspace.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Peerspace/routing.py" afterPath="$PROJECT_DIR$/Peerspace/routing.py" />
-      <change beforePath="$PROJECT_DIR$/Peerspace/settings.py" afterPath="$PROJECT_DIR$/Peerspace/settings.py" />
-      <change beforePath="$PROJECT_DIR$/Peerspace/urls.py" afterPath="$PROJECT_DIR$/Peerspace/urls.py" />
-      <change beforePath="$PROJECT_DIR$/posts/feed.py" afterPath="$PROJECT_DIR$/posts/feed.py" />
-      <change beforePath="$PROJECT_DIR$/posts/models.py" afterPath="$PROJECT_DIR$/posts/models.py" />
-      <change beforePath="$PROJECT_DIR$/posts/templates/posts/post_detail.html" afterPath="$PROJECT_DIR$/posts/templates/posts/post_detail.html" />
-      <change beforePath="$PROJECT_DIR$/posts/templates/posts/post_list.html" afterPath="$PROJECT_DIR$/posts/templates/posts/post_list.html" />
-      <change beforePath="$PROJECT_DIR$/posts/views.py" afterPath="$PROJECT_DIR$/posts/views.py" />
-      <change beforePath="$PROJECT_DIR$/search/templates/search/post_results.html" afterPath="$PROJECT_DIR$/search/templates/search/post_results.html" />
-      <change beforePath="$PROJECT_DIR$/static/admin/js/vendor/xregexp/xregexp.js" afterPath="$PROJECT_DIR$/static/admin/js/vendor/xregexp/xregexp.js" />
-      <change beforePath="$PROJECT_DIR$/static/assets/js/theDocs.all.js" afterPath="$PROJECT_DIR$/static/assets/js/theDocs.all.js" />
-      <change beforePath="$PROJECT_DIR$/static/bower_components/riot/riot+compiler.js" afterPath="$PROJECT_DIR$/static/bower_components/riot/riot+compiler.js" />
-      <change beforePath="$PROJECT_DIR$/static/bower_components/riot/riot.csp.js" afterPath="$PROJECT_DIR$/static/bower_components/riot/riot.csp.js" />
-      <change beforePath="$PROJECT_DIR$/static/bower_components/riot/riot.js" afterPath="$PROJECT_DIR$/static/bower_components/riot/riot.js" />
-      <change beforePath="$PROJECT_DIR$/static/dist/toolkit.js" afterPath="$PROJECT_DIR$/static/dist/toolkit.js" />
-      <change beforePath="$PROJECT_DIR$/static/django_extensions/js/jquery.ajaxQueue.js" afterPath="$PROJECT_DIR$/static/django_extensions/js/jquery.ajaxQueue.js" />
-      <change beforePath="$PROJECT_DIR$/static/django_extensions/js/jquery.autocomplete.js" afterPath="$PROJECT_DIR$/static/django_extensions/js/jquery.autocomplete.js" />
-      <change beforePath="$PROJECT_DIR$/static/js/application.js" afterPath="$PROJECT_DIR$/static/js/application.js" />
-      <change beforePath="$PROJECT_DIR$/static/js/chart.js" afterPath="$PROJECT_DIR$/static/js/chart.js" />
-      <change beforePath="$PROJECT_DIR$/static/js/post.js" afterPath="$PROJECT_DIR$/static/js/post.js" />
-      <change beforePath="$PROJECT_DIR$/static/js/test.js" afterPath="$PROJECT_DIR$/static/js/test.js" />
-      <change beforePath="$PROJECT_DIR$/static/js/toolkit.js" afterPath="$PROJECT_DIR$/static/js/toolkit.js" />
-      <change beforePath="$PROJECT_DIR$/static/lib/radialprogress_test.js" afterPath="$PROJECT_DIR$/static/lib/radialprogress_test.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/RadialprogressTest.html" afterPath="$PROJECT_DIR$/static/radialprogress/RadialprogressTest.html" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/lib/theme_showreel.js" afterPath="$PROJECT_DIR$/static/radialprogress/lib/theme_showreel.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/radialprogress_test.js" afterPath="$PROJECT_DIR$/static/radialprogress/radialprogress_test.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/core/_namespace.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/core/_namespace.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/core/component.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/core/component.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/core/util.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/core/util.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/svg/gradient.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/svg/gradient.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/svg/text.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/svg/text.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/column_bar.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/column_bar.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/corona.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/corona.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/halo.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/halo.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/linearea.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/linearea.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/radialprogress.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/radialprogress.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/rangeinput.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/rangeinput.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/scatter.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/scatter.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/theme/weightedtree.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/theme/weightedtree.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/ui/rangeinput.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/ui/rangeinput.js" />
-      <change beforePath="$PROJECT_DIR$/static/radialprogress/src/viz/radialprogress.js" afterPath="$PROJECT_DIR$/static/radialprogress/src/viz/radialprogress.js" />
-      <change beforePath="$PROJECT_DIR$/static/rest_framework/docs/js/api.js" afterPath="$PROJECT_DIR$/static/rest_framework/docs/js/api.js" />
-      <change beforePath="$PROJECT_DIR$/static/rest_framework/js/ajax-form.js" afterPath="$PROJECT_DIR$/static/rest_framework/js/ajax-form.js" />
-      <change beforePath="$PROJECT_DIR$/static/rest_framework/js/coreapi-0.1.1.js" afterPath="$PROJECT_DIR$/static/rest_framework/js/coreapi-0.1.1.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/conversation.js" afterPath="$PROJECT_DIR$/static/tags/conversation.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/conversation.tag" afterPath="$PROJECT_DIR$/static/tags/conversation.tag" />
-      <change beforePath="$PROJECT_DIR$/static/tags/conversations.js" afterPath="$PROJECT_DIR$/static/tags/conversations.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/conversations.tag" afterPath="$PROJECT_DIR$/static/tags/conversations.tag" />
-      <change beforePath="$PROJECT_DIR$/static/tags/follower.js" afterPath="$PROJECT_DIR$/static/tags/follower.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/follower.tag" afterPath="$PROJECT_DIR$/static/tags/follower.tag" />
-      <change beforePath="$PROJECT_DIR$/static/tags/leaderboard.js" afterPath="$PROJECT_DIR$/static/tags/leaderboard.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/leaderboard.tag" afterPath="$PROJECT_DIR$/static/tags/leaderboard.tag" />
-      <change beforePath="$PROJECT_DIR$/static/tags/notification.js" afterPath="$PROJECT_DIR$/static/tags/notification.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/notification.tag" afterPath="$PROJECT_DIR$/static/tags/notification.tag" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-feed.js" afterPath="$PROJECT_DIR$/static/tags/post-feed.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-feed.tag" afterPath="$PROJECT_DIR$/static/tags/post-feed.tag" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-view.js" afterPath="$PROJECT_DIR$/static/tags/post-view.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-view.tag" afterPath="$PROJECT_DIR$/static/tags/post-view.tag" />
-      <change beforePath="$PROJECT_DIR$/templates/layout.html" afterPath="$PROJECT_DIR$/templates/layout.html" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/login.html" afterPath="$PROJECT_DIR$/templates/registration/login.html" />
-      <change beforePath="$PROJECT_DIR$/user_messages/consumers.py" afterPath="$PROJECT_DIR$/user_messages/consumers.py" />
-      <change beforePath="$PROJECT_DIR$/user_messages/models.py" afterPath="$PROJECT_DIR$/user_messages/models.py" />
-      <change beforePath="$PROJECT_DIR$/user_messages/signals.py" afterPath="$PROJECT_DIR$/user_messages/signals.py" />
-      <change beforePath="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" afterPath="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" />
-      <change beforePath="$PROJECT_DIR$/user_messages/views.py" afterPath="$PROJECT_DIR$/user_messages/views.py" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/users/migrations/0001_initial.py" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0002_auto_20171228_1623.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0003_user_lives_in.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0004_auto_20171228_1630.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0005_user_points.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0006_user_completion_index.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0007_auto_20180102_1235.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0008_auto_20180104_2031.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0009_auto_20180104_2032.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0010_auto_20180104_2034.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0011_auto_20180104_2036.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0012_auto_20180104_2048.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0013_auto_20180104_2051.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0014_auto_20180105_0652.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0015_auto_20180105_0942.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0016_auto_20180105_1259.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0017_auto_20180105_2207.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/users/models.py" afterPath="$PROJECT_DIR$/users/models.py" />
-      <change beforePath="$PROJECT_DIR$/users/templates/users/edit_tags.html" afterPath="$PROJECT_DIR$/users/templates/users/edit_tags.html" />
-      <change beforePath="$PROJECT_DIR$/users/templates/users/leaderboards.html" afterPath="$PROJECT_DIR$/users/templates/users/leaderboards.html" />
-      <change beforePath="$PROJECT_DIR$/users/templates/users/profile.html" afterPath="$PROJECT_DIR$/users/templates/users/profile.html" />
-      <change beforePath="$PROJECT_DIR$/users/templates/users/profile_user.html" afterPath="$PROJECT_DIR$/users/templates/users/profile_user.html" />
-      <change beforePath="$PROJECT_DIR$/users/urls.py" afterPath="$PROJECT_DIR$/users/urls.py" />
+      <change beforePath="$PROJECT_DIR$/users/migrations/0001_initial.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/users/migrations/__init__.py" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -127,7 +35,7 @@
             <entry file="file://$PROJECT_DIR$/posts/models.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="515">
-                  <caret line="88" column="0" lean-forward="true" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+                  <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -137,7 +45,7 @@
             <entry file="file://$PROJECT_DIR$/user_messages/views.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="442">
-                  <caret line="133" column="48" lean-forward="true" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="48" />
+                  <caret line="133" column="48" lean-forward="false" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="48" />
                   <folding>
                     <element signature="e#19#73#0" expanded="true" />
                   </folding>
@@ -155,7 +63,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="consumers.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="consumers.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/user_messages/consumers.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="406">
@@ -163,6 +71,16 @@
                   <folding>
                     <element signature="e#0#11#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="0011_auto_20180106_1810.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/posts/migrations/0011_auto_20180106_1810.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -189,40 +107,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/user_messages/utils.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="425">
-                  <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#0#27#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/user_messages/settings.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="153">
-                  <caret line="9" column="48" lean-forward="false" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/user_messages/models.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="86">
-                  <caret line="18" column="20" lean-forward="true" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
-                  <folding>
-                    <element signature="e#19#47#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
         </leaf>
       </split-first>
       <split-second>
@@ -231,7 +115,7 @@
             <entry file="file://$PROJECT_DIR$/user_messages/signals.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="323">
-                  <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+                  <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#46#0" expanded="true" />
                   </folding>
@@ -321,20 +205,7 @@
             <path>
               <item name="Peerspace" type="b2602c69:ProjectViewProjectNode" />
               <item name="Peerspace" type="462c0819:PsiDirectoryNode" />
-              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Peerspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Peerspace" type="462c0819:PsiDirectoryNode" />
-              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Peerspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Peerspace" type="462c0819:PsiDirectoryNode" />
-              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
+              <item name="users" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -413,7 +284,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -421,7 +291,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14228936" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14228936" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -469,7 +339,7 @@
         <state relative-caret-position="289">
           <caret line="212" column="25" lean-forward="false" selection-start-line="212" selection-start-column="25" selection-end-line="212" selection-end-column="25" />
           <folding>
-            <element signature="e#1763#1809#0" expanded="true" />
+            <element signature="e#1763#1809#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -495,14 +365,14 @@
         <state relative-caret-position="663">
           <caret line="39" column="25" lean-forward="false" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="25" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#small#0;n#div#1;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#small#0;n#div#1;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#3;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#4;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#small#0;n#div#1;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#small#0;n#div#1;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#3;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#4;n#div#0;n#li#0;n#conversation#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -510,7 +380,7 @@
     <entry file="file://$PROJECT_DIR$/user_messages/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="86">
-          <caret line="18" column="20" lean-forward="true" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
+          <caret line="18" column="20" lean-forward="false" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
           <folding>
             <element signature="e#19#47#0" expanded="true" />
           </folding>
@@ -566,7 +436,7 @@
     <entry file="file://$PROJECT_DIR$/posts/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="515">
-          <caret line="88" column="0" lean-forward="true" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+          <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -574,7 +444,7 @@
     <entry file="file://$PROJECT_DIR$/user_messages/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
-          <caret line="133" column="48" lean-forward="true" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="48" />
+          <caret line="133" column="48" lean-forward="false" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="48" />
           <folding>
             <element signature="e#19#73#0" expanded="true" />
           </folding>
@@ -594,7 +464,7 @@
         <state relative-caret-position="255">
           <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
-            <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#0#34#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -606,6 +476,30 @@
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/posts/migrations/0011_auto_20180106_1810.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/users/migrations/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/users/migrations/0001_initial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
