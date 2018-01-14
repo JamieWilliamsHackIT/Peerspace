@@ -105,8 +105,8 @@
     var reached_bottom_notifications = false;
     $('#notifications').on('shown.bs.popover', function () {
     var page_number_notifications = 0;
-    riot.mount('notification', {callback:tagCallBack});;
-    $('.popover').scrollGuard();;
+    riot.mount('notification', {callback:tagCallBack});
+    $('.popover').scrollGuard();
     function tagCallBack(theTag) {
       if (!notification_data.length) {
         $.ajax({
@@ -114,22 +114,22 @@
           url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
           dataType: "json",
           success: function(data) {
-            notification_data = data;;
-            theTag.trigger('data_loaded', notification_data);;
+            notification_data = data;
+            theTag.trigger('data_loaded', notification_data);
             $('.loading-circle-notifications').hide()
           }
         })
       } else {
-        theTag.trigger('data_loaded', notification_data);;
-        $('.loading-circle-notifications').hide();;
+        theTag.trigger('data_loaded', notification_data);
+        $('.loading-circle-notifications').hide();
         $('.popover').scrollTop(last_scroll_top)
       }
       $('.popover').scroll(function() {
         if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reached_bottom_notifications) {
-          page_number_notifications++;;
-          reached_bottom_notifications = true;;
+          page_number_notifications++;
+          reached_bottom_notifications = true;
           //Show loading gif
-          $('.loading-circle-notifications').show();;
+          $('.loading-circle-notifications').show();
           //Gets more posts
           $.ajax({
             type: "GET",
@@ -138,16 +138,16 @@
             success: function(data) {
               $.each(data, function(i, notification) {
                 notification_data.push(notification)
-              });;
+              });
               if (data.length == 10) {
                 reached_bottom_notifications = false
                 // console.log(data)
                 // console.log(notification_data)
               } else {
-                reached_bottom_notifications = true;;
+                reached_bottom_notifications = true;
                 console.log('No more notifications')
               }
-              theTag.trigger('data_loaded', notification_data);;
+              theTag.trigger('data_loaded', notification_data);
               //Hide loading gif
               $('.loading-circle-notifications').hide()
             }, error: function(error) {
@@ -157,14 +157,14 @@
           }
       })
     }
-    });;
+    });
     $('#notifications').on('hide.bs.popover', function () {
       last_scroll_top = $('.popover').scrollTop()
-    });;
+    });
     // Handles messages
     $(document).on('click', '.message-btn', function(e) {
-      e.preventDefault();;
-      conversation_id = $(this).attr('data-user-id');;
+      e.preventDefault();
+      conversation_id = $(this).attr('data-user-id');
       $.ajax({
         type: "GET",
         url: "/messages/api/v5/messages/redirect/" + conversation_id + "/",

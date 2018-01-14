@@ -1,15 +1,10 @@
 import json
 from django.shortcuts import get_object_or_404
 from channels import Group
-from channels import Channel
 from channels.auth import channel_session_user_from_http
 from channels.auth import channel_session_user
 
-from .models import Message
 from .models import Conversation
-
-from .utils import get_conversation_or_error
-from .utils import catch_client_error
 
 
 @channel_session_user_from_http
@@ -19,7 +14,6 @@ def ws_add(message):
     # Add them to the right groups
     conversations = Conversation.objects.filter(users=message.user)
     for conversation in conversations:
-        print('Adding {} to conversation {}'.format(message.user.name, conversation.id))
         Group('conversation-{}'.format(conversation.id)).add(message.reply_channel)
 
 
@@ -41,7 +35,6 @@ def ws_message(message):
     Group('conversation-{}'.format(conversation.id)).send({
         'text': json.dumps(data),
     })
-    print(data)
 
 
 @channel_session_user

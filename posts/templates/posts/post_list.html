@@ -166,21 +166,21 @@
 <script src="{% static 'tags/follower.js' %}"></script>
 <script>
   $(document).ready(function() {
-    $('.no-search-results').hide();;
-    $("#tags").tagit({caseSensitive:false});;
+    $('.no-search-results').hide();
+    $("#tags").tagit({caseSensitive:false});
     $('.ui-widget-content')
       .attr('placeholder', 'Tags')
-      .addClass('form-contol');;
+      .addClass('form-contol');
 
     // Enable date field if the check box is checked
     $(document).on('change', '#set-deadline', function() {
       if (this.checked) {
         $('#deadline').prop('disabled', false)
       } else {
-        $('#deadline').prop('disabled', true);;
+        $('#deadline').prop('disabled', true);
         $('#deadline').val('')
       }
-    });;
+    });
     // Set the number of suggested users to get
     var pageSize = 5;
     // Get the suggested users
@@ -194,38 +194,38 @@
             $('#suggested-users').html('No suggested users...')
           }
           $.each(data, function(i, e) {
-            var userHTML = '<li class="media mb-2">';;
-            userHTML += '<a href="/users/' + e.id + '"><img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '"></a>';;
-            userHTML += '<div class="media-body"><a href="/users/' + e.id + '"><strong>' + e.name + '</strong></a>';;
-            userHTML += '<div class="media-body-actions">';;
-            userHTML += '<button class="btn btn-outline-primary btn-sm follow-btn" userid=' + e.id + '><span class="icon icon-add-user"></span> Follow</button>';;
-            userHTML += '</div></div></li>';;
+            var userHTML = '<li class="media mb-2">';
+            userHTML += '<a href="/users/' + e.id + '"><img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '"></a>';
+            userHTML += '<div class="media-body"><a href="/users/' + e.id + '"><strong>' + e.name + '</strong></a>';
+            userHTML += '<div class="media-body-actions">';
+            userHTML += '<button class="btn btn-outline-primary btn-sm follow-btn" userid=' + e.id + '><span class="icon icon-add-user"></span> Follow</button>';
+            userHTML += '</div></div></li>';
             $('#suggested-users').append(userHTML)
-          });;
+          });
           $('.loading-circle-suggested').hide()
         }, error: function(error) {
-          console.log('Error getting suggested users...');;
-          $('.loading-circle-suggested').hide();;
+          console.log('Error getting suggested users...');
+          $('.loading-circle-suggested').hide();
           $('#suggested-users').html('Error getting suggested users...')
         }
       })
     }
-  });;
+  });
 
-  var followerData = [];;
-  var pageNumberFollowers = 0;;
-  var reachedBottomFollowers = false;;
+  var followerData = [];
+  var pageNumberFollowers = 0;
+  var reachedBottomFollowers = false;
   var type = 'followers';
   function followerCallBack(theTag) {
     // Handle the folowers and following modals
     $(document).on('click', '#followers', function() {
-      $('.loading-circle-followers').show();;
-      $('#followersModal').modal('toggle');;
+      $('.loading-circle-followers').show();
+      $('#followersModal').modal('toggle');
       // Get all of the user's followers
       var userId = {{ user.id }}
-      pageNumberFollowers = 0;;
-      reachedBottomFollowers = false;;
-      $('#followers-modal-content div').remove();;
+      pageNumberFollowers = 0;
+      reachedBottomFollowers = false;
+      $('#followers-modal-content div').remove();
       $.ajax({
         type: "GET",
         url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
@@ -233,19 +233,19 @@
         success: function(data) {
           $.each(data, function(i, user) {
             followerData.push(user)
-          });;
-          theTag.trigger('data_loaded', followerData);;
+          });
+          theTag.trigger('data_loaded', followerData);
           $('.loading-circle-followers').hide()
         }
       });
-    });;
+    });
     $('#followers-modal-content').scroll(function() {
       if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reachedBottomFollowers) {
-        $('.loading-circle-followers').show();;
-        pageNumberFollowers++;;
-        reachedBottomFollowers = true;;
+        $('.loading-circle-followers').show();
+        pageNumberFollowers++;
+        reachedBottomFollowers = true;
         //Show loading gif
-        $('.loading-circle-followers').show();;
+        $('.loading-circle-followers').show();
         //Gets more posts
         $.ajax({
           type: "GET",
@@ -254,14 +254,14 @@
           success: function(data) {
             $.each(data, function(i, follower) {
               followerData.push(follower)
-            });;
+            });
             if (data.length == 10) {
               reachedBottomFollowers = false
             } else {
-              reachedBottomFollowers = true;;
+              reachedBottomFollowers = true;
               console.log('No more followers')
             }
-            theTag.trigger('data_loaded', followerData);;
+            theTag.trigger('data_loaded', followerData);
             //Hide loading gif
             $('.loading-circle-followers').hide()
           }, error: function(error) {
@@ -272,7 +272,7 @@
     })
   }
 
-  riot.mount('follower', {callback:followerCallBack});;
+  riot.mount('follower', {callback:followerCallBack});
 
   $(function() {
       $("#SeeAllEvents").hide();
@@ -298,20 +298,20 @@
 
   // Will fade the delete button in and out when the user hovers over their own comment
   $(document).on('mouseenter', '.comment-block', function() {
-    var commentId = $(this).attr('commentid');;
+    var commentId = $(this).attr('commentid');
     $('.delete-comment-btn-' + commentId).fadeIn();
-  });;
+  });
   $(document).on('mouseleave', '.comment-block', function() {
-    var commentId = $(this).attr('commentid');;
+    var commentId = $(this).attr('commentid');
     $('.delete-comment-btn-' + commentId).fadeOut();
-  });;
+  });
   // $('like-btn').tooltip()
   $(document).on('mouseenter', 'like-btn', function() {
 
-  });;
-  var postData = [];;
-  var postIds = [];;
-  var pageNumber = 0;;
+  });
+  var postData = [];
+  var postIds = [];
+  var pageNumber = 0;
   function tagCallBack(theTag) {
     // Gets posts
     $.ajax({
@@ -319,25 +319,25 @@
       url: "/posts/api/v1/feed/{{ user.id }}/" + pageNumber,
       dataType: 'json',
       success: function(data) {
-        postData = data;;
+        postData = data;
         $.each(postData, function(i, post) {
           postIds.push(post.id)
-        });;
+        });
         userID = {{ user.id }}
-        theTag.trigger('data_loaded', data, userID);;
+        theTag.trigger('data_loaded', data, userID);
         $('.loading-circle-posts').hide()
       }, error: function(error) {
         console.log('Error loading posts...')
       }
     });
-    var reachedBottom = false;;
+    var reachedBottom = false;
     $(window).scroll(function() {
       toScroll = $(document).height() - $(window).height() - 100;
       if ($(this).scrollTop() > toScroll && !reachedBottom) {
-        pageNumber++;;
-        reachedBottom = true;;
+        pageNumber++;
+        reachedBottom = true;
         //Show loading gif
-        $('.loading-circle-posts').show();;
+        $('.loading-circle-posts').show();
         //Gets more posts
         $.ajax({
           type: "GET",
@@ -348,15 +348,15 @@
               if ($.inArray(post.id, postIds) == -1) {
                 postData.push(post)
               }
-            });;
-            userID =;; {{ user.id }}
+            });
+            userID = {{ user.id }}
             if (data.length == 10) {
               reachedBottom = false
             } else {
-              reachedBottom = true;;
+              reachedBottom = true;
               console.log('No more posts')
             }
-            theTag.trigger('data_loaded', postData, userID);;
+            theTag.trigger('data_loaded', postData, userID);
             //Hide loading gif
             $('.loading-circle-posts').hide()
           }, error: function(error) {
@@ -364,48 +364,48 @@
           }
           })
         }
-    });;
+    });
     // Sends post
     $('#post').click(function(e) {
       // Get the entered tags as a list
       var tags = $("#tags").tagit("assignedTags");
-      userID =;; {{ user.id }}
+      userID = {{ user.id }}
       var data = {
         user: userID,
         title: $('#title').val(),
         description: $('#desc').val(),
         tags: tags.join(', '),
         deadline: $('#deadline').val(),
-      };;
-      e.preventDefault();;
+      };
+      e.preventDefault();
       $.ajax({
         type: "POST",
         url: "/posts/api/v1/",
         data: data,
         success: function(data) {
-          postData.unshift(data);;
+          postData.unshift(data);
           pageNumber = 0;
           // riot.mount('post-feed', {callback:tagCallBack})
-          theTag.trigger('data_loaded', postData, userID);;
-          $('#title').val('');;
-          $('#desc').val('');;
+          theTag.trigger('data_loaded', postData, userID);
+          $('#title').val('');
+          $('#desc').val('');
           $("#tags").tagit("removeAll");
           $('.form-group-hidden').hide()
         }
       });
-    });;
+    });
     // User search
     $(document).on("keydown", ".search-input", function (e) {
         if (e.which == 13 && $(this).val()) {
-          e.preventDefault();;
-          var searchTerm = $('.search-input').val();;
+          e.preventDefault();
+          var searchTerm = $('.search-input').val();
           if (searchTerm) {
             // Show loading circle
-            $('.loading-circle-posts').show();;
-            $('.no-search-results').hide();;
+            $('.loading-circle-posts').show();
+            $('.no-search-results').hide();
             // Get search term
             var pageSize = 10;
-            $('.create-post').hide();;
+            $('.create-post').hide();
             $.ajax({
               type: "GET",
               url: "/search/{{ user.id }}/" + searchTerm + "/" + pageSize,
@@ -417,7 +417,7 @@
                   $('.no-search-results').hide()
                 }
                 userID = {{ user.id }}
-                theTag.trigger('data_loaded', data, userID);;
+                theTag.trigger('data_loaded', data, userID);
                 $('.loading-circle-posts').hide()
               }, error: function(error) {
                 console.log('Error searching for posts...')
@@ -429,8 +429,8 @@
   }
   //Sends follow
   $(document).on('click', '.follow-btn', function(e) {
-    e.preventDefault();;
-    this_button = $(this);;
+    e.preventDefault();
+    this_button = $(this);
     $.ajax({
       type: "GET",
       url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
@@ -443,7 +443,7 @@
         }
       }
     })
-  });;
+  });
   function deleteComment(commentId, postId) {
     $.ajax({
       url: "/posts/api/v1/comments/" + commentId,
@@ -459,29 +459,29 @@
       url: "/posts/api/v1/" + postId + "/comment",
       dataType: "json",
       success: function(comments) {
-        $('.comment-list-' + postId).html('');;
+        $('.comment-list-' + postId).html('');
         if (comments.length == 0) {
           $('.comment-form-' + postId).fadeIn()
         }
         $.each(comments, function(i,e) {
           var commentHTML = '<li class="media comment-block py-3" commentid=' + e.comment_id + '>';
-          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">';;
-          commentHTML += '<div class="media-body">';;
-          commentHTML += '<strong>' + e.user_name + ': </strong>';;
-          commentHTML += e.comment;;
-          if ({{ user.id }} == e.user_id;;) {
+          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">';
+          commentHTML += '<div class="media-body">';
+          commentHTML += '<strong>' + e.user_name + ': </strong>';
+          commentHTML += e.comment;
+          if ({{ user.id }} == e.user_id) {
             //Handle the deleting of comments here
             commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + postId + ')"><span class="icon icon-cross"></span></button>'
           }
-          commentHTML += '</li>';;
+          commentHTML += '</li>';
           if (comments.length > i + 1) {
             commentHTML += '<hr>'
           }
           $('.comment-list-' + postId).append(commentHTML)
-        });;
+        });
         // I can get the callback from a function by calling it in a console.log()
-        $('.comment-btn-' + postId).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')');;
-        $('.comment-container-' + postId).fadeIn();;
+        $('.comment-btn-' + postId).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')');
+        $('.comment-container-' + postId).fadeIn();
         $('.comment-form-' + postId).fadeIn()
       }
     });
@@ -490,31 +490,31 @@
   $(document).ready(function() {
     $(document).on('click', '.like-btn', function(e) {
       // Stop the page refreshing when the button is clicked
-      e.preventDefault();;
-      var this_button = $(this);;
+      e.preventDefault();
+      var this_button = $(this);
       $.ajax({
         url: "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         data: {},
         success: function(data) {
           if (data.liked) {
-            this_button.css('color', '#007bff');;
+            this_button.css('color', '#007bff');
             this_button.html('<span class="icon icon-thumbs-up"></span> Liked (' + data.likes + ')')
           } else {
-            this_button.css('color', 'grey');;
+            this_button.css('color', 'grey');
             this_button.html('<span class="icon icon-thumbs-up"></span> Like (' + data.likes + ')')
           }
         }
       })
-    });;
+    });
     //Sends comment
     $(document).on("keydown", ".comment", function (e) {
         if (e.which == 13 && $(this).val()) {
-          postId = $(this).attr("post-id");;
+          postId = $(this).attr("post-id");
           var data = {
             comment: $(this).val(),
             post: postId
-          };;
+          };
           $.ajax({
             url: "/posts/api/v1/" + postId + "/comment",
             method: "POST",
@@ -523,71 +523,71 @@
               //Load all comments
               getComments(postId)
             }
-          });;
+          });
           $(this).val('')
         }
-    });;
+    });
     $(document).on('click', '.comment-btn', function(e) {
       // Stop the page refreshing when the button is clicked
-      e.preventDefault();;
-      postId = $(this).attr("post-id");;
-      commentsOpen = $('.comment-container-' + postId).attr('commentsopen');;
+      e.preventDefault();
+      postId = $(this).attr("post-id");
+      commentsOpen = $('.comment-container-' + postId).attr('commentsopen');
       if (commentsOpen == 'true') {
         $('.comment-container-' + postId).fadeOut(function() {
-          $('.comment-container-' + postId).attr('commentsopen', 'false');;
+          $('.comment-container-' + postId).attr('commentsopen', 'false');
           $('.comment-btn-' + postId).css('color', 'grey')
-        });;
+        });
         $('.comment-form-' + postId).fadeOut()
       } else {
-        $('.comment-container-' + postId).attr('commentsopen', 'true');;
-        $('.comment-btn-' + postId).css('color', '#007bff');;
+        $('.comment-container-' + postId).attr('commentsopen', 'true');
+        $('.comment-btn-' + postId).css('color', '#007bff');
         getComments(postId)
       }
-    });;
+    });
     // Sends verification
     $(document).on('click', '.verify-btn', function(e) {
-      e.preventDefault();;
-      postId = $(this).attr("post-id");;
-      this_button = $(this);;
+      e.preventDefault();
+      postId = $(this).attr("post-id");
+      this_button = $(this);
       $.ajax({
         url: "/posts/api/v1/" + postId + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {
           if (data.verified_user) {
-            this_button.css('color', '#007bff');;
+            this_button.css('color', '#007bff');
             this_button.html('<span class="icon icon-shield"></span> Verified (' + data.verifications + '/5)')
           } else {
-            this_button.css('color', 'grey');;
+            this_button.css('color', 'grey');
             this_button.html('<span class="icon icon-shield"></span> Verify (' + data.verifications + '/5)')
           }
           if (data.verifications >= 5) {
-            $('.verify-btn-' + postId).hide();;
-            $('.awaiting-verifcation-' + postId).hide();;
-            var statusHTML = '<p class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>';;
+            $('.verify-btn-' + postId).hide();
+            $('.awaiting-verifcation-' + postId).hide();
+            var statusHTML = '<p class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>';
             $('.completion-status-container-' + postId).html(statusHTML)
           }
         }
       })
-    });;
-    $('.form-group-hidden').hide();;
+    });
+    $('.form-group-hidden').hide();
     $(document).on('focus', '#title', function() {
       $('.form-group-hidden').fadeIn()
-    });;
+    });
     // Handle the folowers and following modals
     $(document).on('click', '#followers', function(e) {
-      e.preventDefault();;
+      e.preventDefault();
       // Get all of the user's followers
       $.ajax({
         type: "GET",
         url: "/users/api/v2/" + {{ user.id }} + "/followers",
         dataType: "json",
         success: function(data) {
-          $('#followers-model-content').html('');;
+          $('#followers-model-content').html('');
           $.each(data, function(i, e) {
-            var userHTML = '<li class="list-group-item"><div class="media w-100">';;
-            userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">';;
-            userHTML += '<div class="media-body">';;
+            var userHTML = '<li class="list-group-item"><div class="media w-100">';
+            userHTML += '<img class="media-object d-flex align-self-start mr-3" src="' + e.profile_pic + '">';
+            userHTML += '<div class="media-body">';
             if (e.id !== {{ user.id }}) {
               if (e.user_viewing_follow_them) {
                 userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + ' main-follow-btn="false"><span class="icon icon-check"></span> Following</button>'
@@ -595,14 +595,14 @@
                 userHTML += '<button class="btn btn-primary follow-btn btn-sm float-right" userid=' + e.id + ' main-follow-btn="false"><span class="icon icon-user"></span> Follow</button>'
               }
             }
-            userHTML += '<strong>' + e.name + '</strong>';;
-            userHTML += '</div></div></li>';;
+            userHTML += '<strong>' + e.name + '</strong>';
+            userHTML += '</div></div></li>';
             $('#followers-model-content').append(userHTML)
           })
         }
       });
       $('#followersModal').modal('toggle')
-    });;
+    });
     // $(document).on('focusout', '#title', function() {
     //   $('.form-group-hidden').fadeOut()
     // })
@@ -617,7 +617,7 @@
         }
       })
     })
-  });;
+  });
   riot.mount('post-feed', {callback:tagCallBack})
 </script>
 {% endblock %}
