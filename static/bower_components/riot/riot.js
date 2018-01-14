@@ -529,7 +529,7 @@ var brackets = (function (UNDEF) {
 
     parts.qblocks = qblocks;
 
-    return parts
+    return parts;;
 
     function unescapeStr (s) {
       if (prevStr) {
@@ -765,7 +765,7 @@ var tmpl = (function () {
       expr = !cnt ? _wrapExpr(expr, asText)
            : cnt > 1 ? '[' + list.join(',') + '].join(" ").trim()' : list[0];
     }
-    return expr
+    return expr;;
 
     function skipBraces (ch, re) {
       var
@@ -2428,7 +2428,7 @@ function createTag(impl, conf, innerHTML) {
 
       // build multilevel prototype inheritance chain property list
       do { props = props.concat(Object.getOwnPropertyNames(obj || instance)); }
-      while (obj = Object.getPrototypeOf(obj || instance))
+      while (obj = Object.getPrototypeOf(obj || instance));;
 
       // loop the keys in the function prototype or the all object keys
       each(props, function (key) {

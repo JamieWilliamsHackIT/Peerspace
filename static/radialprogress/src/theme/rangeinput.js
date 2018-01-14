@@ -8,7 +8,7 @@ vizuly.theme.range_input = function (viz) {
             label_color: "#CCC",                    // Color of the center label
         }
 
-    }
+    };;
 
 
     // This is the **viz** we will be styling.
@@ -88,7 +88,7 @@ vizuly.theme.range_input = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // This **removes**  the viz from skin and any associated event listeners.
     theme.release = function () {
@@ -108,7 +108,7 @@ vizuly.theme.range_input = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the **skin** for the theme
     theme.skin = function (_) {
@@ -121,12 +121,12 @@ vizuly.theme.range_input = function (viz) {
             throw new Error("theme/linearea.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns **all of the skins**
     theme.skins = function () {
         return skins;
-    }
+    };;
 
 
     // This is the holder for the active skin
@@ -134,5 +134,5 @@ vizuly.theme.range_input = function (viz) {
 
     return theme;
 
-}
+};;
 

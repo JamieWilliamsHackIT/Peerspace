@@ -41,7 +41,7 @@ $.ajax({
               tag: obj.tagLabel,
               weight: 0.5,
               user: {{ user.id }}
-            }
+            };;
             $.ajax({
               type: "POST",
               data: data,
@@ -53,7 +53,7 @@ $.ajax({
           var data = {
             tag: obj.tagLabel,
             user: {{ user.id }}
-          }
+          };;
           $.ajax({
             type: "POST",
             data: data,

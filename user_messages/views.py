@@ -1,25 +1,22 @@
 # Standard imports
 from django.shortcuts import render, get_object_or_404
 from rest_framework import permissions, authentication
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
-
-
-# Import the Message model
-from . import models
+from rest_framework.views import APIView
 
 # Import the User model
 from users.models import User
+# Import the Message model
+from . import models
 
 
 # Render to messages page
 def messages(request, conversation_id=None):
     return render(request, 'user_messages/messages.html')
 
+
 class ConversationAPI(APIView):
-    authenication_classes = (authentication.SessionAuthentication,)
+    authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     # This code will run on the receipt a GET request, it will get 'pk' and
@@ -44,21 +41,20 @@ class ConversationAPI(APIView):
                     profile_pic_url = '/static/default_profile_pic.svg'
                 if not user.id == request.user.id:
                     display_user = {
-                            'id'               :  user.id,
-                            'name'             :  user.name,
-                            'profile_pic_url'  :  profile_pic_url,
-                        }
+                        'id': user.id,
+                        'name': user.name,
+                        'profile_pic_url': profile_pic_url,
+                    }
 
             data.append(
                 {
-                    'id'          :  conversation.id,
-                    'name'        :  conversation.name,
-                    'created_at'  :  conversation.created_at,
-                    'user'        :  display_user,
+                    'id': conversation.id,
+                    'name': conversation.name,
+                    'created_at': conversation.created_at,
+                    'user': display_user,
                 }
             )
         return Response(data)
-
 
     def post(self, request, *args, **kwargs):
         # Create conversation instance
@@ -87,23 +83,22 @@ class ConversationAPI(APIView):
                 profile_pic_url = '/static/default_profile_pic.svg'
             user_list.append(
                 {
-                    'id'               :  user.id,
-                    'name'             :  user.name,
-                    'profile_pic_url'  :  profile_pic_url,
+                    'id': user.id,
+                    'name': user.name,
+                    'profile_pic_url': profile_pic_url,
                 }
             )
         data = {
-            'id'     :  conversation.id,
-            'name'   :  conversation.name,
-            'users'  :  user_list
+            'id': conversation.id,
+            'name': conversation.name,
+            'users': user_list
         }
 
         return Response(data)
 
 
-
 class MessageAPI(APIView):
-    authenication_classes = (authentication.SessionAuthentication,)
+    authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     # This code will run on the receipt a GET request, it will get 'pk' and
@@ -131,12 +126,12 @@ class MessageAPI(APIView):
                 profile_pic_url = '/static/default_profile_pic.svg'
             data.append(
                 {
-                    'id'               :  message.id,
-                    'body'             :  message.body,
-                    'user_id'          :  message.user.id,
-                    'user_name'        :  message.user.name,
-                    'profile_pic_url'  :  profile_pic_url,
-                    'time_ago'         :  message.time_ago,
+                    'id': message.id,
+                    'body': message.body,
+                    'user_id': message.user.id,
+                    'user_name': message.user.name,
+                    'profile_pic_url': profile_pic_url,
+                    'time_ago': message.time_ago,
                 }
             )
 
@@ -161,12 +156,12 @@ class MessageAPI(APIView):
             profile_pic_url = '/static/default_profile_pic.svg'
 
         data = {
-            'id'               :  message.id,
-            'body'             :  message.body,
-            'user_id'          :  message.user.id,
-            'user_name'        :  message.user.name,
-            'profile_pic_url'  :  profile_pic_url,
-            'time_ago'         :  message.time_ago,
+            'id': message.id,
+            'body': message.body,
+            'user_id': message.user.id,
+            'user_name': message.user.name,
+            'profile_pic_url': profile_pic_url,
+            'time_ago': message.time_ago,
         }
 
         return Response(data)

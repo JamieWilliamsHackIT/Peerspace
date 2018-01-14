@@ -110,7 +110,7 @@ vizuly.theme.halo = function (viz) {
         selection.selectAll(".vz-halo-link-path")
             .style("fill",function (d,i) { return skin.link_fill(d,i)})
             .style("fill-opacity", skin.link_fill_opacity)
-            .style("stroke",function (d,i) { return skin.link_stroke(d,i)})
+            .style("stroke",function (d,i) { return skin.link_stroke(d,i)});;
 
         // Style the link nodes (smaller ones)
         selection.selectAll(".vz-halo-link-node")
@@ -267,7 +267,7 @@ vizuly.theme.halo = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // Binds all of our theme callbacks to the viz.
     function applyCallbacks() {
@@ -282,7 +282,7 @@ vizuly.theme.halo = function (viz) {
         viz.selection().attr("class",null);
         callbacks.forEach(function (d) {
             viz.on(d.on, null);
-        })
+        });;
         viz=null;
     };
 
@@ -293,7 +293,7 @@ vizuly.theme.halo = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the skin for the theme
     theme.skin = function (_) {
@@ -306,12 +306,12 @@ vizuly.theme.halo = function (viz) {
             throw new Error("theme/linearea.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns all of the skins
     theme.skins = function () {
         return skins;
-    }
+    };;
 
     var skins = {
         Fire: {
@@ -458,9 +458,9 @@ vizuly.theme.halo = function (viz) {
             },
             class: "vz-skin-ocean"
         }
-    }
+    };;
 
     return theme;
 
 
-}
+};;

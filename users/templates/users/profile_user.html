@@ -143,9 +143,9 @@
   // Initialise the tag input field
   $("#tags").tagit();
   // Get the posts and mount the riot.js tag
-  var postData = []
-  var postIds = []
-  var pageNumber = 0
+  var postData = [];;
+  var postIds = [];;
+  var pageNumber = 0;;
   function tagCallBack(theTag) {
     //Gets posts
     $.ajax({
@@ -153,25 +153,25 @@
       url: "/posts/api/v1/profile/{{ user.id }}/" + pageNumber,
       dataType: "json",
       success: function(data) {
-        postData = data
+        postData = data;;
         $.each(postData, function(i, post) {
           postIds.push(post.id)
-        })
+        });;
         userId = {{ user.id }}
-        theTag.trigger('data_loaded', data, userId)
+        theTag.trigger('data_loaded', data, userId);;
         $('.loading-circle-posts').hide()
       }, error: function(error) {
         console.log('Error loading posts...')
       }
     });
-    var reachedBottom = false
+    var reachedBottom = false;;
     $(window).scroll(function() {
       toScroll = $(document).height() - $(window).height() - 100;
       if ( $(this).scrollTop() > toScroll && !reachedBottom) {
-      pageNumber++
-      reachedBottom = true
+      pageNumber++;;
+      reachedBottom = true;;
       //Show loading gif
-      $('.loading-circle-posts').show()
+      $('.loading-circle-posts').show();;
       //Gets more posts
       $.ajax({
         type: "GET",
@@ -182,13 +182,13 @@
             if ($.inArray(post.id, postIds) == -1) {
               postData.push(post)
             }
-          })
-          userId = {{ user.id }}
+          });;
+          userId =;; {{ user.id }}
           if (data.length) {
-            reachedBottom = false
+            reachedBottom = false;;
             theTag.trigger('data_loaded', postData, userId)
           } else {
-            reachedBottom = true
+            reachedBottom = true;;
             console.log('No more posts')
           }
           //Hide loading gif
@@ -200,21 +200,21 @@
       }
     })
   }
-  var followerData = []
-  var pageNumberFollowers = 0
-  var reachedBottomFollowers = false
+  var followerData = [];;
+  var pageNumberFollowers = 0;;
+  var reachedBottomFollowers = false;;
   var type;
   function followerCallBack(theTag) {
     // Handle the folowers and following modals
     $(document).on('click', '#followers, #following', function() {
-      $('.loading-circle-followers').show()
-      $('#followersModal').modal('toggle')
+      $('.loading-circle-followers').show();;
+      $('#followersModal').modal('toggle');;
       // Get all of the user's followers
       var userId = {{ user.id }}
-      type = $(this).attr('data-modal-type')
-      pageNumberFollowers = 0
-      reachedBottomFollowers = false
-      $('#followers-modal-content div').remove()
+      type = $(this).attr('data-modal-type');;
+      pageNumberFollowers = 0;;
+      reachedBottomFollowers = false;;
+      $('#followers-modal-content div').remove();;
       $.ajax({
         type: "GET",
         url: "/users/api/v2/" + {{ user.id }} + "/followers/" + type + "/" + pageNumberFollowers,
@@ -222,19 +222,19 @@
         success: function(data) {
           $.each(data, function(i, user) {
             followerData.push(user)
-          })
-          theTag.trigger('data_loaded', followerData)
+          });;
+          theTag.trigger('data_loaded', followerData);;
           $('.loading-circle-followers').hide()
         }
       });
-    })
+    });;
     $('#followers-modal-content').scroll(function() {
       if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reachedBottomFollowers) {
-        $('.loading-circle-followers').show()
-        pageNumberFollowers++
-        reachedBottomFollowers = true
+        $('.loading-circle-followers').show();;
+        pageNumberFollowers++;;
+        reachedBottomFollowers = true;;
         //Show loading gif
-        $('.loading-circle-followers').show()
+        $('.loading-circle-followers').show();;
         //Gets more posts
         $.ajax({
           type: "GET",
@@ -243,14 +243,14 @@
           success: function(data) {
             $.each(data, function(i, follower) {
               followerData.push(follower)
-            })
+            });;
             if (data.length == 10) {
               reachedBottomFollowers = false
             } else {
-              reachedBottomFollowers = true
+              reachedBottomFollowers = true;;
               console.log('No more followers')
             }
-            theTag.trigger('data_loaded', followerData)
+            theTag.trigger('data_loaded', followerData);;
             //Hide loading gif
             $('.loading-circle-followers').hide()
           }, error: function(error) {
@@ -258,12 +258,12 @@
           }
         })
       }
-    })
+    });;
     // });
     //Sends follow
     $(document).on('click', '.follow-btn', function(e) {
-      e.preventDefault()
-      this_button = $(this)
+      e.preventDefault();;
+      this_button = $(this);;
       $.ajax({
         type: "GET",
         url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
@@ -280,7 +280,7 @@
   }
 
 
-  riot.mount('follower', {callback:followerCallBack})
+  riot.mount('follower', {callback:followerCallBack});;
 
   // Handle the deleting of comments here
   function deleteComment(comment_id, post_id) {
@@ -300,29 +300,29 @@
       url: "/posts/api/v1/" + post_id + "/comment",
       dataType: "json",
       success: function(comments) {
-        $('.comment-list-' + post_id).html('')
+        $('.comment-list-' + post_id).html('');;
         if (comments.length == 0) {
           $('.comment-form-' + post_id).fadeIn()
         }
         $.each(comments, function(i, e) {
           var commentHTML = '<li class="media comment-block py-3" commentid=' + e.comment_id + '>';
-          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">'
-          commentHTML += '<div class="media-body">'
-          commentHTML += '<strong>' + e.user_name + ': </strong>'
-          commentHTML += e.comment
-          if ({{user.id}} == e.user_id) {
+          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">';;
+          commentHTML += '<div class="media-body">';;
+          commentHTML += '<strong>' + e.user_name + ': </strong>';;
+          commentHTML += e.comment;;
+          if ({{user.id}} == e.user_id;;) {
             // Add the comment delete button
             commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + post_id + ')"><span class="icon icon-cross"></span></button>'
           }
-          commentHTML += '</li>'
+          commentHTML += '</li>';;
           if (comments.length > i + 1) {
             commentHTML += '<hr>'
           }
           // I can get the callback from a function by calling it in a console.log()
           $('.comment-list-' + post_id).append(commentHTML)
-        })
-        $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')')
-        $('.comment-container-' + post_id).fadeIn()
+        });;
+        $('.comment-btn-' + post_id).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')');;
+        $('.comment-container-' + post_id).fadeIn();;
         $('.comment-form-' + post_id).fadeIn()
       }
     });
@@ -330,62 +330,62 @@
   $(document).ready(function() {
     // Will fade the delete button in and out when the user hovers over their own comment
     $(document).on('mouseenter', '.comment-block', function() {
-      var comment_id = $(this).attr('commentid')
+      var comment_id = $(this).attr('commentid');;
       $('.delete-comment-btn-' + comment_id).fadeIn();
-    })
+    });;
     $(document).on('mouseleave', '.comment-block', function() {
-      var comment_id = $(this).attr('commentid')
+      var comment_id = $(this).attr('commentid');;
       $('.delete-comment-btn-' + comment_id).fadeOut();
-    })
+    });;
       // Sends like
     $(document).on('click', '.like-btn', function(e) {
       // Stop the page refreshing when the button is clicked
-      e.preventDefault()
-      var this_button = $(this)
+      e.preventDefault();;
+      var this_button = $(this);;
       $.ajax({
         url: "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         data: {},
         success: function(data) {
           if (data.liked) {
-            this_button.css('color', '#007bff')
+            this_button.css('color', '#007bff');;
             this_button.html('<span class="icon icon-thumbs-up"></span> Liked (' + data.likes + ')')
           } else {
-            this_button.css('color', 'grey')
+            this_button.css('color', 'grey');;
             this_button.html('<span class="icon icon-thumbs-up"></span> Like (' + data.likes + ')')
           }
         }
       })
-    })
+    });;
     // Show the comment section
     $(document).on('click', '.comment-btn', function(e) {
       // Stop the page refreshing when the button is clicked
-      e.preventDefault()
-      post_id = $(this).attr("post-id")
-      commentsOpen = $('.comment-container-' + post_id).attr('commentsopen')
+      e.preventDefault();;
+      post_id = $(this).attr("post-id");;
+      commentsOpen = $('.comment-container-' + post_id).attr('commentsopen');;
       if (commentsOpen == 'true') {
         $('.comment-container-' + post_id).fadeOut(function() {
-          $('.comment-container-' + post_id).attr('commentsopen', 'false')
+          $('.comment-container-' + post_id).attr('commentsopen', 'false');;
           $('.comment-btn-' + post_id).css('color', 'grey')
-        })
+        });;
         $('.comment-form-' + post_id).fadeOut()
       } else {
-        $('.comment-container-' + post_id).attr('commentsopen', 'true')
-        $('.comment-btn-' + post_id).css('color', '#007bff')
-        getComments(post_id)
+        $('.comment-container-' + post_id).attr('commentsopen', 'true');;
+        $('.comment-btn-' + post_id).css('color', '#007bff');;
+        getComments(post_id);;
         $('.comment-' + post_id).focus()
 
       }
-    })
+    });;
     // Hanldes comment creation
     $(document).on("keydown", ".comment", function (e) {
         // Detect when the enter key is pressed
         if (e.which == 13 && $(this).val()) {
-          post_id = $(this).attr("post-id")
+          post_id = $(this).attr("post-id");;
           var data = {
             comment: $(this).val(),
             post: post_id
-          }
+          };;
           // Sends comment
           $.ajax({
             url: "/posts/api/v1/" + post_id + "/comment",
@@ -395,36 +395,36 @@
               //Load all comments
               getComments(post_id)
             }
-          })
+          });;
           $(this).val('')
         }
-    })
+    });;
     // Sends verification
     $(document).on('click', '.verify-btn', function(e) {
-      e.preventDefault()
-      post_id = $(this).attr("post-id")
-      this_button = $(this)
+      e.preventDefault();;
+      post_id = $(this).attr("post-id");;
+      this_button = $(this);;
       $.ajax({
         url: "/posts/api/v1/" + post_id + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {
           if (data.verified_user) {
-            this_button.css('color', '#007bff')
+            this_button.css('color', '#007bff');;
             this_button.html('<span class="icon icon-shield"></span> Verified (' + data.verifications + '/5)')
           } else {
-            this_button.css('color', 'grey')
+            this_button.css('color', 'grey');;
             this_button.html('<span class="icon icon-shield"></span> Verify (' + data.verifications + '/5)')
           }
           if (data.verifications >= 5) {
-            $('.verify-btn-' + post_id).hide()
-            $('.awaiting-verifcation-' + post_id).hide()
-            var statusHTML = '<p class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>'
+            $('.verify-btn-' + post_id).hide();;
+            $('.awaiting-verifcation-' + post_id).hide();;
+            var statusHTML = '<p class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>';;
             $('.completion-status-container-' + post_id).html(statusHTML)
           }
         }
       })
-    })
+    });;
     $('#post').click(function(e) {
       var tags = $("#tags").tagit("assignedTags");
       var data = {
@@ -432,20 +432,20 @@
         title: $('#title').val(),
         description: $('#desc').val(),
         tags: tags.join(", ")
-      }
-      e.preventDefault()
+      };;
+      e.preventDefault();;
       $.ajax({
         type: "POST",
         url: "/posts/api/v1/",
         data: data,
         success: function(postData) {
-          riot.mount('post-feed', {callback:tagCallBack})
-          $('#title').val('')
-          $('#desc').val('')
+          riot.mount('post-feed', {callback:tagCallBack});;
+          $('#title').val('');;
+          $('#desc').val('');;
           $("#tags").tagit("removeAll");
         }
       });
-    })
+    });;
     // Get user proof images
     $.ajax({
       url: "/posts/api/v1/proof_images/" + {{ user.id }} + "/" + 10,
@@ -454,15 +454,15 @@
       success: function(data) {
         $.each(data, function(i, e) {
           $('.images').append('<img href="' + e.post_url + '" class="img-fluid image" style="padding: 10px;" data-width="' + e.proof_pic_width + '" data-height="' + e.proof_pic_height + '" src="' + e.proof_pic_url + '">')
-        })
+        });;
         $('.loading-circle-images').hide()
         // $('.images').imageGrid()
       }
-  })
+  });;
   $(document).on('click', '.image', function() {
     window.location.href = $(this).attr('href');
   })
-})
+});;
   riot.mount('post-feed', {callback:tagCallBack})
 </script>
 </body>

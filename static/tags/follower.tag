@@ -14,9 +14,9 @@
   <script>
     this.on('mount', function() {
       opts.callback(this)
-    })
+    });;
     this.on('data_loaded', function(data) {
-      opts.users = data
+      opts.users = data;;
       this.update()
     })
   </script>

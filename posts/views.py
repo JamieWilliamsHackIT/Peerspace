@@ -116,6 +116,9 @@ from notifications.models import Notification
 
 
 def post_list(request):
+    # This view runs slowly only when one user has a large number of posts, the
+    # time delay must come from the amount of time taken to count the number of
+    # posts and calculate the post statistics for each post
     if request.user.is_authenticated:
         user = request.user
         profile_pictures = get_profile_images(user.id)
@@ -426,8 +429,11 @@ class ListCreateComment(generics.ListCreateAPIView):
     serializer_class = serializers.CommentSerializer
 
     def get(self, request, *args, **kwargs):
+        # Get the post Id from the url
         post_id = self.kwargs['pk']
+        # Get the post object
         post = get_object_or_404(models.Post, pk=post_id)
+        # Get all the comments on that post
         comments = post.comments.all().order_by('created_at')
         comment_list = []
         for comment in comments:

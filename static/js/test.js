@@ -18,8 +18,8 @@ function tagCallBack(theTag) {
 $(document).ready(function() {
   $(document).on('click', '.like-btn', function(e) {
     // Stop the page refreshing when the button is clicked
-    e.preventDefault()
-    var this_button = $(this)
+    e.preventDefault();;
+    var this_button = $(this);;
     $.ajax({
       url: "http://127.0.0.1:8000/posts/api/v1/" + this_button.attr('id') + "/like",
       method: "GET",
@@ -35,26 +35,26 @@ $(document).ready(function() {
       }
     })
   })
-})
-riot.mount('post-list', {callback:tagCallBack})
+});;
+riot.mount('post-list', {callback:tagCallBack});;
 $('#post').click(function(e) {
   var tags = $("#tags").tagit("assignedTags");
   var data = {
-    user: {{ user.id }},
-    title: $('#title').val(),
-    description: $('#desc').val(),
-    tags: tags.join(", ")
+    user: {;;{ user.id }},
+    $('#title').val(),
+    description;: $('#desc').val(),
+    tags;;: tags.join(", ")
   }
-  e.preventDefault()
+  e.preventDefault();;
   $.ajax({
     type: "POST",
     url: "http://127.0.0.1:8000/posts/api/v1/",
     data: data,
     success: function(postData) {
-      riot.mount('post-list', {callback:tagCallBack})
-      $('#title').val('')
-      $('#desc').val('')
+      riot.mount('post-list', {callback:tagCallBack});;
+      $('#title').val('');;
+      $('#desc').val('');;
       $("#tags").tagit("removeAll");
     }
   });
-})
+});;

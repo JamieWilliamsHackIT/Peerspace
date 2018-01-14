@@ -51,9 +51,9 @@ from users.models import UserPreferenceTag
 from users.models import User
 from posts.models import Post
 
+
 # The algorithm itself
 def get_most_relevent(user_pk, page_number, page_size):
-
     # Get user's information
     user = get_object_or_404(User, pk=user_pk)
     # Get all user's tags
@@ -103,7 +103,7 @@ def get_most_relevent(user_pk, page_number, page_size):
     # runtimes = 0
     for post in posts:
         # runtimes += 1
-        # Initialise some varibles
+        # Initialise some variables
         total_score = 0
         tag_score = 0
         num_tags_match = 0
@@ -186,9 +186,9 @@ def get_most_relevent(user_pk, page_number, page_size):
             # wildcard_score *= math.exp((-1/4) * num_days)
             if post.proved_at:
                 num_days_since_proved = ((timezone.now() - post.proved_at).total_seconds() / (3600 * 24))
-                wildcard_score *= math.exp((-1/4) * num_days_since_proved)
+                wildcard_score *= math.exp((-1 / 4) * num_days_since_proved)
             else:
-                wildcard_score *= (math.exp((-1/4) * num_days))
+                wildcard_score *= (math.exp((-1 / 4) * num_days))
             total_relevance = wildcard_score
             score_dict.update({post.id: total_relevance})
         else:
@@ -197,27 +197,27 @@ def get_most_relevent(user_pk, page_number, page_size):
             # small number of days and small for a large number of days
             if post.proved_at:
                 num_days_since_proved = ((timezone.now() - post.proved_at).total_seconds() / (3600 * 24))
-                total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days_since_proved))
+                total_relevance *= decimal.Decimal(math.exp((-1 / 4) * num_days_since_proved))
             else:
-                total_relevance *= decimal.Decimal(math.exp((-1/4) * num_days))
+                total_relevance *= decimal.Decimal(math.exp((-1 / 4) * num_days))
             # Output scores to a dictionary
             score_dict.update({post.id: total_relevance})
         # This is extremely useful for development purposes.
-        print(('''Id: {},
-                  title: {},
-                  score: {}.
-                  {} tags matched.
-                  User follows: {} and {} follower tags matched.
-                  Posted {} days(s) ago.''').format(
-                                                post.id,
-                                                post.title,
-                                                total_relevance,
-                                                num_tags_match,
-                                                does_follow,
-                                                follower_tag_count,
-                                                num_days,
-                                            )
-                )
+        # print(('''Id: {},
+        #           title: {},
+        #           score: {}.
+        #           {} tags matched.
+        #           User follows: {} and {} follower tags matched.
+        #           Posted {} days(s) ago.''').format(
+        #     post.id,
+        #     post.title,
+        #     total_relevance,
+        #     num_tags_match,
+        #     does_follow,
+        #     follower_tag_count,
+        #     num_days,
+        # )
+        # )
 
     # Order score_dict by value and give an ordered list of post ids
     output = {}

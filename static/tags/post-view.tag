@@ -54,10 +54,10 @@
   <script>
     this.on('mount', function() {
       opts.callback(this)
-    })
+    });;
     this.on('data_loaded', function(data, user_id) {
-      opts.post = data
-      console.log(opts.post)
+      opts.post = data;;
+      console.log(opts.post);;
       this.update()
     })
   </script>

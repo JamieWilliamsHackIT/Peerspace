@@ -248,7 +248,7 @@ vizuly.theme.column_bar = function (viz) {
             class: "vz-skin-default"
         }
 
-    }
+    };;
 
     //Here is where the **core logic of the theme starts**
     //
@@ -503,7 +503,7 @@ vizuly.theme.column_bar = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     function applyCallbacks() {
         callbacks.forEach(function (d) {
@@ -517,7 +517,7 @@ vizuly.theme.column_bar = function (viz) {
         viz.selection().attr("class",null);
         callbacks.forEach(function (d) {
             viz.on(d.on, null);
-        })
+        });;
         viz=null;
     };
 
@@ -527,7 +527,7 @@ vizuly.theme.column_bar = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     //This function sets the skin theme without updating the component.
     var _skin=null;
@@ -543,12 +543,12 @@ vizuly.theme.column_bar = function (viz) {
                 + " does not exist.");
 
         return theme;
-    }
+    };;
 
     //This allows us to get direct access to skins and add custom ones or modify existing ones externally.
     theme.skins = function () {
         return skins;
-    }
+    };;
 
     return theme;
 
@@ -558,7 +558,7 @@ vizuly.theme.column_bar = function (viz) {
     // the intrinsic object id and class names of a vizuly.core.component.
     //
     //To learn more about modifying and building your own vizuly.core.components, read our guide **<a href=''>Customizing vizuly.core.components</a>**.
-}
+};;
 
 
 // @version 1.1.54

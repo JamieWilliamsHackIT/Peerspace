@@ -30,7 +30,7 @@ vizuly.version = "1.0";
 /**
  * @namespace vizuly.core
  */
-vizuly.core = {}
+vizuly.core = {};;
 
 vizuly.viz = {};
 

@@ -22,7 +22,7 @@
 /**
  * @class
  */
-vizuly.svg.text = {}
+vizuly.svg.text = {};;
 
 /**
  * This function creates a single line path that can be used for texts along an arc.
@@ -45,7 +45,7 @@ vizuly.svg.text.arcPath = function (radius,startAngle) {
     if (arcD) arcD=arcD[0];
     return arcD;
 
-}
+};;
 
 /**
  * This function will take an *SVG text* object and create line wraps at word breaks by converting the
@@ -91,4 +91,4 @@ vizuly.svg.text.wrap = function (text, value, lineHeight, width) {
         }
 
     });
-}
+};;

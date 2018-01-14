@@ -56,7 +56,7 @@ vizuly.core.util.size = function (margin,width,height) {
     size.right = vizuly.core.util.measure(margin.right,width);
 
     return size;
-}
+};;
 
 /**
  * This function creates a scale based on the value being passed into it.
@@ -79,7 +79,7 @@ vizuly.core.util.getTypedScale = function (value) {
             scale= d3.scale.linear();
         }
         return scale;
-}
+};;
 
 /**
  * This function sets a scale's range based on min and max values, and
@@ -97,7 +97,7 @@ vizuly.core.util.setRange = function (scale,min,max) {
     else {
         scale.range([min,max]);
     }
-}
+};;
 
 
 /**
@@ -160,7 +160,7 @@ vizuly.core.util.getDefs = function (viz) {
     if (defs[0].length < 1)
         defs = viz.selection().select("svg").append("defs");
     return defs;
-}
+};;
 
 
 /**
@@ -174,7 +174,7 @@ vizuly.core.util.createCSSKey = function(s) {
     s = s.replace(/[\s+,'+,\.,\(,\),\"]/g, "");
     s = "css" + s.toUpperCase();
     return s;
-}
+};;
 
 
 /**
@@ -217,7 +217,7 @@ vizuly.core.util.aggregateNest = function(nest, properties, calculation) {
 
     Object.getOwnPropertyNames(deepestChildNode).forEach(function (name) {
         childProperties.push(name);
-    })
+    });;
 
     aggregateNodes(nest);
 
@@ -258,7 +258,7 @@ vizuly.core.util.aggregateNest = function(nest, properties, calculation) {
         }
     }
 
-}
+};;
 
 /**
  * This static function is used to dynamically generate dates on a zoomable axis with the following levels of granularity

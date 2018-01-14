@@ -74,7 +74,7 @@ vizuly.core.component = function(parent,scope,props,events) {
     var args=[];
 
     // Interaction events
-    args.push("mouseover")
+    args.push("mouseover");;
     args.push("mouseout");
     args.push("mousedown");
     args.push("click");
@@ -127,8 +127,7 @@ vizuly.core.component = function(parent,scope,props,events) {
                 }
             }
         });
-    };
-
+    }
     var component = function () {
         setProps(component,scope,scope.properties);
         return component;
@@ -143,7 +142,7 @@ vizuly.core.component = function(parent,scope,props,events) {
      */
     component.id = function () {
         return scope.id;
-    }
+    };
 
     /**
      *  Returns the D3 selection of component DIV container.
@@ -174,19 +173,19 @@ vizuly.core.component = function(parent,scope,props,events) {
     component.validate = function () {
         if (invalid) return;
 
-        var invalid = []
+        var invalid = [];
         Object.getOwnPropertyNames(props).forEach(function (val) {
             if (!scope[val] && Number(scope[val] != 0)) {
                 invalid.push(val);
             }
-        })
+        });
         if (invalid.length > 0) {
             throw new Error("vizuly.core.util.component.validate(): " + invalid.concat() + " need to be declared");
         }
 
         //We disptach a 'validate' event so we can hook in callbacks before other work is done.
         scope.dispatch.validate();
-    }
+    };
 
     //Return our finished component.
     return scope.dispatch.component;

@@ -81,7 +81,7 @@ function initialize() {
             .on("mouseover",onMouseOver)    // mouseover callback - all viz components issue these events
             .on("mouseout",onMouseOut)      // mouseout callback - all viz components issue these events
             .on("click",onClick);           // mouseout callback - all viz components issue these events
-    })
+    });;
 
     //
     // Now we set some unique properties for all three components to demonstrate the different settings.

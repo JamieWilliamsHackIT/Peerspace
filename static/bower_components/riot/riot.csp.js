@@ -6989,7 +6989,7 @@ function hoist(ast){
     walk(ast);
   }
 
-  return ast
+  return ast;;
 
   // walk through each node of a program of block statement
   function walkAll(nodes){
@@ -7122,7 +7122,7 @@ function evaluateAst(tree, context){
   // block scoped context for catch (ex) and 'let'
   var blockContext = context;
 
-  return walk(tree)
+  return walk(tree);;
 
   // recursively walk every node in an array
   function walkAll(nodes){
@@ -7145,44 +7145,44 @@ function evaluateAst(tree, context){
     switch (node.type) {
 
       case 'Program':
-        return walkAll(node.body )
+        return walkAll(node.body );;
 
       case 'BlockStatement':
         enterBlock();
         var result = walkAll(node.body);
         leaveBlock();
-        return result
+        return result;;
 
       case 'SequenceExpression':
-        return walkAll(node.expressions)
+        return walkAll(node.expressions);;
 
       case 'FunctionDeclaration':
         var params = node.params.map(getName);
         var value = getFunction(node.body, params, blockContext);
-        return context[node.id.name] = value
+        return context[node.id.name] = value;;
 
       case 'FunctionExpression':
         var params = node.params.map(getName);
-        return getFunction(node.body, params, blockContext)
+        return getFunction(node.body, params, blockContext);;
 
       case 'ReturnStatement':
         var value = walk(node.argument);
-        return new ReturnValue('return', value)
+        return new ReturnValue('return', value);;
 
       case 'BreakStatement':
-        return new ReturnValue('break')
+        return new ReturnValue('break');;
 
       case 'ContinueStatement':
-        return new ReturnValue('continue')
+        return new ReturnValue('continue');;
 
       case 'ExpressionStatement':
-        return walk(node.expression)
+        return walk(node.expression);;
 
       case 'AssignmentExpression':
-        return setValue(blockContext, node.left, node.right, node.operator)
+        return setValue(blockContext, node.left, node.right, node.operator);;
 
       case 'UpdateExpression':
-        return setValue(blockContext, node.argument, null, node.operator)
+        return setValue(blockContext, node.argument, null, node.operator);;
 
       case 'VariableDeclaration':
         node.declarations.forEach(function(declaration){
@@ -7193,7 +7193,7 @@ function evaluateAst(tree, context){
             target[declaration.id.name] = undefined;
           }
         });
-        break
+        break;;
 
       case 'SwitchStatement':
         var defaultHandler = null;
@@ -7230,7 +7230,7 @@ function evaluateAst(tree, context){
         }
 
         leaveBlock();
-        return result
+        return result;;
 
       case 'IfStatement':
         if (walk(node.test)){
@@ -7258,7 +7258,7 @@ function evaluateAst(tree, context){
           infinite.check();
         }
         leaveBlock();
-        return result
+        return result;;
 
       case 'ForInStatement':
         var infinite = InfiniteChecker(maxIterations);
@@ -7294,7 +7294,7 @@ function evaluateAst(tree, context){
         }
         leaveBlock();
 
-        return result
+        return result;;
 
       case 'WhileStatement':
         var infinite = InfiniteChecker(maxIterations);
@@ -7302,7 +7302,7 @@ function evaluateAst(tree, context){
           walk(node.body);
           infinite.check();
         }
-        break
+        break;;
 
       case 'TryStatement':
         try {
@@ -7320,20 +7320,20 @@ function evaluateAst(tree, context){
             walk(node.finalizer);
           }
         }
-        break
+        break;;
 
       case 'Literal':
-        return node.value
+        return node.value;;
 
       case 'UnaryExpression':
         var val = walk(node.argument);
         switch(node.operator) {
-          case '+': return +val
-          case '-': return -val
-          case '~': return ~val
-          case '!': return !val
-          case 'void': return void val
-          case 'typeof': return typeof val
+          case '+': return +val;;
+          case '-': return -val;;
+          case '~': return ~val;;
+          case '!': return !val;;
+          case 'void': return void val;;
+          case 'typeof': return typeof val;;
           default: return unsupportedExpression(node)
         }
 
@@ -7342,7 +7342,7 @@ function evaluateAst(tree, context){
         for (var i=0;i<node.elements.length;i++){
           obj.push(walk(node.elements[i]));
         }
-        return obj
+        return obj;;
 
       case 'ObjectExpression':
         var obj = blockContext['Object']();
@@ -7351,14 +7351,14 @@ function evaluateAst(tree, context){
           var value = (prop.value === null) ? prop.value : walk(prop.value);
           obj[prop.key.value || prop.key.name] = value;
         }
-        return obj
+        return obj;;
 
       case 'NewExpression':
         var args = node.arguments.map(function(arg){
           return walk(arg)
         });
         var target = walk(node.callee);
-        return primitives.applyNew(target, args)
+        return primitives.applyNew(target, args);;
 
 
       case 'BinaryExpression':
@@ -7366,36 +7366,36 @@ function evaluateAst(tree, context){
         var r = walk(node.right);
 
         switch(node.operator) {
-          case '==':  return l === r
-          case '===': return l === r
-          case '!=':  return l != r
-          case '!==': return l !== r
-          case '+':   return l + r
-          case '-':   return l - r
-          case '*':   return l * r
-          case '/':   return l / r
-          case '%':   return l % r
-          case '<':   return l < r
-          case '<=':  return l <= r
-          case '>':   return l > r
-          case '>=':  return l >= r
-          case '|':   return l | r
-          case '&':   return l & r
-          case '^':   return l ^ r
-          case 'in':  return l in r
-          case 'instanceof': return l instanceof r
+          case '==':  return l === r;;
+          case '===': return l === r;;
+          case '!=':  return l != r;;
+          case '!==': return l !== r;;
+          case '+':   return l + r;;
+          case '-':   return l - r;;
+          case '*':   return l * r;;
+          case '/':   return l / r;;
+          case '%':   return l % r;;
+          case '<':   return l < r;;
+          case '<=':  return l <= r;;
+          case '>':   return l > r;;
+          case '>=':  return l >= r;;
+          case '|':   return l | r;;
+          case '&':   return l & r;;
+          case '^':   return l ^ r;;
+          case 'in':  return l in r;;
+          case 'instanceof': return l instanceof r;;
           default: return unsupportedExpression(node)
         }
 
       case 'LogicalExpression':
         switch(node.operator) {
-          case '&&':  return walk(node.left) && walk(node.right)
-          case '||':  return walk(node.left) || walk(node.right)
+          case '&&':  return walk(node.left) && walk(node.right);;
+          case '||':  return walk(node.left) || walk(node.right);;
           default: return unsupportedExpression(node)
         }
 
       case 'ThisExpression':
-        return blockContext['this']
+        return blockContext['this'];;
 
       case 'Identifier':
         if (node.name === 'undefined'){
@@ -7417,7 +7417,7 @@ function evaluateAst(tree, context){
         if (node.callee.type === 'MemberExpression'){
           object = walk(node.callee.object);
         }
-        return target.apply(object, args)
+        return target.apply(object, args);;
 
       case 'MemberExpression':
         var obj = walk(node.object);
@@ -7431,10 +7431,10 @@ function evaluateAst(tree, context){
 
       case 'ConditionalExpression':
         var val = walk(node.test);
-        return val ? walk(node.consequent) : walk(node.alternate)
+        return val ? walk(node.consequent) : walk(node.alternate);;
 
       case 'EmptyStatement':
-        return
+        return;;
 
       default:
         return unsupportedExpression(node)
@@ -7477,11 +7477,11 @@ function evaluateAst(tree, context){
     // stop built in properties from being able to be changed
     if (canSetProperty(object, name, primitives)){
       switch(operator) {
-        case undefined: return object[name] = walk(right)
-        case '=':  return object[name] = walk(right)
-        case '+=': return object[name] += walk(right)
-        case '-=': return object[name] -= walk(right)
-        case '++': return object[name]++
+        case undefined: return object[name] = walk(right);;
+        case '=':  return object[name] = walk(right);;
+        case '+=': return object[name] += walk(right);;
+        case '-=': return object[name] -= walk(right);;
+        case '++': return object[name]++;;
         case '--': return object[name]--
       }
     }
@@ -7832,7 +7832,7 @@ var brackets = (function (UNDEF) {
 
     parts.qblocks = qblocks;
 
-    return parts
+    return parts;;
 
     function unescapeStr (s) {
       if (prevStr) {
@@ -8067,7 +8067,7 @@ var tmpl = (function () {
       expr = !cnt ? _wrapExpr(expr, asText)
            : cnt > 1 ? '[' + list.join(',') + '].join(" ").trim()' : list[0];
     }
-    return expr
+    return expr;;
 
     function skipBraces (ch, re) {
       var
@@ -9741,7 +9741,7 @@ function createTag(impl, conf, innerHTML) {
 
       // build multilevel prototype inheritance chain property list
       do { props = props.concat(Object.getOwnPropertyNames(obj || instance)); }
-      while (obj = Object.getPrototypeOf(obj || instance))
+      while (obj = Object.getPrototypeOf(obj || instance));;
 
       // loop the keys in the function prototype or the all object keys
       each(props, function (key) {

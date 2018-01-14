@@ -20,9 +20,9 @@
   <script>
     this.on('mount', function() {
       opts.callback(this)
-    })
+    });;
     this.on('data_loaded', function(data, user_id) {
-      opts.slots = data
+      opts.slots = data;;
       this.update()
     })
   </script>

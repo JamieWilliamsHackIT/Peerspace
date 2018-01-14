@@ -62,10 +62,10 @@
 <script>
   this.on('mount', function() {
     opts.callback(this)
-  })
+  });;
   this.on('data_loaded', function(data, userId) {
-    opts.posts = data
-    opts.userId = userId
+    opts.posts = data;;
+    opts.userId = userId;;
     this.update()
   })
 </script>

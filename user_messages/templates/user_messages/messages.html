@@ -2,238 +2,263 @@
 {% load static %}
 {% block title_tag %}Messages | {{ block.super }}{% endblock %}
 {% block body_content %}
-<!-- Peerspace specific stylesheets  -->
-<link rel="stylesheet" href="{% static 'messages/css/messages.css' %}">
-<!-- Percentage circles stylesheets -->
-<link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
-<link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
-<!-- jQueryUi specific stylesheets -->
-<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
-<!-- Tagit specific stylesheets -->
-<link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
-<div class="container leaderboards-container">
-  <div class="row">
-    <div class="card d-md-block col-lg-4 d-lg-block mb-4" style="height: 100%;">
-      <div class="card-body">
-        <ul class="media-list media-list-users list-group">
-          <h3 class="mb-3">Your conversations</h3>
-          <conversations></conversations>
-          <li class="list-group-item conversation new-converation">
-            <div class="media w-100">
-              <img class="media-object rounded-circle mr-3" src="{% static 'img/talk.png' %}">
-              <div class="media-body align-self-center">
-                <strong>New conversation</strong>
-                <small></small>
-              </div>
+    <!-- Peerspace specific stylesheets  -->
+    <link rel="stylesheet" href="{% static 'messages/css/messages.css' %}">
+    <!-- Percentage circles stylesheets -->
+    <link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
+    <link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
+    <!-- jQueryUi specific stylesheets -->
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
+    <!-- Tagit specific stylesheets -->
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <div class="container leaderboards-container">
+        <div class="row">
+            <div class="card d-md-block col-lg-4 d-lg-block mb-4" style="height: 100%;">
+                <div class="card-body">
+                    <ul class="media-list media-list-users list-group">
+                        <h3 class="mb-3">Your conversations</h3>
+                        <conversations></conversations>
+                        <li class="list-group-item conversation new-converation">
+                            <div class="media w-100">
+                                <img class="media-object rounded-circle mr-3" src="{% static 'img/talk.png' %}">
+                                <div class="media-body align-self-center">
+                                    <strong>New conversation</strong>
+                                    <small></small>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </li>
-        </ul>
-      </div>
+            <div class="message-list col-lg-8">
+                <div class="message-list-inner card p-4">
+                    <h3 class="conversation-name"></h3>
+                    <ul class="media-list media-list-conversation c-w-md" id="message-box">
+                        <img class='loading-circle loading-circle-messages' src={% static 'img/loading.gif' %}>
+                        <p class="no-more-messages">No more messages.</p>
+                        <conversation></conversation>
+                    </ul>
+                    <form>
+                        <div class="form-group">
+                            <textarea class="form-control w-100" id="message-input" rows="3"
+                                      placeholder="Message"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="message-list col-lg-8">
-      <div class="message-list-inner card p-4">
-        <h3 class="conversation-name"></h3>
-        <ul class="media-list media-list-conversation c-w-md" id="message-box">
-          <img class='loading-circle loading-circle-messages' src={% static 'img/loading.gif' %}>
-          <p class="no-more-messages">No more messages.</p>
-          <conversation></conversation>
-        </ul>
-        <form>
-          <div class="form-group">
-            <textarea class="form-control w-100" id="message-input" rows="3" placeholder="Message"></textarea>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Makes getting the csrf token easier -->
-<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- jQueryUi -->
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-<!-- Popper JS -->
-<script src="	https://unpkg.com/popper.js"></script>
-<!-- Tagit -->
-<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
-<!-- Adds CSRF token to the request headers -->
-<script src="{% static 'js/csrf.js' %}"></script>
-<!-- Riot.js custom tags -->
-<script src="{% static 'tags/conversations.js' %}"></script>
-<script src="{% static 'tags/conversation.js' %}"></script>
-<!-- Toolkit JS -->
-<script src="{% static 'dist/toolkit.js' %}"></script>
-<script>
-  // Define the conversations tag's callback
-  function usersCallback(theTag) {
-    // Set the page number to 0 (the first page)
-    pageNumber = 0
-    // Get conversations
-    $.ajax({
-      type: "GET",
-      url: "/messages/api/v5/conversations/" + pageNumber,
-      dataType: "json",
-      // On a successful GET request
-      success: function(data) {
-        // Trigger the conversations tag
-        theTag.trigger('data_loaded', data)
-        // Get the conversation Id from the URL
-        var conversationId = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1]
-        // Trigger the click event of the corresponding conversation button
-        $('.conversation-' + conversationId).trigger('click')
-      }
-    })
-  }
-
-  // Get the user's id
-  userId = {{ user.id }}
-
-  // Initialise some varibles
-  var conversationId;
-  var messageData;
-  var reachedTop = false;
-
-  // Hide the loading gif
-  $('.no-more-messages').hide()
-
-  // Define the conversation tag's callback
-  function messagesCallback(theTag) {
-    // Listen for the click event on the conversation buttons
-    $(document).on('click', '.conversation', function() {
-      // Select the clicked button
-      var this_button = $(this)
-      // Hide no more messages text
-      $('.no-more-messages').hide()
-      // Indicate there may be more posts to come
-      reachedTop = false
-      //Show loading gif
-      $('.loading-circle-messages').show()
-      // Get id of conversation from button
-      conversationId = $(this).attr('data-id')
-      // display_user_name =
-      $('.conversation-name').html('<a href="/users/' + $(this).attr('user-id') + '">' + $(this).attr('display-user') + '</a>')
-
-      // Set the page to the first page
-      pageNumber = 0;
-      // Initialise the message data array
-      messageData = [];
-
-      // Get messages
-      $.ajax({
-        type: "GET",
-        url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber,
-        dataType: "json",
-        // On a successful GET request
-        success: function(data) {
-          // Add message data to array
-          messageData.push(data)
-          // Trigger messages tag
-          theTag.trigger('data_loaded', messageData[0], userId)
-          // Set the scroll position to the bottom
-          var scrollDiv = document.getElementById("message-box");
-          scrollDiv.scrollTop = scrollDiv.scrollHeight;
-
-          // Hide loading gif
-          $('.loading-circle-messages').hide()
-          // Reset colour of all conversation buttons
-          $('.conversation').css('background-color', '#FFF')
-          $('.conversation').css('color', '#000')
-          // Change colour of conversation button
-          this_button.css('background-color', '#6A0F49')
-          this_button.css('color', '#FFF')
-        }
-      })
-    })
-
-    // Listen for the enter key to be pressed
-    $(document).on("keydown", "#message-input", function (e) {
-        if (e.which == 13 && $(this).val()) {
-          // Stop the page refreshing
-          e.preventDefault()
-          // Get the message from the input box
-          var message = $.trim($('#message-input').val())
-          // If there is a message add the data to an object
-          if (message) {
-            data = {
-                body: message
-            }
-            // Send the message
+    <!-- Makes getting the csrf token easier -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- jQueryUi -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"
+            charset="utf-8"></script>
+    <!-- Popper JS -->
+    <script src="	https://unpkg.com/popper.js"></script>
+    <!-- Tagit -->
+    <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+    <!-- Adds CSRF token to the request headers -->
+    <script src="{% static 'js/csrf.js' %}"></script>
+    <!-- Riot.js custom tags -->
+    <script src="{% static 'tags/conversations.js' %}"></script>
+    <script src="{% static 'tags/conversation.js' %}"></script>
+    <!-- Toolkit JS -->
+    <script src="{% static 'dist/toolkit.js' %}"></script>
+    <script>
+        // Define the conversations tag's callback
+        function usersCallback(theTag) {
+            // Set the page number to 0 (the first page)
+            pageNumber = 0;
+            // Get conversations
             $.ajax({
-              type: "POST",
-              url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
-              data: data,
-              // On a successful POST request
-              success: function(data) {
-                // Clear the message box
-                $('#message-input').val('')
-                // Add the message to the end of the array
-                messageData[0].push(data)
-                // Trigger the message tag
-                theTag.trigger('data_loaded', messageData[0], userId)
-                // Set the scroll position to the bottom of the div
-                $('.media-list-conversation').scrollTop($('.media-list-conversation')[0].scrollHeight)
-              }
+                type: "GET",
+                url: "/messages/api/v5/conversations/" + pageNumber,
+                dataType: "json",
+                // On a successful GET request
+                success: function (data) {
+                    // Trigger the conversations tag
+                    theTag.trigger('data_loaded', data);
+                    // Get the conversation Id from the URL
+                    var conversationId = window.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").split('/')[1];
+                    // Trigger the click event of the corresponding conversation button
+                    $('.conversation-' + conversationId).trigger('click')
+                }
             })
-          }
         }
-    })
 
-    // Listen for the scroll event on the div
-    $('.media-list-conversation').scroll(function() {
-      // If the user scrolls to the top
-      if ( $(this).scrollTop() == 0 && !reachedTop) {
-        // Increment the page number
-        pageNumber++
-        // Indicate they have reached the top
-        reachedTop = true
-        //Show loading gif
-        $('.loading-circle-messages').show()
-        //Gets more messages
-        $.ajax({
-          type: "GET",
-          url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
-          dataType: 'json',
-          // On a successful GET request
-          success: function(data) {
-            // Add each message to start of array
-            $.each(data, function(i, message) {
-                messageData[0].unshift(message)
-            })
-            // If a full page comes back (i.e. 10 messages)
-            if (data.length == 10) {
-              // Indicate the user is no longer at the top of the page
-              reachedTop = false
-              $('.media-list-conversation').scrollTop(10)
-            } else {
-              // Indicate the user has reached the top of the message stream
-              reachedTop = true
-              // Show the "no more messages" notice
-              $('.no-more-messages').show()
-              // Log to the console that there are no more messages
-              console.log('No more messages')
+        // Get the user's id
+        userId = {{ user.id }};
+
+        // Initialise some variables
+        var conversationId;
+        var messageData = [];
+        var reachedTop = false;
+
+        // Hide the loading gif
+        $('.no-more-messages').hide();
+
+        // Define the conversation tag's callback
+        function messagesCallback(theTag) {
+            // Handel websockets stuff
+            socket = new WebSocket('ws://' + window.location.host);
+            socket.onmessage = function(e) {
+                var data = JSON.parse(e.data);
+                if (data.conversation_id == conversationId && data.user_id != {{ user.id }}) {
+                    var message = {
+                        user_id: data.user_id,
+                        user_name: data.user_name,
+                        profile_pic_url: data.profile_pic_url,
+                        body: data.body,
+                        time_ago: data.time_ago
+                    };
+                    messageData[0].push(message);
+                    theTag.trigger('data_loaded', messageData[0]);
+                    // Set the scroll position to the bottom
+                    var scrollDiv = document.getElementById("message-box");
+                    scrollDiv.scrollTop = scrollDiv.scrollHeight;
+                }
             }
-            // Trigeer the messages tag
-            theTag.trigger('data_loaded', messageData[0], userId)
-            //Hide loading gif
-            $('.loading-circle-messages').hide()
-            // On an unsuccessul GET request indicate there was an error
-          }, error: function(error) {
-            console.log('Error loading posts...')
-          }
-          })
-        }
-    })
-  }
+            // Listen for the click event on the conversation buttons
+            $(document).on('click', '.conversation', function () {
+                // Select the clicked button
+                var this_button = $(this);
+                // Hide no more messages text
+                $('.no-more-messages').hide();
+                // Indicate there may be more posts to come
+                reachedTop = false;
+                //Show loading gif
+                $('.loading-circle-messages').show();
+                // Get id of conversation from button
+                conversationId = $(this).attr('data-id');
+                // display_user_name =
+                $('.conversation-name').html('<a href="/users/' + $(this).attr('user-id') + '">' + $(this).attr('display-user') + '</a>');
 
-  // On page load
-  $(document).ready(function() {
-    // Mount both the converstaions and conversation tags
-    riot.mount('conversations', {callback:usersCallback})
-    riot.mount('conversation', {callback:messagesCallback})
-    // Hide the loading gif
-    $('.loading-circle-messages').hide()
-  })
-</script>
-</body>
+                // Set the page to the first page
+                pageNumber = 0;
+                // Initialise the message data array
+                messageData = [];
+
+                // Get messages
+                $.ajax({
+                    type: "GET",
+                    url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber,
+                    dataType: "json",
+                    // On a successful GET request
+                    success: function (data) {
+                        // Add message data to array
+                        messageData.push(data);
+                        // Trigger messages tag
+                        theTag.trigger('data_loaded', messageData[0], userId);
+                        // Set the scroll position to the bottom
+                        var scrollDiv = document.getElementById("message-box");
+                        scrollDiv.scrollTop = scrollDiv.scrollHeight;
+
+                        // Hide loading gif
+                        $('.loading-circle-messages').hide();
+                        // Reset colour of all conversation buttons
+                        $('.conversation').css('background-color', '#FFF');
+                        $('.conversation').css('color', '#000');
+                        // Change colour of conversation button
+                        this_button.css('background-color', '#6A0F49');
+                        this_button.css('color', '#FFF')
+                    }
+                })
+            });
+
+            // Listen for the enter key to be pressed
+            $(document).on("keydown", "#message-input", function (e) {
+                if (e.which == 13 && $(this).val()) {
+                    // Stop the page refreshing
+                    e.preventDefault();
+                    // Get the message from the input box
+                    var message = $.trim($('#message-input').val());
+                    // If there is a message add the data to an object
+                    if (message) {
+                        var data = {
+                            body: message
+                        };
+                        // Send the message
+                        $.ajax({
+                            type: "POST",
+                            url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
+                            data: data,
+                            // On a successful POST request
+                            success: function (data) {
+                                // Clear the message box
+                                $('#message-input').val('');
+                                // Add the message to the end of the array
+                                messageData[0].push(data);
+                                // Trigger the message tag
+                                theTag.trigger('data_loaded', messageData[0], userId);
+                                // Set the scroll position to the bottom of the div
+                                $('.media-list-conversation').scrollTop($('.media-list-conversation')[0].scrollHeight)
+                            }
+                        })
+                    }
+                }
+            });
+
+            // Listen for the scroll event on the div
+            $('.media-list-conversation').scroll(function () {
+                // If the user scrolls to the top
+                if ($(this).scrollTop() == 0 && !reachedTop) {
+                    // Increment the page number
+                    pageNumber++;
+                    // Indicate they have reached the top
+                    reachedTop = true;
+                    //Show loading gif
+                    $('.loading-circle-messages').show();
+                    //Gets more messages
+                    $.ajax({
+                        type: "GET",
+                        url: "/messages/api/v5/messages/" + conversationId + "/" + pageNumber + "/",
+                        dataType: 'json',
+                        // On a successful GET request
+                        success: function (data) {
+                            // Add each message to start of array
+                            $.each(data, function (i, message) {
+                                messageData[0].unshift(message)
+                            });
+                            // If a full page comes back (i.e. 10 messages)
+                            if (data.length === 10) {
+                                // Indicate the user is no longer at the top of the page
+                                reachedTop = false;
+                                $('.media-list-conversation').scrollTop(10)
+                            } else {
+                                // Indicate the user has reached the top of the message stream
+                                reachedTop = true;
+                                // Show the "no more messages" notice
+                                $('.no-more-messages').show();
+                                // Log to the console that there are no more messages
+                                console.log('No more messages')
+                            }
+                            // Trigger the messages tag
+                            theTag.trigger('data_loaded', messageData[0], userId);
+                            //Hide loading gif
+                            $('.loading-circle-messages').hide()
+                            // On an unsuccessful GET request indicate there was an error
+                        }, error: function (error) {
+                            console.log('Error loading posts...')
+                        }
+                    })
+                }
+            })
+        }
+
+        // On page load
+        $(document).ready(function () {
+            // Mount both the converstaions and conversation tags
+            riot.mount('conversations', {callback: usersCallback});
+            riot.mount('conversation', {callback: messagesCallback});
+
+            // Hide the loading gif
+            $('.loading-circle-messages').hide();
+
+            // Handel websockets stuff
+            socket = new WebSocket('ws://' + window.location.host);
+        })
+    </script>
+    </body>
 {% endblock body_content %}

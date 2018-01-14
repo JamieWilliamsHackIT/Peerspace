@@ -19,6 +19,7 @@ class Comment(models.Model):
                                 on_delete=models.SET_NULL,
                                 related_name='post'
                             )
+
     # This makes referencing comment instances in the admin easier
     def __str__(self):
         return self.comment
@@ -68,7 +69,7 @@ class Post(models.Model):
     # Get the name of the user who created the post
     @property
     def get_user(self):
-        return user.name
+        return self.user.name
 
     # This will return the number of days since the post was created
     @property
@@ -77,12 +78,12 @@ class Post(models.Model):
 
     # This will return the absolute url of the post
     def get_absolute_url(self):
-        return reverse_lazy('posts:post_detail', kwargs={'pk':self.id})
+        return reverse_lazy('posts:post_detail', kwargs={'pk': self.id})
 
     # Check whether the post is verified (not currently in use)
     @property
     def is_verified(self):
-        if self.verifications >= 5:
+        if self.verifications.count() >= 5:
             return True
         return False
 

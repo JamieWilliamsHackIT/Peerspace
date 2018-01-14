@@ -151,7 +151,7 @@ vizuly.svg.gradient.radialFade = function (viz,color,opacity,ratio) {
     var gradient = defs.selectAll("#" + id).data([c]).enter()
         .append("radialGradient")
         .attr("id", id)
-        .attr("class","vz-svg-gradient-radial-fade")
+        .attr("class","vz-svg-gradient-radial-fade");;
 
     gradient.append("stop").attr("offset",(ratio[0]*100) + "%").attr("stop-color",color).attr("stop-opacity",opacity[0]);
     gradient.append("stop").attr("offset",(ratio[1]*100) + "%").attr("stop-color",color).attr("stop-opacity",opacity[1]);

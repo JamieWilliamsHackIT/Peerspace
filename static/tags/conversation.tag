@@ -38,9 +38,9 @@
   <script>
     this.on('mount', function() {
       opts.callback(this)
-    })
+    });
     this.on('data_loaded', function(data, userId) {
-      opts.messages = data
+      opts.messages = data;
       this.update()
     })
   </script>

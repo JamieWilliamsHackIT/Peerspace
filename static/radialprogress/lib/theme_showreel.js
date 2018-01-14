@@ -29,7 +29,7 @@ vizuly.showreel = function (theme, skins, delay) {
 
  var reel = function () {
    return reel;
- }
+ };;
 
  reel.start = function () {
 
@@ -48,7 +48,7 @@ vizuly.showreel = function (theme, skins, delay) {
   }, 50);
 
   return reel;
- }
+ };;
 
 
  reel.tween = function (_) {
@@ -57,13 +57,13 @@ vizuly.showreel = function (theme, skins, delay) {
    }
    tween = _;
    return reel;
- }
+ };;
 
  reel.stop = function () {
    stop=true;
   return reel;
- }
+ };;
 
  return reel();
 
-}
+};;

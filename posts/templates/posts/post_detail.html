@@ -48,7 +48,7 @@
         userId = {{ user.id }}
         post = {
           post: data
-        }
+        };;
         theTag.trigger('data_loaded', post, userId)
       }
     });
@@ -68,71 +68,71 @@
       url: "/posts/api/v1/" + postId + "/comment",
       dataType: "json",
       success: function(comments) {
-        $('.comment-list-' + postId).html('')
+        $('.comment-list-' + postId).html('');;
         if (comments.length == 0) {
           $('.comment-form-' + postId).fadeIn()
         }
         $.each(comments, function(i,e) {
           var commentHTML = '<li class="media comment-block py-3" commentid=' + e.commentId + '>';
-          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">'
-          commentHTML += '<div class="media-body">'
-          commentHTML += '<strong>' + e.user_name + ': </strong>'
-          commentHTML += e.comment
-          if ({{user.id}} == e.userId) {
+          commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">';;
+          commentHTML += '<div class="media-body">';;
+          commentHTML += '<strong>' + e.user_name + ': </strong>';;
+          commentHTML += e.comment;;
+          if ({{user.id}} == e.userId;;) {
             //Handle the deleting of comments here
             commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.commentId + ' btn-outline-danger" style="float:right; padding:0px 3px;" href="#" onClick="deleteComment('+ e.commentId +',' + postId + ')"><span class="icon icon-cross"></span></button>'
           }
-          commentHTML += '</li>'
+          commentHTML += '</li>';;
           if (comments.length > i + 1) {
             commentHTML += '<hr>'
           }
           // I can get the callback from a function by calling it in a console.log()
           $('.comment-list-' + postId).append(commentHTML)
-        })
-        $('.comment-btn-' + postId).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')')
-        $('.comment-container-' + postId).fadeIn()
+        });;
+        $('.comment-btn-' + postId).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')');;
+        $('.comment-container-' + postId).fadeIn();;
         $('.comment-form-' + postId).fadeIn()
       }
     });
   }
   // Will fade the delete button in and out when the user hovers over their own comment
   $(document).on('mouseenter', '.comment-block', function() {
-    var commentId = $(this).attr('commentid')
+    var commentId = $(this).attr('commentid');;
     $('.delete-comment-btn-' + commentId).fadeIn();
-  })
+  });;
   $(document).on('mouseleave', '.comment-block', function() {
-    var commentId = $(this).attr('commentid')
+    var commentId = $(this).attr('commentid');;
     $('.delete-comment-btn-' + commentId).fadeOut();
-  })
+  });;
   //Sends like
   $(document).ready(function() {
     $(document).on('click', '.like-btn', function(e) {
       // Stop the page refreshing when the button is clicked
-      e.preventDefault()
-      var this_button = $(this)
+      e.preventDefault();;
+      var this_button = $(this);;
       $.ajax({
         url: "/posts/api/v1/" + this_button.attr('id') + "/like",
         method: "GET",
         dataType: "json",
         success: function(data) {
           if (data.liked) {
-            this_button.css('color', '#007bff')
+            this_button.css('color', '#007bff');;
             this_button.html('<span class="icon icon-thumbs-up"></span> Liked (' + data.likes + ')')
           } else {
-            this_button.css('color', 'grey')
+            this_button.css('color', 'grey');;
             this_button.html('<span class="icon icon-thumbs-up"></span> Like (' + data.likes + ')')
           }
         }
       })
-    })
+    });;
     //Sends comment
     $(document).on("keydown", ".comment", function (e) {
         if (e.which == 13 && $(this).val()) {
-          postId = $(this).attr("post-id")
+          postId = $(this).attr("post-id");;
           var data = {
             comment: $(this).val(),
             post: postId
-          }
+          };;
           $.ajax({
             url: "/posts/api/v1/" + postId + "/comment",
             method: "POST",
@@ -141,54 +141,54 @@
               //Load all comments
               getComments(postId)
             }
-          })
+          });;
           $(this).val('')
         }
-    })
+    });;
     $(document).on('click', '.comment-btn', function(e) {
       // Stop the page refreshing when the button is clicked
-      e.preventDefault()
-      postId = $(this).attr("post-id")
-      commentsOpen = $('.comment-container-' + postId).attr('commentsopen')
+      e.preventDefault();;
+      postId = $(this).attr("post-id");;
+      commentsOpen = $('.comment-container-' + postId).attr('commentsopen');;
       if (commentsOpen == 'true') {
         $('.comment-container-' + postId).fadeOut(function() {
-          $('.comment-container-' + postId).attr('commentsopen', 'false')
+          $('.comment-container-' + postId).attr('commentsopen', 'false');;
           $('.comment-btn-' + postId).css('color', 'grey')
-        })
+        });;
         $('.comment-form-' + postId).fadeOut()
       } else {
-        $('.comment-container-' + postId).attr('commentsopen', 'true')
-        $('.comment-btn-' + postId).css('color', '#007bff')
+        $('.comment-container-' + postId).attr('commentsopen', 'true');;
+        $('.comment-btn-' + postId).css('color', '#007bff');;
         getComments(postId)
       }
-    })
+    });;
     // Sends verification
     $(document).on('click', '.verify-btn', function(e) {
-      e.preventDefault()
-      postId = $(this).attr("post-id")
-      this_button = $(this)
+      e.preventDefault();;
+      postId = $(this).attr("post-id");;
+      this_button = $(this);;
       $.ajax({
         url: "/posts/api/v1/" + postId + "/verify",
         method: "GET",
         dataType: "json",
         success: function(data) {
           if (data.verified_user) {
-            this_button.css('color', '#007bff')
+            this_button.css('color', '#007bff');;
             this_button.html('<span class="icon icon-shield"></span> Verified (' + data.verifications + '/5)')
           } else {
-            this_button.css('color', 'grey')
+            this_button.css('color', 'grey');;
             this_button.html('<span class="icon icon-shield"></span> Verify (' + data.verifications + '/5)')
           }
           if (data.verifications >= 5) {
-            $('.verify-btn-' + postId).hide()
-            $('.awaiting-verifcation-' + postId).hide()
-            var statusHTML = '<p class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>'
+            $('.verify-btn-' + postId).hide();;
+            $('.awaiting-verifcation-' + postId).hide();;
+            var statusHTML = '<p class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span> Completed</p>';;
             $('.completion-status-container-' + postId).html(statusHTML)
           }
         }
       })
     })
-  })
+  });;
   riot.mount('post-feed', {callback:tagCallBack})
 </script>
 

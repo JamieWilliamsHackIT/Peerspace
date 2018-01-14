@@ -206,7 +206,7 @@ vizuly.theme.linearea = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // Binds all of our theme callbacks to the viz.
     function applyCallbacks() {
@@ -221,7 +221,7 @@ vizuly.theme.linearea = function (viz) {
         viz.selection().attr("class",null);
         callbacks.forEach(function (d) {
             viz.on(d.on, null);
-        })
+        });;
         viz=null;
     };
 
@@ -232,7 +232,7 @@ vizuly.theme.linearea = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the skin for the theme
     theme.skin = function (_) {
@@ -245,12 +245,12 @@ vizuly.theme.linearea = function (viz) {
             throw new Error("theme/linearea.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns all of the skins
     theme.skins = function () {
         return skins;
-    }
+    };;
 
     var skins = {
         Fire : {
@@ -389,7 +389,7 @@ vizuly.theme.linearea = function (viz) {
                 return d3.rgb(businessColors(i)).darker();
             },
             line_over_stroke: function (d,i) {
-                return "#FFF"
+                return "#FFF";;
                 return d3.rgb(businessColors(i)).darker().darker();
             },
             line_opacity: function (d, i) {
@@ -406,9 +406,9 @@ vizuly.theme.linearea = function (viz) {
             yAxis_line_opacity: .25,
             class: "vz-skin-default"
         }
-    }
+    };;
 
     return theme;
 
 
-}
+};;

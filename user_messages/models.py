@@ -2,9 +2,14 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from channels import Group
+import json
 
 # Import User model
 from users.models import User
+
+from .settings import MSG_TYPE_MESSAGE
+
 
 # Define the Message model
 class Message(models.Model):
@@ -17,7 +22,7 @@ class Message(models.Model):
 
     @property
     def time_ago(self):
-        return (timezone.now() - self.created_at)
+        return timezone.now() - self.created_at
 
 
 # Define the Conversation model
@@ -33,4 +38,16 @@ class Conversation(models.Model):
 
     @property
     def time_ago(self):
-        return (timezone.now() - self.created_at)
+        return timezone.now() - self.created_at
+
+    @property
+    def websocket_group(self):
+        return Group('conversation-{self.id}')
+
+    def send_message(self, message, user, msg_type=MSG_TYPE_MESSAGE):
+        final_msg = dict(room=str(self.id), message=message, email=user.email, msg_type=msg_type)
+        self.websocket_group.send(
+            {
+                'text': json.dumps(final_msg),
+            }
+        )

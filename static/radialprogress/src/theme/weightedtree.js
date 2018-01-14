@@ -68,7 +68,7 @@ vizuly.theme.weighted_tree = function (viz) {
             },
             font_size: function() { return null; }
         }
-    }
+    };;
 
     // This is the **viz** we will be styling.
     var viz = viz;
@@ -165,7 +165,7 @@ vizuly.theme.weighted_tree = function (viz) {
 
         selection.selectAll(".vz-weighted_tree-node circle")
             .style("fill",function (d) { return skin.node_fill(d) })
-            .style("fill-opacity", function (d) { return skin.node_fill_opacity(d)})
+            .style("fill-opacity", function (d) { return skin.node_fill_opacity(d)});;
 
         selection.selectAll(".vz-weighted_tree-node text").transition().style("font-size",fontSize).style("font-weight","normal");
 
@@ -202,7 +202,7 @@ vizuly.theme.weighted_tree = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // This **removes**  the viz from skin and any associated event listeners.
     theme.release = function () {
@@ -223,7 +223,7 @@ vizuly.theme.weighted_tree = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the **skin** for the theme
     theme.skin = function (_) {
@@ -238,12 +238,12 @@ vizuly.theme.weighted_tree = function (viz) {
             throw new Error("theme/weightedtree.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns **all of the skins**
     theme.skins = function () {
         return skins;
-    }
+    };;
 
 
     // This is the holder for the active skin
@@ -251,7 +251,7 @@ vizuly.theme.weighted_tree = function (viz) {
 
     return theme;
 
-}
+};;
 
 // We keep our skins declared as **constants** so we can easily reference them in other functions
 vizuly.skin.WEIGHTED_TREE_AXIIS = "Axiis";

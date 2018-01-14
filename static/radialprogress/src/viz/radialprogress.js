@@ -161,7 +161,7 @@ vizuly.viz.radial_progress = function (parent) {
         arcPlot.attr("transform","translate(" + size.width/2 + "," + size.height/2 + ")");
 
         // Create a background circle if one is not present
-        var backCircle= plot.selectAll(".vz-radial_progress-back-circle")
+        var backCircle= plot.selectAll(".vz-radial_progress-back-circle");;
         if (backCircle[0].length == 0) {
             backCircle= arcPlot.append("circle").attr("class","vz-radial_progress-back-circle");
         }

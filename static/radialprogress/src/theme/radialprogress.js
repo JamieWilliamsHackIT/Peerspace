@@ -188,7 +188,7 @@ vizuly.theme.radial_progress = function (viz) {
             },
             class: "vz-skin-business"
         }
-    }
+    };;
 
 
     // This is the **viz** we will be styling.
@@ -282,7 +282,7 @@ vizuly.theme.radial_progress = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // This **removes**  the viz from skin and any associated event listeners.
     theme.release = function () {
@@ -302,7 +302,7 @@ vizuly.theme.radial_progress = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the **skin** for the theme
     theme.skin = function (_) {
@@ -315,12 +315,12 @@ vizuly.theme.radial_progress = function (viz) {
             throw new Error("theme/linearea.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns **all of the skins**
     theme.skins = function () {
         return skins;
-    }
+    };;
 
 
     // This is the holder for the active skin
@@ -328,7 +328,7 @@ vizuly.theme.radial_progress = function (viz) {
 
     return theme;
 
-}
+};;
 
 // We keep our skins declared as **constants** so we can easily reference them in other functions
 vizuly.skin.RADIAL_PROGRESS_FIRE = "Fire";

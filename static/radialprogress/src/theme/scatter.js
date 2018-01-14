@@ -129,7 +129,7 @@ vizuly.theme.scatter = function (viz) {
             .style("stroke-opacity",0)
             .style("stroke",function (d,i) { return skin.node_stroke(d,i)})
             .style("fill",function (d,i) { return skin.node_fill(d,i)})
-            .style("fill-opacity",function (d,i) { return skin.node_fill_opacity(d,i)})
+            .style("fill-opacity",function (d,i) { return skin.node_fill_opacity(d,i)});;
 
         // Transition our background
         skin.background_transition();
@@ -186,7 +186,7 @@ vizuly.theme.scatter = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // Binds all of our theme callbacks to the viz.
     function applyCallbacks() {
@@ -201,7 +201,7 @@ vizuly.theme.scatter = function (viz) {
         viz.selection().attr("class",null);
         callbacks.forEach(function (d) {
             viz.on(d.on, null);
-        })
+        });;
         viz=null;
     };
 
@@ -212,7 +212,7 @@ vizuly.theme.scatter = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the skin for the theme
     theme.skin = function (_) {
@@ -225,12 +225,12 @@ vizuly.theme.scatter = function (viz) {
             throw new Error("theme/linearea.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns all of the skins
     theme.skins = function () {
         return skins;
-    }
+    };;
 
     // This theme allows for callbacks on internal events so any additional style/property changes
     // can be applied AFTER the theme has done its own changes
@@ -325,10 +325,10 @@ vizuly.theme.scatter = function (viz) {
             },
             class: "vz-skin-ocean"
         }
-    }
+    };;
 
 
     return theme;
 
 
-}
+};;

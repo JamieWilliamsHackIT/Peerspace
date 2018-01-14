@@ -166,7 +166,7 @@ vizuly.theme.radial_linearea = function (viz) {
             .style("stroke-dasharray",function () { return viz.outerRadius()/80 + "," + viz.outerRadius()/80});
 
         // Reduce the contrast on the y axis ticks
-        viz.selection().selectAll(".vz-y-axis-tick").style("opacity",.1)
+        viz.selection().selectAll(".vz-y-axis-tick").style("opacity",.1);;
 
         // Remove any previous point tips
         viz.selection().selectAll(".vz-point-tip").remove();
@@ -224,7 +224,7 @@ vizuly.theme.radial_linearea = function (viz) {
             theme.skin(skin);
         applyTheme();
         return theme;
-    }
+    };;
 
     // Binds all of our theme callbacks to the viz.
     function applyCallbacks() {
@@ -239,7 +239,7 @@ vizuly.theme.radial_linearea = function (viz) {
         viz.selection().attr("class",null);
         callbacks.forEach(function (d) {
             viz.on(d.on, null);
-        })
+        });;
         viz=null;
     };
 
@@ -250,7 +250,7 @@ vizuly.theme.radial_linearea = function (viz) {
         }
         viz = _;
         applyCallbacks();
-    }
+    };;
 
     // Sets the skin for the theme
     theme.skin = function (_) {
@@ -263,12 +263,12 @@ vizuly.theme.radial_linearea = function (viz) {
             throw new Error("theme/linearea.js - skin " + _ + " does not exist.");
 
         return theme;
-    }
+    };;
 
     // Returns all of the skins
     theme.skins = function () {
         return skins;
-    }
+    };;
 
     var skins = {
         Fire : {
@@ -418,9 +418,9 @@ vizuly.theme.radial_linearea = function (viz) {
             yAxis_line_opacity: .25,
             class: "vz-skin-default"
         }
-    }
+    };;
 
     return theme;
 
 
-}
+};;
