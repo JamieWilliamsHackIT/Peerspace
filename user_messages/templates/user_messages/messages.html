@@ -102,7 +102,8 @@
         // Define the conversation tag's callback
         function messagesCallback(theTag) {
             // Handel websockets stuff
-            socket = new WebSocket('ws://' + window.location.host);
+            var ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws';
+            socket = new WebSocket(ws_scheme + '://' + window.location.host);
             socket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
                 if (data.conversation_id == conversationId && data.user_id != {{ user.id }}) {
@@ -257,7 +258,8 @@
             $('.loading-circle-messages').hide();
 
             // Handel websockets stuff
-            socket = new WebSocket('ws://' + window.location.host);
+            var ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws';
+            socket = new WebSocket(ws_scheme + '://' + window.location.host);
         })
     </script>
     </body>

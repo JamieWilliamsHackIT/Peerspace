@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1637cfeb-6f96-45d6-bdff-735ef885bd8e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Peerspace/settings.py" afterPath="$PROJECT_DIR$/Peerspace/settings.py" />
+      <change beforePath="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" afterPath="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,16 +18,6 @@
     <splitter split-orientation="horizontal" split-proportion="0.6325301">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="edit_user.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/users/templates/users/edit_user.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="edit_tags.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/users/templates/users/edit_tags.html">
               <provider selected="true" editor-type-id="text-editor">
@@ -70,11 +60,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="719">
                   <caret line="256" column="29" lean-forward="false" selection-start-line="256" selection-start-column="29" selection-end-line="256" selection-end-column="29" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="messages.html" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="702">
+                  <caret line="261" column="47" lean-forward="false" selection-start-line="261" selection-start-column="47" selection-end-line="261" selection-end-column="47" />
                   <folding />
                 </state>
               </provider>
@@ -180,7 +180,6 @@
         <option value="$PROJECT_DIR$/user_messages/signals.py" />
         <option value="$PROJECT_DIR$/posts/models.py" />
         <option value="$PROJECT_DIR$/user_messages/views.py" />
-        <option value="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" />
         <option value="$PROJECT_DIR$/posts/templates/posts/post_list.html" />
         <option value="$PROJECT_DIR$/users/templates/users/profile_user.html" />
         <option value="$PROJECT_DIR$/users/templates/users/profile.html" />
@@ -192,6 +191,7 @@
         <option value="$PROJECT_DIR$/Procfile" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/Peerspace/settings.py" />
+        <option value="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" />
       </list>
     </option>
   </component>
@@ -238,6 +238,19 @@
             <path>
               <item name="Peerspace" type="b2602c69:ProjectViewProjectNode" />
               <item name="Peerspace" type="462c0819:PsiDirectoryNode" />
+              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Peerspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Peerspace" type="462c0819:PsiDirectoryNode" />
+              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Peerspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Peerspace" type="462c0819:PsiDirectoryNode" />
+              <item name="user_messages" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="user_messages" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -449,6 +462,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="16" column="45" lean-forward="false" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="45" />
+          <folding>
+            <element signature="e#19#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -456,6 +472,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#19#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -470,6 +489,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="349">
           <caret line="114" column="4" lean-forward="false" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -532,6 +552,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
           <caret line="36" column="28" lean-forward="false" selection-start-line="36" selection-start-column="28" selection-end-line="36" selection-end-column="28" />
+          <folding>
+            <element signature="e#19#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -539,6 +562,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="515">
           <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -546,13 +570,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
           <caret line="133" column="48" lean-forward="false" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="105" column="44" lean-forward="false" selection-start-line="105" selection-start-column="44" selection-end-line="105" selection-end-column="44" />
+          <folding>
+            <element signature="e#19#73#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -576,6 +596,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -583,6 +604,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="477" column="33" lean-forward="true" selection-start-line="477" selection-start-column="33" selection-end-line="477" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -698,6 +720,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="719">
           <caret line="256" column="29" lean-forward="false" selection-start-line="256" selection-start-column="29" selection-end-line="256" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="261" column="47" lean-forward="false" selection-start-line="261" selection-start-column="47" selection-end-line="261" selection-end-column="47" />
           <folding />
         </state>
       </provider>
