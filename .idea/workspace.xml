@@ -83,8 +83,8 @@
           <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/requirements.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="606">
-                  <caret line="53" column="9" lean-forward="false" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
+                <state relative-caret-position="589">
+                  <caret line="52" column="17" lean-forward="false" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
                   <folding />
                 </state>
               </provider>
@@ -696,8 +696,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="53" column="9" lean-forward="false" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
+        <state relative-caret-position="589">
+          <caret line="52" column="17" lean-forward="false" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
           <folding />
         </state>
       </provider>
