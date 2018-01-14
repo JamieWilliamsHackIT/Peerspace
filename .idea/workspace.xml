@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1637cfeb-6f96-45d6-bdff-735ef885bd8e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" afterPath="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" />
-    </list>
+    <list default="true" id="1637cfeb-6f96-45d6-bdff-735ef885bd8e" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,8 +71,8 @@
           <file leaf-file-name="messages.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="702">
-                  <caret line="261" column="47" lean-forward="false" selection-start-line="261" selection-start-column="47" selection-end-line="261" selection-end-column="47" />
+                <state relative-caret-position="634">
+                  <caret line="119" column="47" lean-forward="false" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
                   <folding />
                 </state>
               </provider>
@@ -726,8 +724,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="261" column="47" lean-forward="false" selection-start-line="261" selection-start-column="47" selection-end-line="261" selection-end-column="47" />
+        <state relative-caret-position="634">
+          <caret line="119" column="47" lean-forward="false" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
           <folding />
         </state>
       </provider>
