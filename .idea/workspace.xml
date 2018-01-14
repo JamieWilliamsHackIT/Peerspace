@@ -71,8 +71,8 @@
           <file leaf-file-name="messages.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="634">
-                  <caret line="119" column="47" lean-forward="false" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
+                <state relative-caret-position="209">
+                  <caret line="94" column="27" lean-forward="true" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
                   <folding />
                 </state>
               </provider>
@@ -724,8 +724,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="634">
-          <caret line="119" column="47" lean-forward="false" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
+        <state relative-caret-position="209">
+          <caret line="94" column="27" lean-forward="true" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
           <folding />
         </state>
       </provider>
