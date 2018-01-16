@@ -48,6 +48,7 @@
       <p if={!post.completed && (post.proof_description || post.proof_pic)} class="float-right completion-status awaiting-verifcation-{post.id} mr-3 pt-1" style="color: #FFBF00; margin-bottom:0px;"><span class="icon icon-hour-glass"></span><span class="d-none d-sm-inline"> Awaiting Verification</span></p>
       <p if={post.completed} class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span><span class="d-none d-sm-inline"> Completed</span></p>
     </div>
+
   </div>
   <div class="comment-container comment-container-{post.id}" commentsopen="false" style="display:none;">
     <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">

@@ -2,7 +2,7 @@
 
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <title>{% block title_tag %}Peerspace{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
     <!-- Required meta tags -->
@@ -16,165 +16,165 @@
     <link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-  </head>
-  <body class="">
+</head>
+<body class="">
 
-    <nav class="navbar navbar-expand-md fixed-top navbar-dark app-navbar">
+<nav class="navbar navbar-expand-md fixed-top navbar-dark app-navbar">
     <div class="container">
-    <a class="navbar-brand" href="{% url 'feed' %}">
-      <img src="{% static 'img/logo.png' %}" alt="Peerspace" class=""><p style="display:inline; vertical-align:middle;"><spam class="display-2" style="font-size:2rem;"></span></p>
-    </a>
+        <a class="navbar-brand" href="{% url 'feed' %}">
+            <img src="{% static 'img/logo.png' %}" alt="Peerspace" class=""><p style="display:inline; vertical-align:middle;"><spam class="display-2" style="font-size:2rem;"></span></p>
+        </a>
 
-    <button class="navbar-toggler navbar-toggler-right d-md-none" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="navbar-toggler navbar-toggler-right d-md-none" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <form class="form-inline float-right d-none d-md-flex mr-5">
-        <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
-      </form>
-      <ul class="navbar-nav ml-auto mr-4">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:leaderboards' %}"><span class="icon icon-list"></span> Leaderboards</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'messages:messages' %}"><span class="icon icon-chat"></span> Messages</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'docs' %}"><span class="icon icon-book"></span> Docs</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:logout' %}"><span class="icon icon-log-out"></span> Logout</a>
-        </li>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <form class="form-inline float-right d-none d-md-flex mr-5">
+                <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
+            </form>
+            <ul class="navbar-nav ml-auto mr-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:leaderboards' %}"><span class="icon icon-list"></span> Leaderboards</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'messages:messages' %}"><span class="icon icon-chat"></span> Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'docs' %}"><span class="icon icon-book"></span> Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:logout' %}"><span class="icon icon-log-out"></span> Logout</a>
+                </li>
 
-      </ul>
+            </ul>
 
 
-      <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-2 d-none d-md-flex">
-        <li class="nav-item ml-2">
-          <a tabindex="0"
-             id="notifications"
-             class=""
-             role="button"
-             data-html="true"
-             data-toggle="notification-popover"
-             data-trigger="focus"
-             data-placement="bottom"
-             title="<b>Notifications · <a href='#'><small>View all</small></a></b>"
-             data-content="<ul class=' ml-0 pl-0 notification-list'><notification></notification><img class='loading-circle loading-circle-notifications' src={% static 'img/loading.gif' %}></ul>">
+            <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-2 d-none d-md-flex">
+                <li class="nav-item ml-2">
+                    <a tabindex="0"
+                       id="notifications"
+                       class=""
+                       role="button"
+                       data-html="true"
+                       data-toggle="notification-popover"
+                       data-trigger="focus"
+                       data-placement="bottom"
+                       title="<b>Notifications · <a href='#'><small>View all</small></a></b>"
+                       data-content="<ul class=' ml-0 pl-0 notification-list'><notification></notification><img class='loading-circle loading-circle-notifications' src={% static 'img/loading.gif' %}></ul>">
 
-          <span class="icon icon-bell notifications"></span><span class="notification-num"></span></a>
-          <a class="btn btn-default navbar-btn navbar-btn-avatar" href="{% url 'users:profile_user' %}">
-            <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
-          </a>
-          <span class="username d-md-none d-lg-inline">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
-          <span class="username d-lg-none">{{ request.user.name }}</span>
-        </li>
-      </ul>
+                        <span class="icon icon-bell notifications"></span><span class="notification-num"></span></a>
+                    <a class="btn btn-default navbar-btn navbar-btn-avatar" href="{% url 'users:profile_user' %}">
+                        <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
+                    </a>
+                    <span class="username d-md-none d-lg-inline">{{ request.user.name }} | {{ request.user.points }} ({{ request.user.level_floor }})</span>
+                    <span class="username d-lg-none">{{ request.user.name }}</span>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
-  </nav>
-  <!-- Optional JavaScript -->
-  <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script> -->
-  <script src="{% static 'dist/toolkit.js' %}"></script>
-  <script src="{% static 'js/application.js' %}"></script>
-  <script src="{% static 'tags/notification.js' %}"></script>
-  {% block body_content %}
-  {% endblock body_content %}
-  <script>
-  $(function(){
-    // This function stops the body from scrooling when scrolling in popover
-    $.fn.scrollGuard = function() {
-    return this
-        .on( 'mousewheel', function (e) {
-            var event = e.originalEvent;
-            var d = event.wheelDelta || -event.detail;
-            this.scrollTop += (d < 0 ? 1 : -1) * 30;
-            e.preventDefault();
-        });
-    };
-    // Enables popover
-    var notification_data = [];
-    var last_scroll_top = 0;
-    $("[data-toggle=notification-popover]").popover({container: 'body'});
-    var reached_bottom_notifications = false;
-    $('#notifications').on('shown.bs.popover', function () {
-    var page_number_notifications = 0;
-    riot.mount('notification', {callback:tagCallBack});
-    $('.popover').scrollGuard();
-    function tagCallBack(theTag) {
-      if (!notification_data.length) {
-        $.ajax({
-          type: "GET",
-          url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
-          dataType: "json",
-          success: function(data) {
-            notification_data = data;
-            theTag.trigger('data_loaded', notification_data);
-            $('.loading-circle-notifications').hide()
-          }
-        })
-      } else {
-        theTag.trigger('data_loaded', notification_data);
-        $('.loading-circle-notifications').hide();
-        $('.popover').scrollTop(last_scroll_top)
-      }
-      $('.popover').scroll(function() {
-        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reached_bottom_notifications) {
-          page_number_notifications++;
-          reached_bottom_notifications = true;
-          //Show loading gif
-          $('.loading-circle-notifications').show();
-          //Gets more posts
-          $.ajax({
-            type: "GET",
-            url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
-            dataType: 'json',
-            success: function(data) {
-              $.each(data, function(i, notification) {
-                notification_data.push(notification)
-              });
-              if (data.length == 10) {
-                reached_bottom_notifications = false
-                // console.log(data)
-                // console.log(notification_data)
-              } else {
-                reached_bottom_notifications = true;
-                console.log('No more notifications')
-              }
-              theTag.trigger('data_loaded', notification_data);
-              //Hide loading gif
-              $('.loading-circle-notifications').hide()
-            }, error: function(error) {
-              console.log('Error loading notifications...')
+</nav>
+<!-- Optional JavaScript -->
+<script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script> -->
+<script src="{% static 'dist/toolkit.js' %}"></script>
+<script src="{% static 'js/application.js' %}"></script>
+<script src="{% static 'tags/notification.js' %}"></script>
+{% block body_content %}
+{% endblock body_content %}
+<script>
+    $(function(){
+        // This function stops the body from scrooling when scrolling in popover
+        $.fn.scrollGuard = function() {
+            return this
+                .on( 'mousewheel', function (e) {
+                    var event = e.originalEvent;
+                    var d = event.wheelDelta || -event.detail;
+                    this.scrollTop += (d < 0 ? 1 : -1) * 30;
+                    e.preventDefault();
+                });
+        };
+        // Enables popover
+        var notification_data = [];
+        var last_scroll_top = 0;
+        $("[data-toggle=notification-popover]").popover({container: 'body'});
+        var reached_bottom_notifications = false;
+        $('#notifications').on('shown.bs.popover', function () {
+            var page_number_notifications = 0;
+            riot.mount('notification', {callback:tagCallBack});
+            $('.popover').scrollGuard();
+            function tagCallBack(theTag) {
+                if (!notification_data.length) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
+                        dataType: "json",
+                        success: function(data) {
+                            notification_data = data;
+                            theTag.trigger('data_loaded', notification_data);
+                            $('.loading-circle-notifications').hide()
+                        }
+                    })
+                } else {
+                    theTag.trigger('data_loaded', notification_data);
+                    $('.loading-circle-notifications').hide();
+                    $('.popover').scrollTop(last_scroll_top)
+                }
+                $('.popover').scroll(function() {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reached_bottom_notifications) {
+                        page_number_notifications++;
+                        reached_bottom_notifications = true;
+                        //Show loading gif
+                        $('.loading-circle-notifications').show();
+                        //Gets more posts
+                        $.ajax({
+                            type: "GET",
+                            url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
+                            dataType: 'json',
+                            success: function(data) {
+                                $.each(data, function(i, notification) {
+                                    notification_data.push(notification)
+                                });
+                                if (data.length == 10) {
+                                    reached_bottom_notifications = false
+                                    // console.log(data)
+                                    // console.log(notification_data)
+                                } else {
+                                    reached_bottom_notifications = true;
+                                    console.log('No more notifications')
+                                }
+                                theTag.trigger('data_loaded', notification_data);
+                                //Hide loading gif
+                                $('.loading-circle-notifications').hide()
+                            }, error: function(error) {
+                                console.log('Error loading notifications...')
+                            }
+                        })
+                    }
+                })
             }
+        });
+        $('#notifications').on('hide.bs.popover', function () {
+            last_scroll_top = $('.popover').scrollTop()
+        });
+        // Handles messages
+        $(document).on('click', '.message-btn', function(e) {
+            e.preventDefault();
+            conversation_id = $(this).attr('data-user-id');
+            $.ajax({
+                type: "GET",
+                url: "/messages/api/v5/messages/redirect/" + conversation_id + "/",
+                dataType: "json",
+                success: function(data) {
+                    window.location.href = "/messages/" + data.conversation_id
+                }
             })
-          }
-      })
-    }
+        })
     });
-    $('#notifications').on('hide.bs.popover', function () {
-      last_scroll_top = $('.popover').scrollTop()
-    });
-    // Handles messages
-    $(document).on('click', '.message-btn', function(e) {
-      e.preventDefault();
-      conversation_id = $(this).attr('data-user-id');
-      $.ajax({
-        type: "GET",
-        url: "/messages/api/v5/messages/redirect/" + conversation_id + "/",
-        dataType: "json",
-        success: function(data) {
-          window.location.href = "/messages/" + data.conversation_id
-        }
-      })
-    })
-  });
-  </script>
-  </body>
+</script>
+</body>
 </html>

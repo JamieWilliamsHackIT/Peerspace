@@ -78,7 +78,8 @@
           <div class="form-group">
             <input type="date" class="form-control" id="deadline" placeholder="Deadline" disabled>
           </div>
-          <button data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="submit" id="post" class="post-btn btn btn-primary">Post</button>
+          <button data-toggle="collapse" href="#" aria-expanded="false" aria-controls="collapseExample" type="submit" id="post" class="post-btn btn btn-primary" style="cursor: pointer;">Post</button>
+          <a href="" id="cancel-post" class="btn btn-outline-secondary ml-2">Cancel</a>
         </div>
       </form>
       <post-feed></post-feed>
@@ -323,7 +324,7 @@
         $.each(postData, function(i, post) {
           postIds.push(post.id)
         });
-        userID = {{ user.id }}
+        var userID = {{ user.id }}
         theTag.trigger('data_loaded', data, userID);
         $('.loading-circle-posts').hide()
       }, error: function(error) {
@@ -349,7 +350,7 @@
                 postData.push(post)
               }
             });
-            userID = {{ user.id }}
+            var userID = {{ user.id }}
             if (data.length == 10) {
               reachedBottom = false
             } else {
@@ -394,6 +395,16 @@
         }
       });
     });
+    // Shows post form
+    $('.form-group-hidden').hide();
+    $(document).on('focus', '#title', function() {
+      $('.form-group-hidden').fadeIn()
+    });
+    // Hides post form
+    $(document).on('click', '#cancel-post', function(e) {
+        e.preventDefault()
+        $('.form-group-hidden').fadeOut()
+    })
     // User search
     $(document).on("keydown", ".search-input", function (e) {
         if (e.which == 13 && $(this).val()) {
@@ -569,10 +580,6 @@
           }
         }
       })
-    });
-    $('.form-group-hidden').hide();
-    $(document).on('focus', '#title', function() {
-      $('.form-group-hidden').fadeIn()
     });
     // Handle the folowers and following modals
     $(document).on('click', '#followers', function(e) {

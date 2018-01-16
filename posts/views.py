@@ -216,13 +216,13 @@ def prove_post(request, pk=None):
                 # the post creation and post completion
                 if post.proof_description and post.proof_pic:
                     post.proved_at = timezone.now()
-                post.completed = True
-                post.save()
+                    post.completed = True
+                    post.save()
 
-                # Add points to the user
-                post_user = post.user
-                post_user.points += 50 + (2 * post.likes.count())
-                post_user.save()
+                    # Add points to the user
+                    post_user = post.user
+                    post_user.points += 50 + (2 * post.likes.count())
+                    post_user.save()
 
                 return HttpResponseRedirect(post.get_absolute_url())
 
@@ -260,6 +260,9 @@ def prove_post_delete(request, pk=None):
             post.verifications.clear()
             post.completed = False
             post.save()
+            post_user = post.user
+            post_user.points -= 50
+            post_user.save()
             return HttpResponseRedirect(post.get_absolute_url())
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
