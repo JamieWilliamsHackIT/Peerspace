@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1637cfeb-6f96-45d6-bdff-735ef885bd8e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Peerspace/settings.py" afterPath="$PROJECT_DIR$/Peerspace/settings.py" />
-      <change beforePath="$PROJECT_DIR$/posts/templates/posts/post_detail.html" afterPath="$PROJECT_DIR$/posts/templates/posts/post_detail.html" />
       <change beforePath="$PROJECT_DIR$/posts/templates/posts/post_detail_user.html" afterPath="$PROJECT_DIR$/posts/templates/posts/post_detail_user.html" />
-      <change beforePath="$PROJECT_DIR$/posts/templates/posts/post_list.html" afterPath="$PROJECT_DIR$/posts/templates/posts/post_list.html" />
-      <change beforePath="$PROJECT_DIR$/posts/templates/posts/prove_post.html" afterPath="$PROJECT_DIR$/posts/templates/posts/prove_post.html" />
-      <change beforePath="$PROJECT_DIR$/posts/views.py" afterPath="$PROJECT_DIR$/posts/views.py" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-feed.tag" afterPath="$PROJECT_DIR$/static/tags/post-feed.tag" />
-      <change beforePath="$PROJECT_DIR$/templates/layout.html" afterPath="$PROJECT_DIR$/templates/layout.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -50,11 +42,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="post_detail_user.html" pinned="false" current-in-tab="false">
+              <file leaf-file-name="post_detail_user.html" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/posts/templates/posts/post_detail_user.html">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="316">
-                      <caret line="37" column="109" lean-forward="false" selection-start-line="37" selection-start-column="109" selection-end-line="37" selection-end-column="109" />
+                    <state relative-caret-position="384">
+                      <caret line="44" column="121" lean-forward="false" selection-start-line="44" selection-start-column="121" selection-end-line="44" selection-end-column="121" />
                       <folding />
                     </state>
                   </provider>
@@ -84,17 +76,17 @@
                 <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="412">
-                      <caret line="85" column="52" lean-forward="true" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="52" />
+                      <caret line="85" column="52" lean-forward="false" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="52" />
                       <folding />
                     </state>
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+              <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="493">
-                      <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+                    <state relative-caret-position="255">
+                      <caret line="15" column="9" lean-forward="false" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
                       <folding />
                     </state>
                   </provider>
@@ -218,8 +210,8 @@
         <option value="$PROJECT_DIR$/posts/templates/posts/post_detail.html" />
         <option value="$PROJECT_DIR$/templates/layout.html" />
         <option value="$PROJECT_DIR$/static/tags/post-feed.tag" />
-        <option value="$PROJECT_DIR$/posts/templates/posts/post_detail_user.html" />
         <option value="$PROJECT_DIR$/Peerspace/settings.py" />
+        <option value="$PROJECT_DIR$/posts/templates/posts/post_detail_user.html" />
       </list>
     </option>
   </component>
@@ -700,14 +692,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/posts/templates/posts/prove_post.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/posts/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -743,7 +727,7 @@
     <entry file="file://$PROJECT_DIR$/user_messages/templates/user_messages/messages.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="412">
-          <caret line="85" column="52" lean-forward="true" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="52" />
+          <caret line="85" column="52" lean-forward="false" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="52" />
           <folding />
         </state>
       </provider>
@@ -766,18 +750,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/posts/templates/posts/post_detail_user.html">
+    <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="37" column="109" lean-forward="false" selection-start-line="37" selection-start-column="109" selection-end-line="37" selection-end-column="109" />
+        <state relative-caret-position="255">
+          <caret line="15" column="9" lean-forward="false" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
+    <entry file="file://$PROJECT_DIR$/posts/templates/posts/prove_post.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+        <state relative-caret-position="238">
+          <caret line="14" column="57" lean-forward="false" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/posts/templates/posts/post_detail_user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="44" column="121" lean-forward="false" selection-start-line="44" selection-start-column="121" selection-end-line="44" selection-end-column="121" />
           <folding />
         </state>
       </provider>
