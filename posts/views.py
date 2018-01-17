@@ -371,8 +371,8 @@ class PostLikeAPI(APIView):
         return Response(data)
 
 
-class PostVerficationAPI(APIView):
-    authenication_classes = (authentication.SessionAuthentication,)
+class PostVerificationAPI(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None, pk=None):

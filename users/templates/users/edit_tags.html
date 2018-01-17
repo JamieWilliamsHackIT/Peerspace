@@ -19,19 +19,13 @@
       <a href="{% url 'users:profile_user' %}" class="btn btn-primary">Save changes</a>
   </form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
-<script src="{% static 'js/csrf.js' %}"></script>
-<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
 <script>
 $.ajax({
   type: "GET",
   dataType: "json",
   url: "/users/get_preferences",
   success: function(data) {
-    for (i in data.tags) {
+    for (var i in data.tags) {
       $('#tags').append('<li>' + data.tags[i] + '</li>')
     }
     $("#tags").tagit({
@@ -61,8 +55,6 @@ $.ajax({
           })
         }
     })
-  }, error(error) {
-    // console.log("Error: " + error)
   }
 })
 </script>

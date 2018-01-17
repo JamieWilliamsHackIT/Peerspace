@@ -2,118 +2,96 @@
 {% load static %}
 {% block title_tag %}Leaderboards | {{ block.super }}{% endblock %}
 {% block body_content %}
-<!-- Peerspace specific stylesheets  -->
-<link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
-<!-- Percentage circles stylesheets -->
-<link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
-<link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
-<!-- jQueryUi specific stylesheets -->
-<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
-<!-- Tagit specific stylesheets -->
-<link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
-<div class="container leaderboards-container">
-  <div class="row">
-    <div class="card d-md-block col-lg-3 d-lg-block mb-4" style="height: 100%;">
-      <div class="card-body">
-        <h6 class="mb-3">Your stats</h6>
-        <ul class="list-unstyled list-spaced">
-          <li><span class="text-muted icon icon-globe mr-3 overall_position"></span>Overall position: {{ overall_position }}</a>
-          </li><li><span class="text-muted icon icon-medal mr-3 points_pos"></span>Points position: {{ points_position }}</a>
-          </li><li><span class="text-muted icon icon-check mr-3 percentage_pos"></span>Completion index position: {{ index_position }}</a>
-        </li></ul>
-        <hr>
-        <h6 class="mb-4">Post completion <small>· <a href="#">More</a></small></h6>
-        <div class="c100 p{{completion_percentage}} center mb-4">
-          <span>{{completion_percentage}}%</span>
-          <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+    <link rel="stylesheet" href="{% static 'users/css/leaderboards.css' %}">
+    <link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
+    <link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <div class="container leaderboards-container">
+        <div class="row">
+            <div class="card d-md-block col-lg-3 d-lg-block mb-4" style="height: 100%;">
+                <div class="card-body">
+                    <h6 class="mb-3">Your stats</h6>
+                    <ul class="list-unstyled list-spaced">
+                        <li><span class="text-muted icon icon-globe mr-3 overall_position"></span>Overall position: {{ overall_position }}</a>
+                        </li><li><span class="text-muted icon icon-medal mr-3 points_pos"></span>Points position: {{ points_position }}</a>
+                    </li><li><span class="text-muted icon icon-check mr-3 percentage_pos"></span>Completion index position: {{ index_position }}</a>
+                    </li></ul>
+                    <hr>
+                    <h6 class="mb-4">Post completion <small>· <a href="#">More</a></small></h6>
+                    <div class="c100 p{{completion_percentage}} center mb-4">
+                        <span>{{completion_percentage}}%</span>
+                        <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+                    </div>
+                    <!-- <hr> -->
+                    <h6>Level (total points: {{user.points}})</h6>
+                    <div class="green c100 p{{user.level_percentage}} center my-4">
+                        <span>{{user.level_floor}}</span>
+                        <div class="slice"><div class="bar"></div><div class="fill"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="user-list col-lg-9">
+                <div class="user-list-inner card">
+                    <div class="controls container py-4 ml-5">
+                        <div class="row">
+                            <select class="form-control mr-2 col-lg-4 group">
+                                <option>Global</option>
+                                <option>Following</option>
+                                <option>Followers</option>
+                            </select>
+                            <select class="form-control col-lg-4 type">
+                                <option>Points</option>
+                                <option>Completion Index</option>
+                            </select>
+                        </div>
+                    </div>
+                    <ul>
+                        <leaderboard></leaderboard>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <!-- <hr> -->
-        <h6>Level (total points: {{user.points}})</h6>
-        <div class="green c100 p{{user.level_percentage}} center my-4">
-          <span>{{user.level_floor}}</span>
-          <div class="slice"><div class="bar"></div><div class="fill"></div></div>
-        </div>
-      </div>
     </div>
-    <div class="user-list col-lg-9">
-      <div class="user-list-inner card">
-        <div class="controls container py-4 ml-5">
-          <div class="row">
-            <select class="form-control mr-2 col-lg-4 group">
-              <option>Global</option>
-              <option>Following</option>
-              <option>Followers</option>
-            </select>
-            <select class="form-control col-lg-4 type">
-              <option>Points</option>
-              <option>Completion Index</option>
-            </select>
-          </div>
-        </div>
-        <ul>
-          <leaderboard></leaderboard>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Makes getting the csrf token easier -->
-<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- jQueryUi -->
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-<!-- Popper JS -->
-<script src="	https://unpkg.com/popper.js"></script>
-<!-- Tagit -->
-<script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
-<!-- Adds CSRF token to the request headers -->
-<script src="{% static 'js/csrf.js' %}"></script>
-<!-- Riot.js custom tag -->
-<script src="{% static 'tags/leaderboard.js' %}"></script>
-<!-- Toolkit JS -->
-<script src="{% static 'dist/toolkit.js' %}"></script>
-<script>
-  page_number = 0;
-  leaderboard_group = "global";
-  leaderboard_type = "points";
-  function tagCallBack(theTag) {
-    // Gets posts
-    $.ajax({
-      type: "GET",
-      url: "/users/leaderboards/api/v3/{{ user.id }}/" + leaderboard_group + "/" + leaderboard_type + "/" + page_number,
-      dataType: 'json',
-      success: function(data) {
-        user_id = {{ user.id }}
-        theTag.trigger('data_loaded', data, user_id)
-      }
-    });
-    $(".group").change(function() {
-      $.ajax({
-        type: "GET",
-        url: "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
-        dataType: 'json',
-        success: function(data) {
-          user_id = {{ user.id }}
-          theTag.trigger('data_loaded', data, user_id)
+    <script src="{% static 'tags/leaderboard.js' %}"></script>
+    <script>
+        page_number = 0;
+        leaderboard_group = "global";
+        leaderboard_type = "points";
+        function tagCallBack(theTag) {
+            // Gets posts
+            $.ajax({
+                type: "GET",
+                url: "/users/leaderboards/api/v3/{{ user.id }}/" + leaderboard_group + "/" + leaderboard_type + "/" + page_number,
+                dataType: 'json',
+                success: function(data) {
+                    theTag.trigger('data_loaded', data, {{ user.id }})
+                }
+            });
+            $(".group").change(function() {
+                $.ajax({
+                    type: "GET",
+                    url: "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
+                    dataType: 'json',
+                    success: function(data) {
+                        theTag.trigger('data_loaded', data, {{ user.id }})
+                    }
+                })
+            });
+            $(".type").change(function() {
+                $.ajax({
+                    type: "GET",
+                    url: "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
+                    dataType: 'json',
+                    success: function(data) {
+                        theTag.trigger('data_loaded', data, {{ user.id }})
+                    }
+                })
+            });
         }
-      })
-    });
-    $(".type").change(function() {
-      $.ajax({
-        type: "GET",
-        url: "/users/leaderboards/api/v3/{{ user.id }}/" + $(".group option:selected").val() + "/" + $(".type option:selected").val() + "/" + page_number,
-        dataType: 'json',
-        success: function(data) {
-          user_id = {{ user.id }}
-          theTag.trigger('data_loaded', data, user_id)
-        }
-      })
-    });
-  }
-  $(document).ready(function() {
-    riot.mount('leaderboard', {callback:tagCallBack})
-  })
-</script>
-</body>
+        $(document).ready(function() {
+            riot.mount('leaderboard', {callback:tagCallBack})
+        })
+    </script>
+    </body>
 {% endblock body_content %}

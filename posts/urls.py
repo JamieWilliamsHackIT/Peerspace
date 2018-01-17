@@ -63,7 +63,7 @@ urlpatterns = [
     ),
     path(
         'api/v1/<int:pk>/verify',
-        views.PostVerficationAPI.as_view(),
+        views.PostVerificationAPI.as_view(),
         name='API_post_verifys'
     ),
     path(

@@ -1,34 +1,46 @@
 {% load static %}
-
 <!doctype html>
 <html lang="en">
 <head>
     <title>{% block title_tag %}Peerspace{% endblock %}</title>
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'dist/toolkit.css' %}">
     <link rel="stylesheet" href="{% static 'css/application.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
-    <!-- Percentage circles stylesheets -->
     <link rel="stylesheet" href="{% static 'posts/css/circle.css' %}">
     <link rel="stylesheet" href="{% static 'posts/sass/circle.scss' %}">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+        (function($) {
+            if (!$.curCSS) {
+                $.curCSS = $.css;
+            }
+        })(jQuery);
+    </script>    <script src="{% static 'js/csrf.js' %}"></script>
+    <script src="{% static 'js/tag-it.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'dist/toolkit.js' %}"></script>
+    <script src="{% static 'js/application.js' %}"></script>
+    <script src="{% static 'tags/notification.js' %}"></script>
+    <script src="{% static 'tags/post-feed.js' %}"></script>
+    <script src="{% static 'tags/follower.js' %}"></script>
 </head>
-<body class="">
-
+<body>
 <nav class="navbar navbar-expand-md fixed-top navbar-dark app-navbar">
     <div class="container">
         <a class="navbar-brand" href="{% url 'feed' %}">
             <img src="{% static 'img/logo.png' %}" alt="Peerspace" class=""><p style="display:inline; vertical-align:middle;"><spam class="display-2" style="font-size:2rem;"></span></p>
         </a>
-
         <button class="navbar-toggler navbar-toggler-right d-md-none" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <form class="form-inline float-right d-none d-md-flex mr-5">
                 <input class="form-control search-input" type="text" data-action="grow" placeholder="Search">
@@ -46,10 +58,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'users:logout' %}"><span class="icon icon-log-out"></span> Logout</a>
                 </li>
-
             </ul>
-
-
             <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-2 d-none d-md-flex">
                 <li class="nav-item ml-2">
                     <a tabindex="0"
@@ -62,7 +71,6 @@
                        data-placement="bottom"
                        title="<b>Notifications · <a href='#'><small>View all</small></a></b>"
                        data-content="<ul class=' ml-0 pl-0 notification-list'><notification></notification><img class='loading-circle loading-circle-notifications' src={% static 'img/loading.gif' %}></ul>">
-
                         <span class="icon icon-bell notifications"></span><span class="notification-num"></span></a>
                     <a class="btn btn-default navbar-btn navbar-btn-avatar" href="{% url 'users:profile_user' %}">
                         <img class="rounded-circle" src="{{ request.user.profile_pic.url }}">
@@ -74,16 +82,6 @@
         </div>
     </div>
 </nav>
-<!-- Optional JavaScript -->
-<script src="{% static 'bower_components/riot/riot.min.js' %}"></script>
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script> -->
-<script src="{% static 'dist/toolkit.js' %}"></script>
-<script src="{% static 'js/application.js' %}"></script>
-<script src="{% static 'tags/notification.js' %}"></script>
 {% block body_content %}
 {% endblock body_content %}
 <script>
@@ -139,7 +137,7 @@
                                 $.each(data, function(i, notification) {
                                     notification_data.push(notification)
                                 });
-                                if (data.length == 10) {
+                                if (data.length === 10) {
                                     reached_bottom_notifications = false
                                     // console.log(data)
                                     // console.log(notification_data)
