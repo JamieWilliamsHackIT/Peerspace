@@ -5,24 +5,18 @@ other actions can be displayed in real time without the need for a refresh or
 continuous AJAX requests.
 """
 
-
-# Standard imports
-from rest_framework import generics
-from rest_framework import permissions
-from rest_framework import authentication
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.utils import timezone
+from rest_framework import authentication
+# Standard imports
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # Import the User model
 from users.models import User
-
 # Import the Notification model
 from . import models
+
 
 # This class will return notification objects
 class NotificationAPI(APIView):
@@ -46,7 +40,7 @@ class NotificationAPI(APIView):
         data = []
         # Iterate through the notifications and create JSON data
         for notification in notifications:
-            # Get the transcieving user's profile picture
+            # Get the transceiving user's profile picture
             if notification.user_tx.profile_pic:
                 user_tx_pic_url = notification.user_tx.profile_pic.url
             else:
@@ -57,21 +51,23 @@ class NotificationAPI(APIView):
                 data.append(
                     {
                         # Notification info
-                        'id'                :     notification.id,
-                        'type'              :     notification._type,
-                        'redirect_url'      :     notification.redirect_url,
-                        'viewed'            :     notification.viewed,
-                        'time_ago'          :     notification.time_ago(),
+                        'id': notification.id,
+                        'type': notification._type,
+                        'redirect_url': notification.redirect_url,
+                        'viewed': notification.viewed,
+                        'time_ago': notification.time_ago(),
                         # User info
-                        'user_rx_id'        :     notification.user_rx.id,
-                        'user_rx_name'      :     notification.user_rx.name,
-                        'user_tx_id'        :     notification.user_tx.id,
-                        'user_tx_name'      :     notification.user_tx.name,
-                        'user_tx_pic_url'   :     user_tx_pic_url,
+                        'user_rx_id': notification.user_rx.id,
+                        'user_rx_name': notification.user_rx.name,
+                        'user_tx_id': notification.user_tx.id,
+                        'user_tx_name': notification.user_tx.name,
+                        'user_tx_pic_url': user_tx_pic_url,
                         # Post info
-                        'post_id'           :     notification.post.id,
-                        'post_title'        :     notification.post.title,
-                        'comment'           :     notification.comment,
+                        'post_id': notification.post.id,
+                        'post_title': notification.post.title,
+                        'comment': notification.comment,
+                        'progress_description': notification.progress_description,
+                        'progress_pic_url': notification.progress_pic_url,
                     }
                 )
             else:
@@ -79,17 +75,17 @@ class NotificationAPI(APIView):
                 data.append(
                     {
                         # Notification info
-                        'id'                :     notification.id,
-                        'type'              :     notification._type,
-                        'redirect_url'      :     notification.redirect_url,
-                        'viewed'            :     notification.viewed,
-                        'time_ago'          :     notification.time_ago(),
+                        'id': notification.id,
+                        'type': notification._type,
+                        'redirect_url': notification.redirect_url,
+                        'viewed': notification.viewed,
+                        'time_ago': notification.time_ago(),
                         # User info
-                        'user_rx_id'        :     notification.user_rx.id,
-                        'user_rx_name'      :     notification.user_rx.name,
-                        'user_tx_id'        :     notification.user_tx.id,
-                        'user_tx_name'      :     notification.user_tx.name,
-                        'user_tx_pic_url'   :     user_tx_pic_url,
+                        'user_rx_id': notification.user_rx.id,
+                        'user_rx_name': notification.user_rx.name,
+                        'user_tx_id': notification.user_tx.id,
+                        'user_tx_name': notification.user_tx.name,
+                        'user_tx_pic_url': user_tx_pic_url,
                     }
                 )
 

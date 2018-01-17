@@ -6,28 +6,48 @@ from django.conf import settings
 # Import the Post model
 from posts.models import Post
 
-# Define the model to hold the notification data
-class Notification(models.Model):
-    # This field stores the type of notification (like, comment, follow, etc...)
-    _type = models.CharField(max_length=50)
-    # This field holds the url of the post or user that has been liked or followed
-    redirect_url = models.URLField()
-    # This holds a ForeignKey relation between the notification and the recieving user
-    user_rx = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='notifications_rx', default=None, null=True)
-    # This holds a ForeignKey relation between the notification and the transcieving user
-    user_tx = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='notifications_tx', default=None, null=True)
-    # This holds a ForeignKey relation between the notification and a post
-    post = models.ForeignKey(Post, on_delete=models.SET_NULL, related_name='post', default=None, null=True)
-    # This holds the comment data if the notification is of _type 'comment'
-    comment = models.TextField(default='', blank=True)
-    # This stores whether the user has seen the notification (currently not in use)
-    viewed = models.BooleanField(default=False)
-    # This stores the date and time when the action that created the notification was made
-    created_at = models.DateTimeField(default=timezone.now)
 
-    # This makes it easier to reference notification instances in the admin
+class Notification(models.Model):
+    """This class defines the notification model.
+    When a user interacts with a post or a user the
+    relevant user(s) are sent a notification letting
+    them know.
+    """
+    _type = models.CharField(max_length=50)
+    redirect_url = models.URLField()
+    user_rx = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name='notifications_rx',
+        default=None,
+        null=True
+    )
+    user_tx = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name='notifications_tx',
+        default=None,
+        null=True
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.SET_NULL,
+        related_name='post',
+        default=None,
+        null=True
+    )
+    comment = models.TextField(default='', blank=True)
+    viewed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
+    progress_description = models.TextField(blank=True, null=True)
+    progress_pic_url = models.URLField(blank=True, null=True)
+
     def __str__(self):
+        """This methods makes referencing each instance in the admin easier
+        """
         return '{} notification for {}'.format(self._type, self.user_rx.name)
-    # This returns the number of seconds since the notification was created
+
     def time_ago(self):
-        return (timezone.now() - self.created_at)
+        """Returns the time delta representing how long ago the notification was made
+        """
+        return timezone.now() - self.created_at

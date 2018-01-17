@@ -15,6 +15,8 @@ from django.utils import timezone
 import decimal
 from users.models import UserPreferenceTag
 from notifications.models import Notification
+from users.views import get_profile_images, post_stats
+from notifications.models import Notification
 
 # Import forms from app
 from . import forms
@@ -48,31 +50,42 @@ class RetrieveUpdateDestroyPost(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PostSerializer
 
 
-# This API view provides the post data for the feed
+# This API view provides the post data
 class FeedPostList(APIView):
-    # Define authentication and permission classes
-    authenication_classes = (authentication.SessionAuthentication,)
+    authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    # Run when a GET request is received
-    def get(self, request, format=None, user_id=None, page_number=None):
-        # Get the user from the url
-        # user_id = self.kwargs['user_id']
-        # page_number = self.kwargs['page_number']
-        # Define max posts per get srequest
+    def get(self, request, format=None, user_id=None, page_number=None, page=None):
         page_size = 10
-        post_ids = get_most_relevent(user_id, page_number, page_size)
-        # This may not be the best way to tackle this issue, nevertheless
-        # it is a working solution. The queryset was not ordered so I have
-        # serialised the data from the posts myself
+        posts = []
+        if page == 'feed':
+            post_ids = get_most_relevent(user_id, page_number, page_size)
+            for _id in post_ids:
+                posts.append(get_object_or_404(models.Post, id=_id))
+        elif page == 'profile':
+            posts = models.Post.objects.filter(user=user_id)
+        elif page == 'detail':
+            # This is a bit confusing: I needed to get the post id from the frontend and the page number parameter was
+            # not being used in this case (the detail view displays only one post per page therefore the page number
+            # is redundant) so I used it to get the post id.
+            posts.append(get_object_or_404(models.Post, pk=page_number))
 
         data = []
-        for _id in post_ids:
-            post = get_object_or_404(models.Post, pk=_id)
+        for post in posts:
             if post.proof_pic:
                 proof_pic = post.proof_pic.url
             else:
                 proof_pic = ''
+
+            progress_data = []
+            for progress in models.PostProgress.objects.filter(post=post).order_by('-created_at'):
+                progress_data.append({
+                    'id': progress.id,
+                    'description': progress.description,
+                    'progress_pic': progress.progress_pic.url,
+                    'time_ago': (timezone.now() - progress.created_at).total_seconds()
+                })
+
             data.append(
                 {
                     'id': post.id,
@@ -92,27 +105,13 @@ class FeedPostList(APIView):
                     'days_taken': post.days_taken,
                     'comments': [comment.id for comment in post.comments.all()],
                     'verifications': [verf.id for verf in post.verifications.all()],
+                    'motivations': [motivation.id for motivation in post.motivations.all()],
+                    'progress_updates': progress_data,
+                    'page': page,
                 }
             )
+
         return Response(data)
-
-
-class ProfilePostList(generics.ListAPIView):
-    serializer_class = serializers.PostSerializer
-
-    def get_queryset(self):
-        user_id = self.kwargs['user_id']
-        page_number = self.kwargs['page_number']
-        page_size = 10
-        slice1 = page_size * page_number
-        slice2 = (page_size * page_number) + page_size
-
-        queryset = models.Post.objects.filter(user=user_id).order_by('-created_at')[slice1:slice2]
-        return queryset
-
-
-from users.views import get_profile_images, post_stats
-from notifications.models import Notification
 
 
 def post_list(request):
@@ -235,7 +234,7 @@ def prove_post(request, pk=None):
         else:
             # If the user doesn't own the post then don't let them edit it and
             # redirect them
-            return HttpResponseRedirect(instance.get_absolute_url())
+            return HttpResponseRedirect(post.get_absolute_url())
     else:
         # If they are not logged in redirect them to the login page
         return HttpResponseRedirect(reverse_lazy('login'))
@@ -288,6 +287,99 @@ class DeletePost(LoginRequiredMixin, generic.DeleteView):
         return super(DeletePost, self).dispatch(request, *args, **kwargs)
 
 
+def send_notification(_type, user, post, comment=None, progress=None):
+    if _type == 'like':
+        notification_group = post.likes.all()
+    elif _type == 'comment':
+        notification_group = []
+    elif _type == 'verify':
+        notification_group = post.verifications.all()
+    elif _type == 'motivate':
+        notification_group = post.motivations.all()
+    elif _type == 'progress':
+        notification_group = []
+    else:
+        notification_group = None
+
+    if _type == 'progress':
+        # Get all the users who have motivated the post
+        for user in post.motivations.all():
+            if not user == post.user:
+                notification = Notification()
+                notification._type = _type
+                notification.redirect_url = post.get_absolute_url()
+                notification.user_rx = user
+                notification.user_tx = post.user
+                notification.post = post
+                notification.progress_description = progress.description
+                notification.progress_pic_url = progress.progress_pic.url
+                notification.save()
+
+    if user not in notification_group and not user == post.user:
+        notifications = Notification.objects.filter(user_tx=user)
+        notified = False
+        if not _type == 'comment':
+            for notification in notifications:
+                if notification.post == post and notification._type == _type:
+                    notified = True
+        else:
+            if not notified:
+                # Create notification if ine hasn't been made already
+                notification = Notification()
+                notification._type = _type
+                if _type == 'comment':
+                    notification.comment = comment
+                notification.redirect_url = post.get_absolute_url()
+                # I am using rx to mean receiver and tx to mean transceiver
+                notification.user_rx = post.user
+                notification.user_tx = user
+                notification.post = post
+                notification.save()
+
+
+def add_progress(request, pk=None):
+    # Check to see if the user is logged in
+    if request.user.is_authenticated:
+        # Get all of the users posts
+        user_posts = models.Post.objects.filter(user=request.user.id)
+        # Get the post being updated
+        post = get_object_or_404(models.Post, pk=pk)
+        # The user is the owner of the post then go ahead and load the form
+        if post in user_posts:
+            form = forms.PostProgress(
+                request.POST or None,
+                request.FILES or None,
+                )
+            # Validate the form
+            if form.is_valid():
+                post_progress = form.save(commit=False)
+                if post_progress.description and post_progress.progress_pic:
+                    post_progress.post = post
+                    post_progress.save()
+
+                    # Add points to the user
+                    post_user = post.user
+                    post_user.points += 10 + (2 * post.likes.count())
+                    post_user.save()
+                    send_notification('progress', request.user, post, progress=post_progress)
+
+                return HttpResponseRedirect(post.get_absolute_url())
+
+            context = {
+                'pk': pk,
+                'form': form,
+            }
+
+            return render(request, 'posts/progress.html', context)
+        else:
+            # If the user doesn't own the post then don't let them edit it and
+            # redirect them
+            return HttpResponseRedirect(post.get_absolute_url())
+    else:
+        # If they are not logged in redirect them to the login page
+        return HttpResponseRedirect(reverse_lazy('login'))
+
+
 class PostLikeAPI(APIView):
     authenication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
@@ -298,23 +390,7 @@ class PostLikeAPI(APIView):
         # Get the user object from the
         user = self.request.user
 
-        # Create a notification for the post owner
-        if not user in post.likes.all() and not user == post.user:
-            notifications = Notification.objects.filter(user_tx=user)
-            notified = False
-            for notification in notifications:
-                if notification.post == post and notification._type == 'like':
-                    notified = True
-            if not notified:
-                # Create notification if ine hasn't been made already
-                notification = Notification()
-                notification._type = 'like'
-                notification.redirect_url = post.get_absolute_url()
-                # I am using rx to mean receiver and tx to mean transceiver
-                notification.user_rx = post.user
-                notification.user_tx = user
-                notification.post = post
-                notification.save()
+        send_notification('like', user, post)
 
         # Initialise some variables
         liked = False
@@ -380,26 +456,8 @@ class PostVerificationAPI(APIView):
         post = get_object_or_404(models.Post, pk=pk)
         # Get user
         user = self.request.user
-        print(post.verifications.all())
-        # Create a notification for the post owner
-        if not user in post.verifications.all() and not user == post.user:
-            notifications = Notification.objects.filter(user_tx=user)
-            notified = False
-            print('runs 1')
-            for notification in notifications:
-                if notification.post == post and notification._type == 'verify':
-                    notified = True
-            if not notified:
-                print('runs 2')
-                # Create notification if ine hasn't been made already
-                notification = Notification()
-                notification._type = 'verify'
-                notification.redirect_url = post.get_absolute_url()
-                # I am using rx to mean receiver and tx to mean transceiver
-                notification.user_rx = post.user
-                notification.user_tx = user
-                notification.post = post
-                notification.save()
+
+        send_notification('verify', user, post)
 
         # Initialise some variables
         verified_user = False
@@ -463,18 +521,7 @@ class ListCreateComment(generics.ListCreateAPIView):
             post.comments.add(comment)
             post.save()
 
-            # Create a notification for the post owner
-            if not request.user == post.user:
-                # Create notification if ine hasn't been made already
-                notification = Notification()
-                notification._type = 'comment'
-                notification.comment = comment.comment
-                notification.redirect_url = post.get_absolute_url()
-                # I am using rx to mean receiver and tx to mean transceiver
-                notification.user_rx = post.user
-                notification.user_tx = request.user
-                notification.post = post
-                notification.save()
+            send_notification('comment', request.user, post, comment)
 
             # Define how much to adjust the weights by
             adjustment = 0.020
@@ -508,6 +555,41 @@ class ListCreateComment(generics.ListCreateAPIView):
             return super(ListCreateComment, self).post(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('login'))
+
+
+class MotivateAPI(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None, pk=None):
+        # Add the user to the post's motivations
+        user = request.user
+        post = get_object_or_404(models.Post, pk=pk)
+
+        send_notification('motivate', user, post)
+
+        # Check if the user is logged in
+        if user.is_authenticated:
+            if user in post.motivations.all():
+                post.motivations.remove(user)
+                motivated_user = False
+            else:
+                post.motivations.add(user)
+                motivated_user = True
+            # Indicate the like status has been updated
+            updated = True
+            post.save()
+        else:
+            # If they are not logged in then redirect them to login page
+            return HttpResponseRedirect(reverse_lazy('login'))
+
+        data = {
+            'motivated_user': motivated_user,
+            'motivations': post.motivations.count(),
+            'updated': updated,
+        }
+
+        return Response(data)
 
 
 class PostProofImageApi(APIView):

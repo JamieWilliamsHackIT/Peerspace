@@ -109,7 +109,7 @@
                 if (!notification_data.length) {
                     $.ajax({
                         type: "GET",
-                        url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
+                        url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications + "/",
                         dataType: "json",
                         success: function(data) {
                             notification_data = data;
@@ -131,7 +131,7 @@
                         //Gets more posts
                         $.ajax({
                             type: "GET",
-                            url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications,
+                            url: "/notifications/api/v4/" + {{ request.user.id }} + "/" + page_number_notifications + "/",
                             dataType: 'json',
                             success: function(data) {
                                 $.each(data, function(i, notification) {
@@ -139,8 +139,6 @@
                                 });
                                 if (data.length === 10) {
                                     reached_bottom_notifications = false
-                                    // console.log(data)
-                                    // console.log(notification_data)
                                 } else {
                                     reached_bottom_notifications = true;
                                     console.log('No more notifications')

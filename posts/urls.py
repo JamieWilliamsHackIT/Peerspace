@@ -40,6 +40,11 @@ urlpatterns = [
         views.prove_post_delete,
         name='prove_delete'
     ),
+    path(
+        '<int:pk>/progress/',
+        views.add_progress,
+        name='progress'
+    ),
     # API urls
     path(
         'api/v1/',
@@ -47,27 +52,22 @@ urlpatterns = [
         name='API_post_list'
     ),
     path(
-        'api/v1/profile/<int:user_id>/<int:page_number>/',
-        views.ProfilePostList.as_view(),
-        name='API_profile_posts'
-    ),
-    path(
         'api/v1/<pk>/',
         views.RetrieveUpdateDestroyPost.as_view(),
         name='API_post_detail'
     ),
     path(
-        'api/v1/<int:pk>/like',
+        'api/v1/<int:pk>/like/',
         views.PostLikeAPI.as_view(),
         name='API_post_like'
     ),
     path(
-        'api/v1/<int:pk>/verify',
+        'api/v1/<int:pk>/verify/',
         views.PostVerificationAPI.as_view(),
-        name='API_post_verifys'
+        name='API_post_verify'
     ),
     path(
-        'api/v1/<int:pk>/comment',
+        'api/v1/<int:pk>/comment/',
         views.ListCreateComment.as_view(),
         name='API_post_comment'
     ),
@@ -77,7 +77,7 @@ urlpatterns = [
         name='API_post_comment_delete'
     ),
     path(
-        'api/v1/feed/<int:user_id>/<int:page_number>/',
+        'api/v1/<page>/<int:user_id>/<int:page_number>/',
         views.FeedPostList.as_view(),
         name='feed'
     ),
@@ -85,5 +85,10 @@ urlpatterns = [
         'api/v1/proof_images/<int:pk>/<int:page_size>/',
         views.PostProofImageApi.as_view(),
         name='proof_images'
-    )
+    ),
+    path(
+        'api/v1/<int:pk>/motivate/',
+        views.MotivateAPI.as_view(),
+        name='motivate'
+    ),
 ]

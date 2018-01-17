@@ -31,27 +31,39 @@
             <ul class="media-list col-lg-6 mt-3 media-list-stream post-body mb-3">
                 <post-feed></post-feed>
             </ul>
+            <div class="user-post mt-3 col-lg-3">
+                <div class="card card-profile mb-4" style="position: sticky; top: 60px; background-color: rgb(240,240,240); border: none">
+                    <div class="card-body text-center" style="background-color: white; border: 1px solid rgba(0,0,0,.125);">
+                        <h3 class="text-left">Options</h3>
+                        <style>.control-btn {display: block; margin: 10px 0; text-align: left; color: grey;}</style>
+                        <a href="/posts/{{ post.id }}/edit/" class="control-btn"><span class="icon icon-message"></span> Message user</a>
+                        <a href="/posts/{{ post.id }}/delete/" class="control-btn"><span class="icon icon-warning"></span> Report post</a>
+                    </div>
+                    <div class="comment-container comment-container-{{ post.id }} p-3 mt-4" commentsopen="false" style="border: 1px solid rgba(0,0,0,.125);">
+                        <h3>Comments</h3>
+                        <ul class="media-list comment-list comment-list-{{ post.id }} mx-auto d-block my-0" style="width:95%;">
+                        </ul>
+                    </div>
+                    <div class="comment-form comment-form-{post.id}">
+                        <div class="form-group">
+                            <input type="text" class="form-control comment" post-id="{{ post.id }}" placeholder="Comment">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    <script src="{% static 'js/csrf.js' %}"></script>
-    <script src="{% static 'tags/post-feed.js' %}"></script>
     <script>
-        function tagCallBack(theTag) {
-            //Gets posts
-            $.ajax({
-                type: "GET",
-                url: "/posts/api/v1/{{ post.id }}",
-                dataType: 'json',
-                success: function(data) {
-                    userId = {{ user.id }}
-                        post = {
-                            post: data
-                        };
-                    theTag.trigger('data_loaded', post, userId)
-                }
-            });
+        function sendVar() {
+            return {
+                userId: {{ user.id }},
+                page: 'postDetail',
+                tags: false,
+                postId: {{ post.id }}
+            }
         }
-        riot.mount('post-feed', {callback:tagCallBack})
     </script>
+    <script src="{% static 'js/peerspace.js' %}"></script>
+    <script>getComments({{ post.id }}, {{ user.id }})</script>
 {% endblock %}

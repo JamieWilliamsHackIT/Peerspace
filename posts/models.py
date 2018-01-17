@@ -46,6 +46,7 @@ class Post(models.Model):
     proved_at = models.DateTimeField(default=None, blank=True, null=True)
     verifications = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='verfs')
     comments = models.ManyToManyField(Comment, blank=True, related_name='comments')
+    motivations = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='motivations')
 
     def __str__(self):
         """Return the Id, post title, and post user
@@ -101,3 +102,4 @@ class PostProgress(models.Model):
     description = models.TextField()
     progress_pic = models.ImageField(blank=True, null=True, default=None)
     post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(default=timezone.now)

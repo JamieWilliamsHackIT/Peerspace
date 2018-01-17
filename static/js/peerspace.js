@@ -1,12 +1,12 @@
 var vars = sendVar()
 
-if (vars.tags) {
-    $('#tags').tagit()
-}
+if (vars.tags) { $('#tags').tagit() }
 
 if (vars.page === 'postFeed' || vars.page === 'profileUser') {
-    riot.mount('post-feed', {callback:postFeedCallBack})
+    riot.mount('post-feed', {callback:postFeedCallBack});
     riot.mount('follower', {callback:followerCallBack})
+} else if (vars.page === 'postDetail') {
+    riot.mount('post-feed', {callback:postFeedCallBack})
 }
 
 
@@ -14,7 +14,7 @@ if (vars.page === 'postFeed' || vars.page === 'profileUser') {
 function getComments(postId, userId) {
     $.ajax({
         type: "GET",
-        url: "/posts/api/v1/" + postId + "/comment",
+        url: "/posts/api/v1/" + postId + "/comment/",
         dataType: "json",
         success: function(comments) {
             $('.comment-list-' + postId).html('');
@@ -29,7 +29,7 @@ function getComments(postId, userId) {
                 commentHTML += e.comment;
                 if (userId === e.user_id) {
                     //Handle the deleting of comments here
-                    commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; '
+                    commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; ';
                     commentHTML += 'padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + postId + ',' + userId + ')"><span class="icon icon-cross"></span></button>'
                 }
                 commentHTML += '</li>';
@@ -39,7 +39,12 @@ function getComments(postId, userId) {
                 // I can get the callback from a function by calling it in a console.log()
                 $('.comment-list-' + postId).append(commentHTML)
             });
-            $('.comment-btn-' + postId).html('<span class="icon icon-message"></span> Comment (' + comments.length + ')');
+            $('.js-comments-stat-' + postId).html('');
+            if (comments.length) {
+                $('.js-comments-stat-' + postId).html('<span class="icon icon-message"> ' + comments.length)
+            } else {
+                $('.js-comments-stat-' + postId).html('')
+            }
             $('.comment-container-' + postId).fadeIn();
             $('.comment-form-' + postId).fadeIn()
         }
@@ -50,9 +55,9 @@ function getComments(postId, userId) {
 // Deletes a comment
 function deleteComment(commentId, postId, userId) {
     $.ajax({
-        url: "/posts/api/v1/comments/" + commentId,
+        url: "/posts/api/v1/comments/" + commentId + "/",
         type: "DELETE",
-        // This MUST be in the callback due to the asynchronus nature of javascript
+        // This MUST be in the callback due to the asynchronous nature of javascript
         success: function() {getComments(postId, userId)}
     });
 }
@@ -65,16 +70,21 @@ $(document).ready(function() {
         e.preventDefault();
         const this_button = $(this);
         $.ajax({
-            url: "/posts/api/v1/" + this_button.attr('id') + "/like",
+            url: "/posts/api/v1/" + this_button.attr('id') + "/like/",
             method: "GET",
             dataType: "json",
             success: function(data) {
+                if (data.likes) {
+                    $('.js-likes-stat-' + this_button.attr('id')).html('<span class="icon icon-heart"> ' + data.likes)
+                } else {
+                    $('.js-likes-stat-' + this_button.attr('id')).html('')
+                }
                 if (data.liked) {
                     this_button.css('color', '#007bff');
-                    this_button.html('<span class="icon icon-thumbs-up"></span> Liked (' + data.likes + ')')
+                    this_button.html('<span class="icon icon-heart"></span> Like');
                 } else {
                     this_button.css('color', 'grey');
-                    this_button.html('<span class="icon icon-thumbs-up"></span> Like (' + data.likes + ')')
+                    this_button.html('<span class="icon icon-heart-outlined"></span> Like')
                 }
             }
         })
@@ -111,10 +121,10 @@ $(document).on("keydown", ".comment", function (e) {
             post: postId
         };
         $.ajax({
-            url: "/posts/api/v1/" + postId + "/comment",
+            url: "/posts/api/v1/" + postId + "/comment/",
             method: "POST",
             data: data,
-            success: function(data) {
+            success: function() {
                 //Load all comments
                 getComments(postId, vars.userId)
             }
@@ -141,7 +151,7 @@ $(document).on('click', '.verify-btn', function(e) {
     const postId = $(this).attr("post-id");
     const this_button = $(this);
     $.ajax({
-        url: "/posts/api/v1/" + postId + "/verify",
+        url: "/posts/api/v1/" + postId + "/verify/",
         method: "GET",
         dataType: "json",
         success: function(data) {
@@ -163,56 +173,39 @@ $(document).on('click', '.verify-btn', function(e) {
 });
 
 
-//Sends follow
-$(document).on('click', '.follow-btn', function(e) {
-    e.preventDefault();
-    const this_button = $(this);
-    $.ajax({
-        type: "GET",
-        url: "/users/api/v2/" + this_button.attr('userid') + "/follow/",
-        dataType: "json",
-        success: function(data) {
-            if (data.following) {
-                this_button.html('<span class="icon icon-check"></span> Following')
-            } else {
-                this_button.html('<span class="icon icon-add-user"></span> Follow')
-            }
-        }
-    })
-});
-
-
 // Callback for post-feed tag
 function postFeedCallBack(theTag) {
     var postData = [];
     var postIds = [];
     var pageNumber = 0;
     var url;
+    var reachedBottom = false;
     // Gets posts
     if (vars.page === 'postFeed') {
-        url = "/posts/api/v1/feed/" + vars.userId + "/" + pageNumber
+        url = "/posts/api/v1/feed/" + vars.userId + "/0/"
     } else if (vars.page === 'profileUser') {
-        url = "/posts/api/v1/profile/" + vars.userId + "/" + pageNumber
+        url = "/posts/api/v1/profile/" + vars.userId + "/0/"
+    } else if (vars.page === 'postDetail') {
+        url = "/posts/api/v1/detail/" + vars.userId + "/" + vars.postId + "/";
+        reachedBottom = true
     }
     $.ajax({
         type: "GET",
-        url: url,
+        url: url,  // Start with page 0 (the first page)
         dataType: 'json',
         success: function(data) {
             postData = data;
             $.each(postData, function(i, post) {
                 postIds.push(post.id)
             });
-            var userID = vars.userId;
-            theTag.trigger('data_loaded', data, userID);
+            theTag.trigger('data_loaded', data, vars.userId);
             $('.loading-circle-posts').hide()
         }, error: function() {
             console.log('Error loading posts...')
         }
     });
-    var reachedBottom = false;
     $(window).scroll(function() {
-        toScroll = $(document).height() - $(window).height() - 100;
+        var toScroll = $(document).height() - $(window).height() - 100;
         if ($(this).scrollTop() > toScroll && !reachedBottom) {
             pageNumber++;
             reachedBottom = true;
@@ -221,7 +214,7 @@ function postFeedCallBack(theTag) {
             //Gets more posts
             $.ajax({
                 type: "GET",
-                url: url,
+                url: url + pageNumber + "/",
                 dataType: 'json',
                 success: function(data) {
                     $.each(data, function(i, post) {
@@ -229,14 +222,13 @@ function postFeedCallBack(theTag) {
                             postData.push(post)
                         }
                     });
-                    var userID = vars.userId;
                     if (data.length === 10) {
                         reachedBottom = false
                     } else {
                         reachedBottom = true;
                         console.log('No more posts')
                     }
-                    theTag.trigger('data_loaded', postData, userID);
+                    theTag.trigger('data_loaded', postData, vars.userId);
                     //Hide loading gif
                     $('.loading-circle-posts').hide()
                 }, error: function() {
@@ -249,9 +241,8 @@ function postFeedCallBack(theTag) {
     $('#post').click(function(e) {
         // Get the entered tags as a list
         var tags = $("#tags").tagit("assignedTags");
-        const userID = vars.userId;
         var data = {
-            user: userID,
+            user: vars.userId,
             title: $('#title').val(),
             description: $('#desc').val(),
             tags: tags.join(', '),
@@ -265,7 +256,7 @@ function postFeedCallBack(theTag) {
             success: function(data) {
                 postData.unshift(data);
                 pageNumber = 0;
-                theTag.trigger('data_loaded', postData, userID);
+                theTag.trigger('data_loaded', postData, vars.userId);
                 $('#title').val('');
                 $('#desc').val('');
                 $("#tags").tagit("removeAll");
@@ -298,7 +289,7 @@ function postFeedCallBack(theTag) {
                 $('.create-post').hide();
                 $.ajax({
                     type: "GET",
-                    url: "/search/" + vars.userId + "/" + searchTerm + "/" + pageSize,
+                    url: "/search/" + vars.userId + "/" + searchTerm + "/" + pageSize + "/",
                     dataType: 'json',
                     success: function(data) {
                         if (!data.length) {
@@ -306,8 +297,7 @@ function postFeedCallBack(theTag) {
                         } else {
                             $('.no-search-results').hide()
                         }
-                        userID = vars.userId;
-                        theTag.trigger('data_loaded', data, userID);
+                        theTag.trigger('data_loaded', data, vars.userId);
                         $('.loading-circle-posts').hide()
                     }, error: function() {
                         console.log('Error searching for posts...')
@@ -327,7 +317,6 @@ function followerCallBack(theTag) {
     var type;
     // Handle the followers and following modals
     $(document).on('click', '#followers, #following', function() {
-        console.log('test')
         $('.loading-circle-followers').show();
         $('#followersModal').modal('toggle');
         // Get all of the user's followers
@@ -338,12 +327,12 @@ function followerCallBack(theTag) {
         $('#followers-modal-content div').remove();
         $.ajax({
             type: "GET",
-            url: "/users/api/v2/" + vars.userId + "/followers/" + type + "/" + pageNumberFollowers,
+            url: "/users/api/v2/" + vars.userId + "/followers/" + type + "/" + pageNumberFollowers + "/",
             dataType: "json",
             success: function(data) {
                 $.each(data, function(i, user) {
                     followerData.push(user)
-                })
+                });
                 theTag.trigger('data_loaded', followerData);
                 $('.loading-circle-followers').hide()
             }
@@ -359,7 +348,7 @@ function followerCallBack(theTag) {
             //Gets more posts
             $.ajax({
                 type: "GET",
-                url: "/users/api/v2/" + vars.userId + "/followers/" + type + "/" + pageNumberFollowers,
+                url: "/users/api/v2/" + vars.userId + "/followers/" + type + "/" + pageNumberFollowers + "/",
                 dataType: 'json',
                 success: function(data) {
                     $.each(data, function(i, follower) {
@@ -414,19 +403,43 @@ $(document).on('click', '.message-btn', function() {
 
 
 // Get user proof images
-$.ajax({
-    url: "/posts/api/v1/proof_images/" + vars.userId + "/" + 10,
-    method: "GET",
-    dataType: "json",
-    success: function(data) {
-        $.each(data, function(i, e) {
-            $('.images').append('<img href="' + e.post_url + '" class="img-fluid image" style="padding: 10px;" data-width="' + e.proof_pic_width + '" data-height="' + e.proof_pic_height + '" src="' + e.proof_pic_url + '">')
-        });
-        $('.loading-circle-images').hide()
-    }
-});
+if (vars.page === 'profileUser') {
+    $.ajax({
+        url: "/posts/api/v1/proof_images/" + vars.userId + "/10/",
+        method: "GET",
+        dataType: "json",
+        success: function(data) {
+            $.each(data, function(i, e) {
+                $('.images').append('<img href="' + e.post_url + '" class="img-fluid image" style="padding: 10px;" data-width="' + e.proof_pic_width + '" data-height="' + e.proof_pic_height + '" src="' + e.proof_pic_url + '">')
+            });
+            $('.loading-circle-images').hide()
+        }
+    });
+}
 
 
 $(document).on('click', '.image', function() {
     window.location.href = ($(this).attr('href')).toString();
+});
+
+
+// Sends motivations
+$(document).on('click', '.motivate-btn', function(e) {
+    e.preventDefault()
+    var this_button = $(this);
+    var postId = this_button.attr('post-id');
+    $.ajax({
+        type: "GET",
+        url: "/posts/api/v1/" + postId + "/motivate/",
+        dataType: "json",
+        success: function(data) {
+            if (data.motivations) {
+                $('.js-motivations-stat-' + postId).html('<span class="icon icon-flash">' + data.motivations);
+                this_button.css('color', '#007bff')
+            } else {
+                $('.js-motivations-stat-' + postId).html('');
+                this_button.css('color', 'grey')
+            }
+        }
+    })
 });

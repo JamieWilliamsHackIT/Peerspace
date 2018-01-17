@@ -1,29 +1,26 @@
 # Standard imports (I am aware of using commas to import multilpe things on one
 # line but as I am trying to keep to PEP8 I have seperated them only their own)
-from django.contrib.auth import authenticate
-from django.contrib.auth import login
 from django.contrib.auth import logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseRedirect
 from rest_framework import generics
 from rest_framework import permissions, authentication
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-# Import any models
-from . import models
-from posts.models import Post
 from notifications.models import Notification
+from posts.models import Post
 # Import any forms
 from . import forms
+# Import any models
+from . import models
 # Import serializers
 from . import serializers
+
 
 # This class renders the signup template and form
 class SignUpView(generic.CreateView):
@@ -40,6 +37,7 @@ class SignUpView(generic.CreateView):
 class LogoutView(generic.RedirectView):
     # Get the url linked the name "home"
     url = reverse_lazy('home')
+
     # This method logs the user out and runs the base LogoutView class using the
     # .super() method
     def get(self, request, *args, **kwargs):
@@ -54,10 +52,12 @@ class UpdateProfile(LoginRequiredMixin, generic.UpdateView):
     model = models.User
     # Set the form to the UpdateProfile form in forms.py
     form_class = forms.UpdateProfile
+
     # Set the redirect uel to the user's profile page
     def get_success_url(self):
         pk = self.request.user.id
         return reverse_lazy('users:profile', kwargs={'pk': pk})
+
     # Set the template the render
     template_name = 'users/edit_user.html'
 
@@ -84,7 +84,9 @@ class UpdateTags(APIView):
         }
         return Response(data)
 
+
 from rest_framework.decorators import api_view
+
 
 @api_view(['POST'])
 def delete_tag(request):
@@ -100,7 +102,7 @@ def delete_tag(request):
 
     return Response(data)
 
-import math
+
 # The blocks of code within the functions appeared twice, so I refactered them
 # into functions
 
@@ -167,11 +169,11 @@ def profile_view_user(request):
         # Render the template with the user object, profile pictures and post stats
         # in a context dictionary
         return render(request, 'users/profile_user.html', {
-            'user'                   :  user,
-            'profile_pictures'       :  profile_pictures,
-            'number_of_posts'        :  post_stats(user.id)['number_of_posts'],
-            'completed_posts'        :  post_stats(user.id)['completed_posts'],
-            'completion_percentage'  :  post_stats(user.id)['completion_percentage'],
+            'user': user,
+            'profile_pictures': profile_pictures,
+            'number_of_posts': post_stats(user.id)['number_of_posts'],
+            'completed_posts': post_stats(user.id)['completed_posts'],
+            'completion_percentage': post_stats(user.id)['completion_percentage'],
         })
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
@@ -197,13 +199,13 @@ def profile_view(request, pk):
         # Render the template with the user object and user_profile_pic url in
         # context dictionary
         return render(request, 'users/profile.html', {
-            'user'                   :  user,
-            'user_viewing'           :  request.user.id,
-            'following'              :  following,
-            'profile_pictures'       :  profile_pictures,
-            'number_of_posts'        :  post_stats(user.id)['number_of_posts'],
-            'completed_posts'        :  post_stats(user.id)['completed_posts'],
-            'completion_percentage'  :  post_stats(user.id)['completion_percentage'],
+            'user': user,
+            'user_viewing': request.user.id,
+            'following': following,
+            'profile_pictures': profile_pictures,
+            'number_of_posts': post_stats(user.id)['number_of_posts'],
+            'completed_posts': post_stats(user.id)['completed_posts'],
+            'completion_percentage': post_stats(user.id)['completion_percentage'],
         })
     else:
         return HttpResponseRedirect(reverse_lazy('login'))
@@ -247,8 +249,8 @@ class FollowUser(APIView):
                 following = True
             updated = True
         data = {
-            'following'  :  following,
-            'updated'    :  updated
+            'following': following,
+            'updated': updated
         }
         return Response(data)
 
@@ -281,16 +283,15 @@ class UserFollowers(APIView):
                 if follower == user_viewing:
                     follow_button = False
 
-
                 data.append(
                     {
-                        'id'                        :  follower.id,
-                        'name'                      :  follower.name,
-                        'followers'                 :  follower.followers.count(),
-                        'points'                    :  follower.points,
-                        'profile_pic'               :  get_profile_images(follower.id)['user_profile_pic'],
-                        'user_viewing_follow_them'  :  user_viewing_follow_them,
-                        'follow_button'             :  follow_button
+                        'id': follower.id,
+                        'name': follower.name,
+                        'followers': follower.followers.count(),
+                        'points': follower.points,
+                        'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
+                        'user_viewing_follow_them': user_viewing_follow_them,
+                        'follow_button': follow_button
                     }
                 )
 
@@ -310,32 +311,32 @@ class UserFollowers(APIView):
 
                     data.append(
                         {
-                            'id'                        :  follower.id,
-                            'name'                      :  follower.name,
-                            'followers'                 :  follower.followers.count(),
-                            'points'                    :  follower.points,
-                            'profile_pic'               :  get_profile_images(follower.id)['user_profile_pic'],
-                            'user_viewing_follow_them'  :  user_viewing_follow_them,
-                            'follow_button'             :  follow_button
+                            'id': follower.id,
+                            'name': follower.name,
+                            'followers': follower.followers.count(),
+                            'points': follower.points,
+                            'profile_pic': get_profile_images(follower.id)['user_profile_pic'],
+                            'user_viewing_follow_them': user_viewing_follow_them,
+                            'follow_button': follow_button
                         }
                     )
 
             else:
 
                 for user in following:
-
                     data.append(
                         {
-                            'id'             :  user.id,
-                            'name'           :  user.name,
-                            'followers'      :  user.followers.count(),
-                            'points'         :  user.points,
-                            'profile_pic'    :  get_profile_images(user.id)['user_profile_pic'],
-                            'follow_button'  :  False
+                            'id': user.id,
+                            'name': user.name,
+                            'followers': user.followers.count(),
+                            'points': user.points,
+                            'profile_pic': get_profile_images(user.id)['user_profile_pic'],
+                            'follow_button': False
                         }
                     )
 
         return Response(data)
+
 
 import math
 
@@ -375,7 +376,6 @@ class SuggestedUsers(APIView):
                     # print('Id: {} and score: {}'.format(user.id, score))
                     # suggested_users += 1
 
-
         sorted_score_dict = sorted(score_dict, key=score_dict.__getitem__)
         output = {}
         for k in sorted_score_dict:
@@ -388,9 +388,9 @@ class SuggestedUsers(APIView):
             if not user == main_user:
                 data.append(
                     {
-                        'id'           :  user.id,
-                        'name'         :  user.name,
-                        'profile_pic'  :  get_profile_images(user.id)['user_profile_pic'],
+                        'id': user.id,
+                        'name': user.name,
+                        'profile_pic': get_profile_images(user.id)['user_profile_pic'],
                     }
                 )
 
@@ -410,9 +410,9 @@ class TopUserAPI(APIView):
         for user in users[:page_size]:
             data.append(
                 {
-                    'id'           :  user.id,
-                    'name'         :  user.name,
-                    'profile_pic'  :  get_profile_images(user.id)['user_profile_pic'],
+                    'id': user.id,
+                    'name': user.name,
+                    'profile_pic': get_profile_images(user.id)['user_profile_pic'],
                 }
             )
 
@@ -429,14 +429,12 @@ def leaderboards_view(request):
         user.save()
     index_position = list(models.User.objects.all().order_by('-completion_index')).index(user) + 1
     return render(request, 'users/leaderboards.html',
-                      {
-                        'points_position'        :  points_position,
-                        'index_position'         :  index_position,
-                        'completion_percentage'  :  post_stats(request.user.id)['completion_percentage'],
-                      }
+                  {
+                      'points_position': points_position,
+                      'index_position': index_position,
+                      'completion_percentage': post_stats(request.user.id)['completion_percentage'],
+                  }
                   )
-
-from itertools import chain
 
 
 class LeaderboardsAPI(APIView):
@@ -497,13 +495,13 @@ class LeaderboardsAPI(APIView):
         for user in results:
             data.append(
                 {
-                    'id'                :  user.id,
-                    'name'              :  user.name,
-                    'profile_pic_url'   :  user.profile_pic.url,
-                    'position'          :  list(results).index(user) + 1,
-                    'points'            :  user.points,
-                    'level'             :  user.level_floor,
-                    'completion_index'  :  user.completion_index,
+                    'id': user.id,
+                    'name': user.name,
+                    'profile_pic_url': user.profile_pic.url,
+                    'position': list(results).index(user) + 1,
+                    'points': user.points,
+                    'level': user.level_floor,
+                    'completion_index': user.completion_index,
                 }
             )
 

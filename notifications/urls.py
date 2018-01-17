@@ -22,7 +22,7 @@ urlpatterns = [
     # ),
     # API urls
     path(
-        'api/v4/<int:pk>/<int:page_number>',
+        'api/v4/<int:pk>/<int:page_number>/',
         views.NotificationAPI.as_view(),
         name='API_notifications_get'
     ),
