@@ -63,7 +63,9 @@ class FeedPostList(APIView):
             for _id in post_ids:
                 posts.append(get_object_or_404(models.Post, id=_id))
         elif page == 'profile':
-            posts = models.Post.objects.filter(user=user_id).order_by('-created_at')
+            slice1 = (page_number * page_size)
+            slice2 = (page_number * page_size) + page_size
+            posts = models.Post.objects.filter(user=user_id).order_by('-created_at')[slice1:slice2]
         elif page == 'detail':
             # This is a bit confusing: I needed to get the post id from the frontend and the page number parameter was
             # not being used in this case (the detail view displays only one post per page therefore the page number
