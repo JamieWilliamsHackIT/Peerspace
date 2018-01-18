@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from users.models import User
 from posts.models import Post
 
+
 # Simple function-based-view that renders the home page
 def home_view(request):
     users = User.objects.all()
@@ -57,6 +58,7 @@ def settings(request):
         'facebook_login': facebook_login,
         'can_disconnect': can_disconnect
     })
+
 
 @login_required
 def password(request):

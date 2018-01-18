@@ -8,8 +8,9 @@
                     <small class="text-muted float-right" if={post.time_ago >= 60 && post.time_ago < 3600}>{Math.round(post.time_ago / 60)} min<span if={Math.round(post.time_ago / 60) !== 1}>s</span></small>
                     <small class="text-muted float-right" if={post.time_ago >= 3600 && post.time_ago < (24 * 3600)}>{Math.round(post.time_ago / 3600)} hour<span if={Math.round(post.time_ago / 3600) !== 1}>s</span></small>
                     <small class="text-muted float-right" if={post.time_ago >= (24 * 3600)}>{Math.round(post.time_ago / (24 * 3600))} day<span if={Math.round(post.time_ago / (24 * 3600)) !== 1}>s</span></small>
-                    <br>
-                    <small class="text-muted float-right">{post.progress_updates.length} updates</small>
+
+
+                    <small class="text-muted float-right updates-stat">{post.progress_updates.length} update<span if={post.progress_updates.length !== 1}>s</span></small>
                     <h6><a href="/users/{post.user}">{post.user_name}</a> made the commitment: <br><br><a href="/posts/{post.id}">{post.title}</a></h6>
                 </div><hr>
                 <p>
@@ -39,17 +40,6 @@
                 <p if={post.completed} class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span><span class="d-none d-sm-inline"> Completed</span></p>
             </div>
         </div>
-        <div if={post.page != 'detail'}>
-            <div class="comment-container comment-container-{post.id}" commentsopen="false" style="display:none;">
-                <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">
-                </ul>
-            </div>
-            <div class="comment-form comment-form-{post.id}" style="display:none;">
-                <div class="form-group">
-                    <input type="text" class="form-control comment" post-id="{post.id}" placeholder="Comment">
-                </div>
-            </div>
-        </div>
         <div if={post.proof_description && post.proof_pic} id="accordion{post.id}" role="tablist">
             <div class="card">
                 <div class="card-header" role="tab" id="heading{post.id}">
@@ -66,6 +56,17 @@
                             <img class="img-fluid d-block m-auto" src="{post.proof_pic}">
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div if={post.page != 'detail'}>
+            <div class="comment-container comment-container-{post.id}" commentsopen="false" style="display:none;">
+                <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">
+                </ul>
+            </div>
+            <div class="comment-form comment-form-{post.id}" style="display:none;">
+                <div class="form-group">
+                    <input type="text" class="form-control comment" post-id="{post.id}" placeholder="Comment">
                 </div>
             </div>
         </div>

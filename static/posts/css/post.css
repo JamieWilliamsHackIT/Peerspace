@@ -64,6 +64,12 @@
   color: grey;
 }
 
+.updates-stat {
+  position: absolute;
+  top: 40px;
+  right: 21px;
+}
+
 /*.comments-stat {*/
   /*padding: 0 2px 0 5px;*/
 /*}*/
