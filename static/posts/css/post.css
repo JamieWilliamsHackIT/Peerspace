@@ -64,6 +64,13 @@
   color: grey;
 }
 
+.post-stats-completed {
+  position: absolute;
+  bottom: -10px;
+  right: 10px;
+  color: grey;
+}
+
 .updates-stat {
   position: absolute;
   top: 40px;
@@ -103,6 +110,16 @@
   margin-bottom: 0;
 }
 
+.comment-block-detail {
+  font-size: 0.80rem;
+}
+
+.comment-block-detail img {
+  width: 20px;
+  height: 20px;
+  margin-right: 0!important;
+}
+
 .comment-form {
   margin: 0.99px;
 }
@@ -110,6 +127,8 @@
 .comment-container {
   background-color: white;
   margin: 0.99px;
+  height: 350px;
+  overflow-y: scroll;
 }
 
 .comment-pic {

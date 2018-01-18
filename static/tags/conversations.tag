@@ -13,9 +13,9 @@
   <script>
     this.on('mount', function() {
       opts.callback(this)
-    });;
+    });
     this.on('data_loaded', function(data) {
-      opts.convos = data;;
+      opts.convos = data;
       this.update()
     })
   </script>

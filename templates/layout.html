@@ -31,6 +31,7 @@
     <script src="{% static 'tags/notification.js' %}"></script>
     <script src="{% static 'tags/post-feed.js' %}"></script>
     <script src="{% static 'tags/follower.js' %}"></script>
+    <script src="{% static 'tags/comments.js' %}"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-md fixed-top navbar-dark app-navbar">
@@ -160,7 +161,7 @@
         // Handles messages
         $(document).on('click', '.message-btn', function(e) {
             e.preventDefault();
-            conversation_id = $(this).attr('data-user-id');
+            var conversation_id = $(this).attr('data-user-id');
             $.ajax({
                 type: "GET",
                 url: "/messages/api/v5/messages/redirect/" + conversation_id + "/",

@@ -63,7 +63,7 @@ class FeedPostList(APIView):
             for _id in post_ids:
                 posts.append(get_object_or_404(models.Post, id=_id))
         elif page == 'profile':
-            posts = models.Post.objects.filter(user=user_id)
+            posts = models.Post.objects.filter(user=user_id).order_by('-create_at')
         elif page == 'detail':
             # This is a bit confusing: I needed to get the post id from the frontend and the page number parameter was
             # not being used in this case (the detail view displays only one post per page therefore the page number
@@ -495,7 +495,11 @@ class ListCreateComment(generics.ListCreateAPIView):
         # Get the post object
         post = get_object_or_404(models.Post, pk=post_id)
         # Get all the comments on that post
-        comments = post.comments.all().order_by('created_at')
+        page_size = 5
+        page_number = self.kwargs['page_number']
+        slice1 = (page_number * page_size)
+        slice2 = (page_number * page_size) + page_size
+        comments = post.comments.all().order_by('created_at')[slice1:slice2]
         comment_list = []
         for comment in comments:
             comment_list.append(
@@ -505,9 +509,16 @@ class ListCreateComment(generics.ListCreateAPIView):
                     'user_id': comment.user.id,
                     'user_name': comment.user.name,
                     'user_pic_url': comment.user.profile_pic.url,
+                    'total': post.comments.all().count(),
                 }
             )
-        return Response(comment_list)
+
+        data = {
+            'comments': comment_list,
+            'total': post.comments.all().count(),
+        }
+
+        return Response(data)
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated:

@@ -10,45 +10,98 @@ if (vars.page === 'postFeed' || vars.page === 'profileUser') {
 }
 
 
+// This function stops the body from scrooling when scrolling in popover
+$.fn.scrollGuard = function() {
+    return this
+        .on( 'mousewheel', function (e) {
+            var event = e.originalEvent;
+            var d = event.wheelDelta || -event.detail;
+            this.scrollTop += (d < 0 ? 1 : -1) * 30;
+            e.preventDefault();
+        });
+};
+
+
+function commentsCallBack(theTag, postId, userId) {
+   console.log('callback', postId, user_id)
+   $.ajax({
+       type: "GET",
+       url: "/posts/api/v1/" + postId + "/comment/0/",
+       dataType: "json",
+       success: function (comments) {
+           console.log(comments);
+           $.each(comments.comments, function(i, comment) {
+               commentData.push(comment)
+           });
+           theTag.trigger('data_loaded', commentData, postId, userId)
+           $('.js-comments-stat-' + postId).html('');
+           if (comments.comments.length) {
+               $('.js-comments-stat-' + postId).html('<span class="icon icon-message ml-1"> ' + comments.total)
+           } else {
+               $('.js-comments-stat-' + postId).html('')
+           }
+           $('.comment-container-' + postId).fadeIn();
+           $('.comment-form-' + postId).fadeIn()
+       }
+   })
+}
+riot.mount('comments', {callback:commentsCallBack});
+
+
 // Gets comments
 function getComments(postId, userId) {
-    $.ajax({
-        type: "GET",
-        url: "/posts/api/v1/" + postId + "/comment/",
-        dataType: "json",
-        success: function(comments) {
-            $('.comment-list-' + postId).html('');
-            if (comments.length === 0) {
+    var commentData = [];
+    $('.comment-container').scrollGuard();
+    function commentsCallBack(theTag) {
+        $.ajax({
+            type: "GET",
+            url: "/posts/api/v1/" + postId + "/comment/0/",
+            dataType: "json",
+            success: function (comments) {
+                console.log(comments);
+                $.each(comments.comments, function(i, comment) {
+                    commentData.push(comment)
+                });
+                theTag.trigger('data_loaded', commentData, postId, userId)
+                $('.js-comments-stat-' + postId).html('');
+                if (comments.comments.length) {
+                    $('.js-comments-stat-' + postId).html('<span class="icon icon-message ml-1"> ' + comments.total)
+                } else {
+                    $('.js-comments-stat-' + postId).html('')
+                }
+                $('.comment-container-' + postId).fadeIn();
                 $('.comment-form-' + postId).fadeIn()
             }
-            $.each(comments, function(i,e) {
-                var commentHTML = '<li class="media comment-block py-3" commentid=' + e.comment_id + '>';
-                commentHTML += '<img class="media-object comment-pic d-flex align-self-start mr-3" src="' + e.user_pic_url + '">';
-                commentHTML += '<div class="media-body">';
-                commentHTML += '<strong>' + e.user_name + ': </strong>';
-                commentHTML += e.comment;
-                if (userId === e.user_id) {
-                    //Handle the deleting of comments here
-                    commentHTML += '</div><button class="btn delete-comment-btn delete-comment-btn-' + e.comment_id + ' btn-outline-danger" style="float:right; ';
-                    commentHTML += 'padding:0px 3px;" href="#" onClick="deleteComment('+ e.comment_id +',' + postId + ',' + userId + ')"><span class="icon icon-cross"></span></button>'
-                }
-                commentHTML += '</li>';
-                if (comments.length > i + 1) {
-                    commentHTML += '<hr>'
-                }
-                // I can get the callback from a function by calling it in a console.log()
-                $('.comment-list-' + postId).append(commentHTML)
-            });
-            $('.js-comments-stat-' + postId).html('');
-            if (comments.length) {
-                $('.js-comments-stat-' + postId).html('<span class="icon icon-message"> ' + comments.length)
-            } else {
-                $('.js-comments-stat-' + postId).html('')
-            }
-            $('.comment-container-' + postId).fadeIn();
-            $('.comment-form-' + postId).fadeIn()
-        }
-    });
+        })
+    }
+    console.log(typeof(commentsCallBack))
+    $('.comment-container').scroll(function() {})
+    riot.mount('.js-comments-tag-' + postId, {callback:commentsCallBack});
+    // riot.mount('comments', {callback:commentsCallBack});
+
+
+
+
+    //$.ajax({
+    //    type: "GET",
+    //    url: "/posts/api/v1/" + postId + "/comment/0/",
+    //    dataType: "json",
+    //    success: function(comments) {
+    //        $('.comment-list-' + postId).html('');
+    //        if (comments.length === 0) {
+    //            $('.comment-form-' + postId).fadeIn()
+    //        }
+//
+    //        $('.js-comments-stat-' + postId).html('');
+    //        if (comments.length) {
+    //            $('.js-comments-stat-' + postId).html('<span class="icon icon-message"> ' + comments.length)
+    //        } else {
+    //            $('.js-comments-stat-' + postId).html('')
+    //        }
+    //        $('.comment-container-' + postId).fadeIn();
+    //        $('.comment-form-' + postId).fadeIn()
+    //    }
+    //});
 }
 
 
@@ -214,7 +267,7 @@ function postFeedCallBack(theTag) {
             //Gets more posts
             $.ajax({
                 type: "GET",
-                url: url + pageNumber + "/",
+                url: (url).replace("/0/", "") + "/" + pageNumber + "/",
                 dataType: 'json',
                 success: function(data) {
                     $.each(data, function(i, post) {
