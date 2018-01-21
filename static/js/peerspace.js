@@ -10,7 +10,7 @@ if (vars.page === 'postFeed' || vars.page === 'profileUser') {
 }
 
 
-// This function stops the body from scrooling when scrolling in popover
+// This function stops the body from scrolling when scrolling in a popover
 $.fn.scrollGuard = function() {
     return this
         .on( 'mousewheel', function (e) {
@@ -25,7 +25,6 @@ $.fn.scrollGuard = function() {
 //Sends like
 $(document).ready(function() {
     $(document).on('click', '.like-btn', function(e) {
-        // Stop the page refreshing when the button is clicked
         e.preventDefault();
         const this_button = $(this);
         $.ajax({
@@ -51,28 +50,34 @@ $(document).ready(function() {
 });
 
 
-// Gets comments
+// Handles comments
 var commentData = [{}];
 var commentsPageNumber = {};
+var tag = {};
+$(document).on('click', '.comment-btn', function() {
+    const this_button = $(this);
+    const postId = this_button.attr('data-post-id');
+    if (this_button.attr('data-open') === 'true') {
+        $('.comment-btn-' + postId).attr('data-open', 'false');
+        $('.comment-form-' + postId).fadeOut();
+        $('.comment-container-' + postId).fadeOut();
+    } else {
+        this_button.attr('data-open', 'true');
+        //console.log('open');
+        if ($('.comment-list-' + postId).find('comments').length === 0) {
+            $('.comment-list-' + postId).append('<comments class="js-comments-tag-' + postId + '"></comments>');
+            tag[postId] = riot.mount('.js-comments-tag-' + postId, {callback:commentsCallBack, postId:postId, userId:vars.userId});
+        }
+        $('.comment-form-' + postId).fadeIn();
+        $('.comment-container-' + postId).fadeIn();
+    }
+});
+
 
 function commentsCallBack(theTag, postId, userId) {
-    console.log('Callback', postId, userId)
-
-    function updateComments(commentData) {
-        console.log(commentData);
-        theTag.trigger('data_loaded', commentData[postId].comments, postId, userId);
-        $('.js-comments-stat-' + postId).html('');
-        if (commentData[postId].comments.length) {
-            //console.log(commentData[postId])
-            $('.js-comments-stat-' + postId).html('<span class="icon icon-message ml-1"> ' + commentData[postId].comments[0].total)
-        } else {
-            $('.js-comments-stat-' + postId).html('')
-        }
-        $('.comment-container-' + postId).fadeIn();
-        $('.comment-form-' + postId).fadeIn()
-    }
-
     commentsPageNumber[postId] = 0;
+
+    // Get comments
     if (commentData[postId] === undefined) {
         $.ajax({
             type: "GET",
@@ -80,39 +85,41 @@ function commentsCallBack(theTag, postId, userId) {
             dataType: "json",
             success: function (comments) {
                 commentData[postId] = {
-                    comments: [],
-                    total: 0
+                    comments: comments.comments,
+                    total: comments.total
                 };
-                commentData[postId].comments = comments.comments;
-                commentData[postId].total = comments.total;
-                updateComments(commentData)
+                triggerTag(commentData, postId)
             }
         });
     } else {
-        updateComments(commentData)
+        triggerTag(commentData, postId)
     }
 
-    $(document).on('click', '.js-load-comments-' + postId, function(e) {
+    // Gets extra comments
+    $(document).on('click', '.js-load-comments', function() {
+        const postId = $(this).attr('data-post-id');
         commentsPageNumber[postId]++;
-        e.preventDefault();
         $.ajax({
             type: "GET",
             url: "/posts/api/v1/" + postId + "/comment/" + commentsPageNumber[postId] + "/",
             dataType: "json",
             success: function (comments) {
-                $.each(comments.comments, function(i, comment) {
+                if (comments.comments.length < 5) {
+                    $('.js-load-comments-' + postId).html('');
+                    console.log('No more comments for post ' + postId);
+                }
+                $.each(comments.comments, function (i, comment) {
                     commentData[postId].comments.push(comment);
                 });
-                console.log(commentData);
-                theTag.trigger('data_loaded', commentData[postId].comments, postId, userId);
+                triggerTag(commentData, postId);
             }
         })
     });
 
     //Sends comment
     $(document).on("keydown", ".comment", function (e) {
+        const postId = $(this).attr('data-post-id');
         if (e.which === 13 && $(this).val()) {
-            const postId = $(this).attr("post-id");
             var data = {
                 comment: $(this).val(),
                 post: postId
@@ -121,9 +128,11 @@ function commentsCallBack(theTag, postId, userId) {
                 url: "/posts/api/v1/" + postId + "/comment/0/",
                 method: "POST",
                 data: data,
-                success: function(comment) {
-                    commentData[postId].comments.unshift(comment);
-                    updateComments(commentData)
+                success: function(data) {
+                    // Re-trigger tag
+                    commentData[postId].comments.unshift(data);
+                    commentData[postId].total = data.total;
+                    triggerTag(commentData, postId)
                 }
             });
             $(this).val('')
@@ -131,69 +140,45 @@ function commentsCallBack(theTag, postId, userId) {
     });
 
     // Deletes a comment
-    $(document).on('click', '.delete-comment-btn', function(e) {
-        console.log('runs')
-        console.log(commentData);
-        e.preventDefault();
+    $(document).on('click', '.delete-comment-btn', function() {
         var commentId = $(this).attr('data-comment-id');
         var postId = $(this).attr('data-post-id');
         $.ajax({
             url: "/posts/api/v1/comments/" + commentId + "/",
             type: "DELETE",
-            // This MUST be in the callback due to the asynchronous nature of javascript
             success: function() {
                 // Remove the comment from the object
                 commentData[postId].comments = $.grep(commentData[postId]['comments'], function(e) {
                     return e.comment_id != commentId
                 });
-                //console.log(commentData)
-                updateComments(commentData)
+                commentData[postId].total--;
+                triggerTag(commentData, postId)
             }
         });
     });
-}
 
-
-function getComments(postId, userId) {
-    if ($('.comment-list-' + postId).find('comments').length === 0) {
-        $('.comment-list-' + postId).append('<comments class="js-comments-tag-' + postId + '"></comments>');
+    // Triggers the tag specific to a post
+    function triggerTag(commentData, postId) {
+        tag[postId][0].trigger('data_loaded', commentData[postId].comments, postId, userId);
+        // Update the comment stats
+        $('.js-comments-stat-' + postId).html('');
+        if (commentData[postId].comments.length) {
+            $('.js-comments-stat-' + postId).html('<span class="icon icon-message ml-1"> ' + commentData[postId].total)
+        } else {
+            $('.js-comments-stat-' + postId).html('')
+        }
     }
-    console.log(postId)
-    riot.mount('.js-comments-tag-' + postId, {callback:commentsCallBack, postId:postId, userId:userId});
 }
-
-
-// Opens comment section
-$(document).on('click', '.comment-btn', function(e) {
-    //Stop the page refreshing when the button is clicked
-    e.preventDefault();
-    const postId = $(this).attr("post-id");
-    console.log(postId)
-    const commentsOpen = $('.comment-container-' + postId).attr('commentsopen');
-    if (commentsOpen === 'true') {
-        $('.comment-container-' + postId).fadeOut(function() {
-            $('.comment-container-' + postId).attr('commentsopen', 'false');
-            $('.comment-btn-' + postId).css('color', 'grey')
-        });
-        $('.comment-form-' + postId).fadeOut()
-        riot.unmount('.js-comments-tag-' + postId);
-    } else {
-        $('.comment-container-' + postId).attr('commentsopen', 'true');
-        $('.comment-btn-' + postId).css('color', '#007bff');
-        console.log(postId)
-        getComments(postId, vars.userId)
-    }
-});
 
 
 // Will fade the delete button in and out when the user hovers over their own comment
 $(document).on('mouseenter', '.comment-block', function() {
     var commentId = $(this).attr('commentid');
-    $('.delete-comment-btn-' + commentId).fadeIn();
+    $('.delete-comment-btn-' + commentId).fadeIn(100);
 });
 $(document).on('mouseleave', '.comment-block', function() {
     var commentId = $(this).attr('commentid');
-    $('.delete-comment-btn-' + commentId).fadeOut();
+    $('.delete-comment-btn-' + commentId).fadeOut(100);
 });
 
 

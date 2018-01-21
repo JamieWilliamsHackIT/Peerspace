@@ -115,9 +115,9 @@
 }
 
 .comment-block-detail img {
-  width: 20px;
-  height: 20px;
-  margin-right: 0!important;
+  /*width: 28px!important;*/
+  /*height: 28px!important;*/
+  /*margin-right: 10px!important;*/
 }
 
 .comment-form {
@@ -125,14 +125,29 @@
 }
 
 .comment-container {
+  background-color: rgb(245, 245, 245);
+  /*border: 1px solid rgba(0,0,0, 0.125);*/
+}
+
+.comment-body {
   background-color: white;
-  /*margin: 0.99px;*/
-  /*max-height: 350px;*/
-  /*overflow-y: scroll;*/
+  padding: 10px;
+  border-radius: 20px;
+  max-width: 85%;
+}
+
+.load-comments {
+  cursor: pointer!important;
+  color: #0056b3!important;
+}
+
+.load-comments:hover {
+  text-decoration: underline!important;
 }
 
 .comment-pic {
   width: 35px!important;
+  border-radius: 50%;
 }
 
 .delete-comment-btn {

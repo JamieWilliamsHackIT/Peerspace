@@ -32,7 +32,7 @@
                 <post-feed></post-feed>
             </ul>
             <div class="user-post mt-3 col-lg-3">
-                <div class="card card-profile mb-4" style="position: sticky; top: 60px; background-color: rgb(240,240,240); border: none">
+                <div class="card card-profile mb-4" style="position: sticky; top: 60px; background-color: rgba(232, 230, 232, 1); border: none">
                     <div class="card-body text-center" style="background-color: white; border: 1px solid rgba(0,0,0,.125);">
                         <h3 class="text-left">Options</h3>
                         <style>.control-btn {display: block; margin: 10px 0; text-align: left; color: grey;}</style>
@@ -41,13 +41,17 @@
                     </div>
                     <div class="comment-container comment-container-{{ post.id }} p-3 mt-4" commentsopen="false" style="border: 1px solid rgba(0,0,0,.125);">
                         <h3>Comments</h3>
-                        <ul class="media-list comment-list comment-list-{{ post.id }} mx-auto d-block my-0" style="width:95%;">
-                        </ul>
-                    </div>
-                    <div class="comment-form comment-form-{post.id}">
-                        <div class="form-group">
-                            <input type="text" class="form-control comment" post-id="{{ post.id }}" placeholder="Comment">
+                        <div class="comment-form comment-form-{post.id}">
+                            <div class="form-group mb-0">
+                                <textarea type="text" class="form-control comment" data-post-id="{{ post.id }}" placeholder="Write comment" rows="1"></textarea>
+                            </div>
                         </div>
+                        <ul class="media-list comment-list comment-list-{{ post.id }} mx-auto d-block my-0" style="width:95%;">
+                            <comments></comments>
+                            {% if post.comments.count > 5 %}
+                            <a class="ml-3 pb-2 d-block js-load-comments js-load-comments-{{ post.id }} load-comments" data-post-id="{{ post.id }}">Load more comments</a>
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
 
@@ -65,5 +69,8 @@
         }
     </script>
     <script src="{% static 'js/peerspace.js' %}"></script>
-    <script>getComments({{ post.id }}, {{ user.id }})</script>
+    <script>
+        var tag = {};
+        tag[{{ post.id }}] = riot.mount('comments', {callback:commentsCallBack, postId:{{ post.id }}, userId:{{ user.id }}});
+    </script>
 {% endblock %}

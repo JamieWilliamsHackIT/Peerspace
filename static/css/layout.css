@@ -1,5 +1,5 @@
 body {
-  background-color: rgba(240, 240, 240, 1)!important;
+  background-color: rgba(232, 230, 232, 1)!important;
   overflow: auto;
 }
 
@@ -111,7 +111,7 @@ body {
   margin-top: 3px;
 }
 
-@@media (max-width) {
+@media (max-width) {
   .search-input {
     width: 240px!important;
   }
