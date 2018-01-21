@@ -100,6 +100,7 @@ class FeedPostList(APIView):
                     'completed': post.completed,
                     'user_name': post.user.name,
                     'user_url': post.user.profile_pic.url,
+                    'user_viewing_url': request.user.profile_pic.url,
                     'user': post.user.id,
                     'likes': [like.id for like in post.likes.all()],
                     'tags': post.tags,

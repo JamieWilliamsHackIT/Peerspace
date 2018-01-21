@@ -51,27 +51,28 @@
             </p>
         </div>
         <div class="post-footer pb-3">
-            <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(opts.userId)}><span class="icon icon-heart"></span> Like</a>
-            <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(opts.userId)}><span class="icon icon-heart-outlined"></span> Like</a>
-            <a class="ml-3 pt-3 comment-btn comment-btn-{post.id}" data-open="false" data-post-id={post.id} href="#" if={post.page != 'detail'}><span class="icon icon-message"></span> Comment</a>
-            <a class="ml-auto pt-3 motivate-btn motivate-btn-{post.id}" style="color: #007bff;" post-id="{post.id}" show={post.motivations.includes(opts.userId)} if={!post.completed} href="#"><span class="icon icon-flash"></span> Motivate</a>
-            <a class="ml-auto pt-3 motivate-btn motivate-btn-{post.id}" post-id="{post.id}" hide={post.motivations.includes(opts.userId)} if={!post.completed} href="#"><span class="icon icon-flash"></span> Motivate</a>
-            <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(opts.userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
-            <a if={(!post.completed && (post.proof_description || post.proof_pic)) && !post.verifications.includes(opts.userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:grey;" href="#"><span class="icon icon-shield"></span> Verify ({post.verifications.length}/5)</a>
+            <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(opts.userViewingId)}><span class="icon icon-heart"></span> Like</a>
+            <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(opts.userViewingId)}><span class="icon icon-heart-outlined"></span> Like</a>
+            <a class="ml-3 pt-3 comment-btn comment-btn-{post.id}" data-open="false" data-post-id={post.id} if={post.page != 'detail'}><span class="icon icon-message"></span> Comment</a>
+            <a class="ml-auto pt-3 motivate-btn motivate-btn-{post.id}" style="color: #007bff;" post-id="{post.id}" show={post.motivations.includes(opts.userViewingId)} if={!post.completed} href="#"><span class="icon icon-flash"></span> Motivate</a>
+            <a class="ml-auto pt-3 motivate-btn motivate-btn-{post.id}" post-id="{post.id}" hide={post.motivations.includes(opts.userViewingId)} if={!post.completed} href="#"><span class="icon icon-flash"></span> Motivate</a>
+            <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(opts.userViewingId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
+            <a if={(!post.completed && (post.proof_description || post.proof_pic)) && !post.verifications.includes(opts.userViewingId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:grey;" href="#"><span class="icon icon-shield"></span> Verify ({post.verifications.length}/5)</a>
             <div class="completion-status-container-{post.id}" style="display:inline;">
                 <p if={!post.completed && !(post.proof_description || post.proof_pic)} class="float-right completion-status mr-3 pt-1" style="color: red;"><span class="icon icon-cross"></span><span class="d-none d-sm-inline"> Not completed</span></p>
                 <p if={post.completed} class="float-right completion-status completed-{post.id} mr-3 pt-1" style="color: green;"><span class="icon icon-check"></span><span class="d-none d-sm-inline"> Completed</span></p>
             </div>
         </div>
         <div if={post.page != 'detail'}>
-            <div class="comment-form comment-form-{post.id}" style="display:none;">
-                <div class="form-group mb-0">
-                    <textarea type="text" class="form-control comment" data-post-id="{post.id}" placeholder="Write comment" rows="1"></textarea>
-                </div>
-            </div>
-            <div class="comment-container comment-container-{post.id}" style="display:none;">
-                <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">
 
+            <div class="comment-container comment-container-{post.id}" style="display:none;">
+                <div class="comment-form comment-form-{post.id} py-2 mx-3 style="display:none;">
+                    <div class="form-group mb-0 d-flex">
+                        <img class="media-object comment-pic d-flex align-self-start mr-3" src="{post.user_viewing_url}">
+                        <textarea type="text" class="form-control comment d-flex" data-post-id="{post.id}" placeholder="Write comment" rows="1"></textarea>
+                    </div>
+                </div>
+                <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">
                 </ul>
                 <a if={post.comments.length > 5} class="ml-3 pb-2 d-block js-load-comments js-load-comments-{post.id} load-comments" data-post-id="{post.id}">Load more comments</a>
             </div>
@@ -106,9 +107,10 @@
         this.on('mount', function() {
             opts.callback(this)
         });
-        this.on('data_loaded', function(data, userId) {
+        this.on('data_loaded', function(data, userId, userViewingId) {
             opts.posts = data;
             opts.userId = userId;
+            opts.userViewingId = userViewingId;
             this.update()
         })
     </script>

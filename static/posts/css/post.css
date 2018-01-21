@@ -92,6 +92,10 @@
   height: 30px;
 }
 
+.comment {
+    border-radius: 20px;
+}
+
 .like-btn,
 .comment-btn,
 .verify-btn,
@@ -100,6 +104,15 @@
   vertical-align: middle;
   color: grey;
   transition: all 0.5s;
+  cursor: pointer;
+}
+
+.comment-btn {
+    color: grey!important
+}
+
+.comment-btn:hover {
+    text-decoration: underline!important;
 }
 
 .like-btn:hover {
@@ -147,6 +160,7 @@
 
 .comment-pic {
   width: 35px!important;
+  height: 35px!important;
   border-radius: 50%;
 }
 

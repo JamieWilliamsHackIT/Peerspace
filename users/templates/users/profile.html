@@ -102,6 +102,7 @@
         function sendVar() {
             return {
                 userId: {{ user.id }},
+                userViewingId: {{ request.user.id }},
                 page: 'profileUser',
                 tags: false
             }

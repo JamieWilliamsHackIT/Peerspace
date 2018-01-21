@@ -146,6 +146,7 @@
         function sendVar() {
             return {
                 userId: {{ user.id }},
+                userViewingId: {{ request.user.id }},
                 page: 'postFeed',
                 tags: true
             }

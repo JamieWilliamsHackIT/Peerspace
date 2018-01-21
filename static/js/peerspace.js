@@ -63,7 +63,6 @@ $(document).on('click', '.comment-btn', function() {
         $('.comment-container-' + postId).fadeOut();
     } else {
         this_button.attr('data-open', 'true');
-        //console.log('open');
         if ($('.comment-list-' + postId).find('comments').length === 0) {
             $('.comment-list-' + postId).append('<comments class="js-comments-tag-' + postId + '"></comments>');
             tag[postId] = riot.mount('.js-comments-tag-' + postId, {callback:commentsCallBack, postId:postId, userId:vars.userId});
@@ -135,7 +134,7 @@ function commentsCallBack(theTag, postId, userId) {
                     triggerTag(commentData, postId)
                 }
             });
-            $(this).val('')
+            $(this).val('').blur()
         }
     });
 
@@ -235,7 +234,7 @@ function postFeedCallBack(theTag) {
             $.each(postData, function(i, post) {
                 postIds.push(post.id)
             });
-            theTag.trigger('data_loaded', data, vars.userId);
+            theTag.trigger('data_loaded', data, vars.userId, vars.userViewingId);
             $('.loading-circle-posts').hide()
         }, error: function() {
             console.log('Error loading posts...')
@@ -265,7 +264,7 @@ function postFeedCallBack(theTag) {
                         reachedBottom = true;
                         console.log('No more posts')
                     }
-                    theTag.trigger('data_loaded', postData, vars.userId);
+                    theTag.trigger('data_loaded', postData, vars.userId, vars.userViewingId);
                     //Hide loading gif
                     $('.loading-circle-posts').hide()
                 }, error: function() {
@@ -293,7 +292,7 @@ function postFeedCallBack(theTag) {
             success: function(data) {
                 postData.unshift(data);
                 pageNumber = 0;
-                theTag.trigger('data_loaded', postData, vars.userId);
+                theTag.trigger('data_loaded', postData, vars.userId, vars.userViewingId);
                 $('#title').val('');
                 $('#desc').val('');
                 $("#tags").tagit("removeAll");
@@ -334,7 +333,7 @@ function postFeedCallBack(theTag) {
                         } else {
                             $('.no-search-results').hide()
                         }
-                        theTag.trigger('data_loaded', data, vars.userId);
+                        theTag.trigger('data_loaded', data, vars.userId, vars.userViewingId);
                         $('.loading-circle-posts').hide()
                     }, error: function() {
                         console.log('Error searching for posts...')
