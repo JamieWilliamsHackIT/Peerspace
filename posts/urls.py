@@ -68,7 +68,7 @@ urlpatterns = [
     ),
     path(
         'api/v1/<int:pk>/comment/<int:page_number>/',
-        views.ListCreateComment.as_view(),
+        views.CommentAPI.as_view(),
         name='API_post_comment'
     ),
     path(

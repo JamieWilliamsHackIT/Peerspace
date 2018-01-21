@@ -5,6 +5,7 @@ from rest_framework import permissions
 from rest_framework import authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.mixins import DestroyModelMixin
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -487,9 +488,9 @@ class PostVerificationAPI(APIView):
         return Response(data)
 
 
-class ListCreateComment(generics.ListCreateAPIView):
-    queryset = models.Comment.objects.all()
-    serializer_class = serializers.CommentSerializer
+class CommentAPI(APIView, DestroyModelMixin):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         # Get the post Id from the url
@@ -501,7 +502,7 @@ class ListCreateComment(generics.ListCreateAPIView):
         page_number = self.kwargs['page_number']
         slice1 = (page_number * page_size)
         slice2 = (page_number * page_size) + page_size
-        comments = post.comments.all().order_by('created_at')[slice1:slice2]
+        comments = post.comments.all().order_by('-created_at')[slice1:slice2]
         comment_list = []
         for comment in comments:
             comment_list.append(
@@ -564,10 +565,38 @@ class ListCreateComment(generics.ListCreateAPIView):
             adjust_tag_weights(1)
 
             self.comments = post.comments.count()
+            self.comment_id = comment.id
 
-            return super(ListCreateComment, self).post(request, *args, **kwargs)
+            data = {
+                'comment_id': comment.id,
+                'comment': comment.comment,
+                'user_id': comment.user.id,
+                'user_name': comment.user.name,
+                'user_pic_url': comment.user.profile_pic.url,
+                'total': post.comments.all().count(),
+            }
+
+            return Response(data)
         else:
             return HttpResponseRedirect(reverse_lazy('login'))
+
+
+class DestroyViewComment(generics.RetrieveDestroyAPIView):
+    queryset = models.Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+
+    def delete(self, request, *args, **kwargs):
+        comment_id = self.kwargs['pk']
+        comment = get_object_or_404(models.Comment, pk=comment_id)
+        if request.user.is_authenticated:
+            if request.user.id == comment.user.id:
+                return super(DestroyViewComment, self).delete(
+                    request,
+                    *args,
+                    **kwargs
+                )
+            return Response("You can't do that")
+        return HttpResponseRedirect(reverse_lazy('login'))
 
 
 class MotivateAPI(APIView):
@@ -632,21 +661,3 @@ class PostProofImageApi(APIView):
                 )
 
         return Response(data)
-
-
-class DestroyViewComment(generics.RetrieveDestroyAPIView):
-    queryset = models.Comment.objects.all()
-    serializer_class = serializers.CommentSerializer
-
-    def delete(self, request, *args, **kwargs):
-        comment_id = self.kwargs['pk']
-        comment = get_object_or_404(models.Comment, pk=comment_id)
-        if request.user.is_authenticated:
-            if request.user.id == comment.user.id:
-                return super(DestroyViewComment, self).delete(
-                    request,
-                    *args,
-                    **kwargs
-                )
-            return Response("You can't do that")
-        return HttpResponseRedirect(reverse_lazy('login'))

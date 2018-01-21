@@ -53,7 +53,7 @@
         <div class="post-footer pb-3">
             <a href="#" class="ml-3 pt-3 like-btn" style="color: #007bff;" id="{post.id}" show={post.likes.includes(opts.userId)}><span class="icon icon-heart"></span> Like</a>
             <a href="#" class="ml-3 pt-3 like-btn" id="{post.id}" hide={post.likes.includes(opts.userId)}><span class="icon icon-heart-outlined"></span> Like</a>
-            <a class="ml-3 pt-3 comment-btn comment-btn-{post.id}" post-id="{post.id}" href="#" if={post.page != 'detail'}><span class="icon icon-message"></span> Comment</a>
+            <a class="ml-3 pt-3 comment-btn comment-btn-{post.id}" post-id={post.id} href="#" if={post.page != 'detail'}><span class="icon icon-message"></span> Comment</a>
             <a class="ml-auto pt-3 motivate-btn motivate-btn-{post.id}" style="color: #007bff;" post-id="{post.id}" show={post.motivations.includes(opts.userId)} if={!post.completed} href="#"><span class="icon icon-flash"></span> Motivate</a>
             <a class="ml-auto pt-3 motivate-btn motivate-btn-{post.id}" post-id="{post.id}" hide={post.motivations.includes(opts.userId)} if={!post.completed} href="#"><span class="icon icon-flash"></span> Motivate</a>
             <a if={(!post.completed && (post.proof_description || post.proof_pic)) && post.verifications.includes(opts.userId)} class="ml-3 pt-3 verify-btn verify-btn-{post.id}" post-id="{post.id}" style="color:#007bff;" href="#"><span class="icon icon-shield"></span> Verified ({post.verifications.length}/5)</a>
@@ -64,15 +64,15 @@
             </div>
         </div>
         <div if={post.page != 'detail'}>
-            <div class="comment-container comment-container-{post.id}" commentsopen="false" style="display:none;">
-                <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">
-                    <comments class="js-comments-tag-{post.id}"></comments>
-                </ul>
-            </div>
             <div class="comment-form comment-form-{post.id}" style="display:none;">
-                <div class="form-group">
+                <div class="form-group mb-0">
                     <input type="text" class="form-control comment" post-id="{post.id}" placeholder="Comment">
                 </div>
+            </div>
+            <div class="comment-container comment-container-{post.id}" commentsopen="false" style="display:none;">
+                <ul class="media-list comment-list comment-list-{post.id} mx-auto d-block my-0" style="width:95%;">
+                </ul>
+                <a if={post.comments.length > 5} href="#" class="ml-3 pb-2 d-block js-load-comments-{post.id}">Load more comments</a>
             </div>
         </div>
         <div if={post.page == 'detail'} class="mt-4">

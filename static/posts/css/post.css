@@ -126,9 +126,9 @@
 
 .comment-container {
   background-color: white;
-  margin: 0.99px;
-  height: 350px;
-  overflow-y: scroll;
+  /*margin: 0.99px;*/
+  /*max-height: 350px;*/
+  /*overflow-y: scroll;*/
 }
 
 .comment-pic {
