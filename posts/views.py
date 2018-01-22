@@ -639,16 +639,21 @@ class PostProofImageApi(APIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, format=None, pk=None, page_size=None):
+    def get(self, request, format=None, user_id=None, page_number=None):
+        print('get')
         # Get user
-        user = get_object_or_404(User, pk=pk)
+        user = get_object_or_404(User, pk=user_id)
         # Get their posts
         posts = models.Post.objects.filter(user=user).order_by('-created_at')
 
+        page_size = 10
+        slice1 = (page_size * page_number)
+        slice2 = (page_size * page_number) + page_size
+
         # Get the picture for each post
         data = []
-        for post in posts[:page_size]:
-            if post.proof_description and post.proof_pic:
+        for post in posts[slice1:slice2]:
+            if post.completed:
                 # Serialise data
                 data.append(
                     {

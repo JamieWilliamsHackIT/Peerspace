@@ -27,7 +27,7 @@
             </div>
         </li>
         <div if={post.proof_description && post.proof_pic} id="accordion{post.id}" role="tablist" style="position: relative">
-            <div class="card pb-4">
+            <div class="card proof-card pb-4">
                 <div class="card-header" role="tab" id="heading{post.id}">
                     <h5 class="mb-0">
                         <a data-toggle="collapse" href="#collapse{post.id}" aria-expanded="true" aria-controls="collapse{post.id}">
@@ -64,7 +64,6 @@
             </div>
         </div>
         <div if={post.page != 'detail'}>
-
             <div class="comment-container comment-container-{post.id}" style="display:none;">
                 <div class="comment-form comment-form-{post.id} py-2 mx-3 style="display:none;">
                     <div class="form-group mb-0 d-flex">
@@ -79,7 +78,7 @@
         </div>
         <div if={post.page == 'detail'} class="mt-4">
         <div each={progress in post.progress_updates} id="accordion{progress.id}" role="tablist">
-            <div class="card">
+            <div class="card proof-card">
                 <div class="card-header" role="tab" id="heading{progress.id}">
                     <h5 class="mb-0">
                         <a data-toggle="collapse" href="#collapse{progress.id}" aria-expanded="true" aria-controls="collapse{progress.id}">

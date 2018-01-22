@@ -441,7 +441,7 @@ $(document).on('click', '.message-btn', function() {
 // Get user proof images
 if (vars.page === 'profileUser') {
     $.ajax({
-        url: "/posts/api/v1/proof_images/" + vars.userId + "/10/",
+        url: "/posts/api/v1/" + vars.userId + "/proof_images/0/",
         method: "GET",
         dataType: "json",
         success: function(data) {

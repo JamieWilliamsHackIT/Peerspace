@@ -85,7 +85,7 @@
 
 .post-footer {
   background-color: white; /* rgb(250, 250, 250); */
-  margin: 0.99px;
+  margin: 0.99px 1.1px;
   /* margin-bottom: 15px; */
   text-decoration: none;
   color: black;
@@ -139,7 +139,7 @@
 
 .comment-container {
   background-color: rgb(245, 245, 245);
-  /*border: 1px solid rgba(0,0,0, 0.125);*/
+  border: 1px solid rgba(0,0,0, 0.125);
 }
 
 .comment-body {
@@ -176,4 +176,9 @@
 #followers-modal-content img {
   width: 48px;
   height: 48px;
+}
+
+.proof-card {
+    border-radius: 0;
+    margin: 0.99px;
 }

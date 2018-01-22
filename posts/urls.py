@@ -82,7 +82,7 @@ urlpatterns = [
         name='feed'
     ),
     path(
-        'api/v1/proof_images/<int:pk>/<int:page_size>/',
+        'api/v1/<int:user_id>/proof_images/<int:page_number>/',  # Watch out for urls with similar structure
         views.PostProofImageApi.as_view(),
         name='proof_images'
     ),
