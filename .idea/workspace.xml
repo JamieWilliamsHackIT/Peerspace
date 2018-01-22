@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1637cfeb-6f96-45d6-bdff-735ef885bd8e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Peerspace/settings.py" afterPath="$PROJECT_DIR$/Peerspace/settings.py" />
-      <change beforePath="$PROJECT_DIR$/posts/urls.py" afterPath="$PROJECT_DIR$/posts/urls.py" />
-      <change beforePath="$PROJECT_DIR$/posts/views.py" afterPath="$PROJECT_DIR$/posts/views.py" />
       <change beforePath="$PROJECT_DIR$/static/js/peerspace.js" afterPath="$PROJECT_DIR$/static/js/peerspace.js" />
-      <change beforePath="$PROJECT_DIR$/static/posts/css/post.css" afterPath="$PROJECT_DIR$/static/posts/css/post.css" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-feed.js" afterPath="$PROJECT_DIR$/static/tags/post-feed.js" />
-      <change beforePath="$PROJECT_DIR$/static/tags/post-feed.tag" afterPath="$PROJECT_DIR$/static/tags/post-feed.tag" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" afterPath="$PROJECT_DIR$/users/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,8 +23,8 @@
           <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/posts/views.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="265">
-                  <caret line="648" column="22" lean-forward="true" selection-start-line="648" selection-start-column="22" selection-end-line="648" selection-end-column="22" />
+                <state relative-caret-position="10455">
+                  <caret line="648" column="22" lean-forward="false" selection-start-line="648" selection-start-column="22" selection-end-line="648" selection-end-column="22" />
                   <folding>
                     <element signature="e#19#54#0" expanded="true" />
                   </folding>
@@ -40,8 +35,8 @@
           <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/posts/urls.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="425">
-                  <caret line="88" column="9" lean-forward="true" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+                <state relative-caret-position="1445">
+                  <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
                   <folding />
                 </state>
               </provider>
@@ -50,7 +45,7 @@
           <file leaf-file-name="layout.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/templates/layout.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-33">
+                <state relative-caret-position="561">
                   <caret line="33" column="40" lean-forward="false" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
                   <folding />
                 </state>
@@ -60,12 +55,22 @@
           <file leaf-file-name="peerspace.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/static/js/peerspace.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="518">
-                  <caret line="443" column="60" lean-forward="false" selection-start-line="443" selection-start-column="60" selection-end-line="443" selection-end-column="60" />
+                <state relative-caret-position="569">
+                  <caret line="392" column="42" lean-forward="true" selection-start-line="392" selection-start-column="42" selection-end-line="392" selection-end-column="42" />
                   <folding>
-                    <marker date="1516624075295" expanded="true" signature="7524:7537" ph="..." />
-                    <marker date="1516624075295" expanded="true" signature="16383:16397" ph="..." />
+                    <marker date="1516649184632" expanded="true" signature="7524:7537" ph="..." />
+                    <marker date="1516649184632" expanded="true" signature="16384:16398" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/users/views.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="294">
+                  <caret line="267" column="22" lean-forward="false" selection-start-line="267" selection-start-column="22" selection-end-line="267" selection-end-column="22" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -73,18 +78,8 @@
           <file leaf-file-name="feed.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/posts/feed.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-2091">
+                <state relative-caret-position="0">
                   <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="post_list.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/posts/templates/posts/post_list.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2516">
-                  <caret line="148" column="16" lean-forward="false" selection-start-line="148" selection-start-column="16" selection-end-line="148" selection-end-column="53" />
                   <folding />
                 </state>
               </provider>
@@ -103,18 +98,18 @@
           <file leaf-file-name="profile_user.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/users/templates/users/profile_user.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1589">
+                <state relative-caret-position="2074">
                   <caret line="122" column="14" lean-forward="false" selection-start-line="122" selection-start-column="14" selection-end-line="122" selection-end-column="14" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="476">
-                  <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+                <state relative-caret-position="306">
+                  <caret line="18" column="70" lean-forward="true" selection-start-line="18" selection-start-column="70" selection-end-line="18" selection-end-column="70" />
                   <folding />
                 </state>
               </provider>
@@ -124,7 +119,7 @@
             <entry file="file://$PROJECT_DIR$/static/posts/css/post.css">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="2414">
-                  <caret line="142" column="1" lean-forward="true" selection-start-line="142" selection-start-column="1" selection-end-line="142" selection-end-column="1" />
+                  <caret line="142" column="1" lean-forward="false" selection-start-line="142" selection-start-column="1" selection-end-line="142" selection-end-column="1" />
                   <folding />
                 </state>
               </provider>
@@ -229,7 +224,6 @@
         <option value="$PROJECT_DIR$/users/templates/users/edit_tags.html" />
         <option value="$PROJECT_DIR$/user_messages/templates/user_messages/messages.html" />
         <option value="$PROJECT_DIR$/users/templates/users/leaderboards.html" />
-        <option value="$PROJECT_DIR$/users/views.py" />
         <option value="$PROJECT_DIR$/notifications/urls.py" />
         <option value="$PROJECT_DIR$/posts/forms.py" />
         <option value="$PROJECT_DIR$/posts/models.py" />
@@ -253,8 +247,9 @@
         <option value="$PROJECT_DIR$/static/posts/css/post.css" />
         <option value="$PROJECT_DIR$/posts/views.py" />
         <option value="$PROJECT_DIR$/posts/urls.py" />
-        <option value="$PROJECT_DIR$/static/js/peerspace.js" />
         <option value="$PROJECT_DIR$/Peerspace/settings.py" />
+        <option value="$PROJECT_DIR$/static/js/peerspace.js" />
+        <option value="$PROJECT_DIR$/users/views.py" />
       </list>
     </option>
   </component>
@@ -425,16 +420,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16847827" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27173913" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27173913" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.07065217" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23187633" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2337043" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -645,7 +640,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="24" column="43" lean-forward="false" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -670,15 +664,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1003">
           <caret line="69" column="74" lean-forward="false" selection-start-line="69" selection-start-column="74" selection-end-line="69" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/users/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8670">
-          <caret line="529" column="0" lean-forward="false" selection-start-line="529" selection-start-column="0" selection-end-line="529" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -723,7 +708,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1751">
           <caret line="103" column="27" lean-forward="false" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -731,7 +715,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1122">
           <caret line="66" column="28" lean-forward="false" selection-start-line="66" selection-start-column="28" selection-end-line="66" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -739,7 +722,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1241">
           <caret line="73" column="21" lean-forward="false" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -770,14 +752,14 @@
     <entry file="file://$PROJECT_DIR$/static/posts/css/post.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2414">
-          <caret line="142" column="1" lean-forward="true" selection-start-line="142" selection-start-column="1" selection-end-line="142" selection-end-column="1" />
+          <caret line="142" column="1" lean-forward="false" selection-start-line="142" selection-start-column="1" selection-end-line="142" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-33">
+        <state relative-caret-position="561">
           <caret line="33" column="40" lean-forward="false" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
           <folding />
         </state>
@@ -785,7 +767,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/users/templates/users/profile_user.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1589">
+        <state relative-caret-position="2074">
           <caret line="122" column="14" lean-forward="false" selection-start-line="122" selection-start-column="14" selection-end-line="122" selection-end-column="14" />
           <folding />
         </state>
@@ -793,7 +775,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/feed.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2091">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -801,37 +783,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="88" column="9" lean-forward="true" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+        <state relative-caret-position="1445">
+          <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="648" column="22" lean-forward="true" selection-start-line="648" selection-start-column="22" selection-end-line="648" selection-end-column="22" />
+        <state relative-caret-position="10455">
+          <caret line="648" column="22" lean-forward="false" selection-start-line="648" selection-start-column="22" selection-end-line="648" selection-end-column="22" />
           <folding>
             <element signature="e#19#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="70" lean-forward="true" selection-start-line="18" selection-start-column="70" selection-end-line="18" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/static/js/peerspace.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="443" column="60" lean-forward="false" selection-start-line="443" selection-start-column="60" selection-end-line="443" selection-end-column="60" />
+        <state relative-caret-position="569">
+          <caret line="392" column="42" lean-forward="true" selection-start-line="392" selection-start-column="42" selection-end-line="392" selection-end-column="42" />
           <folding>
-            <marker date="1516624075295" expanded="true" signature="7524:7537" ph="..." />
-            <marker date="1516624075295" expanded="true" signature="16383:16397" ph="..." />
+            <marker date="1516649184632" expanded="true" signature="7524:7537" ph="..." />
+            <marker date="1516649184632" expanded="true" signature="16384:16398" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Peerspace/settings.py">
+    <entry file="file://$PROJECT_DIR$/users/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="294">
+          <caret line="267" column="22" lean-forward="false" selection-start-line="267" selection-start-column="22" selection-end-line="267" selection-end-column="22" />
           <folding />
         </state>
       </provider>

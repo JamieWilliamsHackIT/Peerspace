@@ -265,7 +265,7 @@ class UserFollowers(APIView):
         # Get the user user viewing the page
         user_viewing = request.user
         # Set up slices
-        page_size = 7
+        page_size = 10
         slice1 = (page_size * page_number)
         slice2 = (page_size * page_number) + page_size
         # Get either the user's followers or the users they follow
@@ -362,7 +362,7 @@ class SuggestedUsers(APIView):
 
             for user in user_following:
                 # if suggested_users <= page_size:
-                if not user in main_user.following.all():
+                if user not in main_user.following.all():
                     # Get the user's tags
                     tags = models.UserPreferenceTag.objects.filter(user=user)
                     tags = [tag.tag.lower() for tag in tags]

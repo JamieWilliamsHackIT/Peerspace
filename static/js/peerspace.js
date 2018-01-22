@@ -377,7 +377,7 @@ function followerCallBack(theTag) {
     $('#followers-modal-content').scroll(function() {
         if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && !reachedBottomFollowers) {
             $('.loading-circle-followers').show();
-            pageNumberFollowers++
+            pageNumberFollowers++;
             reachedBottomFollowers = true;
             //Show loading gif
             $('.loading-circle-followers').show();
