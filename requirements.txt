@@ -67,7 +67,7 @@ service-identity==17.0.0
 six==1.11.0
 social-auth-app-django==2.1.0
 social-auth-core==1.6.0
-Twisted==17.9.0
+Twisted==19.7.0
 txaio==2.8.2
 typing==3.6.2
 urllib3==1.22
