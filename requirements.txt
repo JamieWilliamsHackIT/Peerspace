@@ -32,7 +32,7 @@ docutils==0.14
 gunicorn==19.7.1
 h2==3.0.1
 hpack==3.0.0
-httplib2==0.10.3
+httplib2==0.18.0
 hyperframe==5.1.0
 hyperlink==17.3.1
 idna==2.6
